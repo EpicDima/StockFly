@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="ru.yandex.stockfly.model.Company" />
+
+        <variable
+            name="loading"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="company"
+            type="androidx.lifecycle.LiveData&lt;Company>" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/WithoutOverScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/current"
+                style="@style/SingleLineTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text='@{company != null ? company.currentString : ""}'
+                android:textSize="@dimen/chart_current_textsize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="$131.93" />
+
+            <TextView
+                android:id="@+id/change"
+                style="@style/SingleLineTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text='@{company != null ? company.changeString + (company.changePercentString.isEmpty() ? "" : " (") + company.changePercentString + (company.changePercentString.isEmpty() ? "" : ")") :""}'
+                android:textColor='@{company.changeString.startsWith("+") ? @color/green : (company.changeString.startsWith("-") ? @color/red : @color/dark)}'
+                android:textSize="@dimen/chart_change_textsize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/current"
+                tools:text="+$0.12 (1,15%)" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/chart_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/warnings_layout_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change">
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@style/ProgressBar"
+                    android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ru.yandex.stockfly.ui.company.chart.ChartView
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{loading ? View.INVISIBLE : View.VISIBLE}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/datetime_buttons_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chart_layout">
+
+                <TextView
+                    android:id="@+id/day_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:text="@string/d_day"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/week_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/week_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:text="@string/w_week"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/month_button"
+                    app:layout_constraintStart_toEndOf="@+id/day_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/month_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:text="@string/m_month"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/six_months_button"
+                    app:layout_constraintStart_toEndOf="@+id/week_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/six_months_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:text="@string/six_m_six_months"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/year_button"
+                    app:layout_constraintStart_toEndOf="@+id/month_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/year_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:text="@string/one_y_one_year"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/all_time_button"
+                    app:layout_constraintStart_toEndOf="@+id/six_months_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/all_time_button"
+                    style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:text="@string/all_time"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/year_button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/buy_button"
+                style="@style/BuyButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="52dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="20dp"
+                android:text='@{company != null ? @string/buy_stock(company.currentString) : ""}'
+                android:visibility="@{(company != null &amp;&amp; company.quote != null) ? View.VISIBLE : View.INVISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/datetime_buttons_layout"
+                tools:text="Buy for $132.04" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

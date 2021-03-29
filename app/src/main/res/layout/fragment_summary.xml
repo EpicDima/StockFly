@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="ru.yandex.stockfly.model.Company" />
+
+        <variable
+            name="company"
+            type="androidx.lifecycle.LiveData&lt;Company>" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="216dp"
+            android:layout_height="216dp"
+            android:layout_marginTop="64dp"
+            android:contentDescription="@string/company_logo"
+            app:imageUrl="@{company.logoUrl}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/WarningTextView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/centerwidget_margin_top"
+            android:gravity="center"
+            android:text="@string/work_in_progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

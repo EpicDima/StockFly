@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="loading"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="error"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="showPopular"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="showSearched"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="showResult"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="emptyResult"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:elevation="0dp">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/menu_button_size"
+                    android:layout_margin="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/rounded_border_2dp">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="@dimen/menu_button_size"
+                        android:layout_height="@dimen/menu_button_size"
+                        android:contentDescription="@string/back_icon"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/search_edit_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/menu_button_size"
+                        android:layout_marginStart="44dp"
+                        android:layout_marginEnd="48dp"
+                        android:background="@null"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:imeOptions="actionSearch"
+                        android:importantForAutofill="no"
+                        android:inputType="text|none"
+                        android:maxLength="50"
+                        android:maxLines="1"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="LabelFor"
+                        tools:text="Apple" />
+
+                    <ImageView
+                        android:id="@+id/close"
+                        android:layout_width="@dimen/menu_button_size"
+                        android:layout_height="@dimen/menu_button_size"
+                        android:contentDescription="@string/close_icon"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_close"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/search_edit_text"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            style="@style/WithoutOverScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/popular_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="@{showPopular ? View.VISIBLE : View.GONE}"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/popular_title"
+                        style="@style/SearchTitle"
+                        android:text="@string/popular_title" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/popular_recycler_view"
+                        style="@style/HorizontalList"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/searched_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical"
+                    android:visibility="@{showSearched ? View.VISIBLE : View.GONE}"
+                    tools:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/searched_title"
+                        style="@style/SearchTitle"
+                        android:text="@string/searched_title" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/searched_recycler_view"
+                        style="@style/HorizontalList"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/result_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="@{showResult ? View.VISIBLE : View.GONE}"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/result_title"
+                        style="@style/SearchTitle"
+                        android:text="@string/search_result_title" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/result_recycler_view"
+                        style="@style/VerticalList"
+                        android:layout_marginTop="4dp"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/ProgressBar"
+                android:layout_marginTop="@dimen/centerwidget_margin_top"
+                android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/error_textview"
+                style="@style/ErrorTextView"
+                android:layout_marginTop="@dimen/centerwidget_margin_top"
+                android:visibility="@{error ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/empty_textview"
+                style="@style/WarningTextView"
+                android:layout_marginTop="@dimen/centerwidget_margin_top"
+                android:text="@string/no_results"
+                android:visibility="@{emptyResult ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

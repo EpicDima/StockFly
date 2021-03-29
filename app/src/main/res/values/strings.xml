@@ -1,5 +1,51 @@
 <resources>
     <string name="app_name">StockFly</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+
+    <string name="work_in_progress">Work in progress</string>
+
+    <string name="error_receiving_data">Error receiving data</string>
+
+    <string-array name="main_tabs">
+        <item>Stocks</item>
+        <item>Favourite</item>
+    </string-array>
+
+    <string-array name="main_tabs_empty_list">
+        <item>You haven’t viewed any companies or tickers</item>
+        <item>You didn’t mark any companies as favorites</item>
+    </string-array>
+
+    <string name="company_logo">Company’s logo</string>
+    <string name="favourite_icon">Icon indicating favorite company</string>
+
+    <string name="search_hint">Find company or ticker</string>
+    <string name="search_icon">Search icon</string>
+    <string name="back_icon">Back icon</string>
+    <string name="close_icon">Close icon</string>
+    <string name="not_empty_request">The search query must not be an empty string</string>
+    <string name="no_results">No results found</string>
+
+    <string name="popular_title">Popular requests</string>
+    <string name="searched_title">You’ve searched for this</string>
+    <string name="search_result_title">Stocks</string>
+
+    <string-array name="company_tabs">
+        <item>Chart</item>
+        <item>Summary</item>
+        <item>News</item>
+    </string-array>
+
+    <string name="d_day">D</string>
+    <string name="w_week">W</string>
+    <string name="m_month">M</string>
+    <string name="six_m_six_months">6M</string>
+    <string name="one_y_one_year">1Y</string>
+    <string name="all_time">All</string>
+    <string name="buy_stock">Buy for %1$s</string>
+    <string name="bought_stock">You bought %1$s for %2$s</string>
+    <string name="no_data">No available data</string>
+
+    <string name="news_item_image">Image from the news</string>
+    <string name="no_news">No news lately</string>
+
 </resources>

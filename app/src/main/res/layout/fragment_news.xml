@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="loading"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="error"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="empty"
+            type="Boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            style="@style/VerticalList"
+            android:visibility="@{(loading || error || empty) ? View.GONE : View.VISIBLE}"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty_textview"
+            style="@style/WarningTextView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/centerwidget_margin_top"
+            android:gravity="center"
+            android:text="@string/no_news"
+            android:visibility="@{(empty &amp;&amp; !loading &amp;&amp; !error) ? View.VISIBLE : View.GONE}" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/centerwidget_margin_top"
+            android:gravity="center"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/error_textview"
+            style="@style/ErrorTextView"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/centerwidget_margin_top"
+            android:gravity="center"
+            android:visibility="@{error ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+    </LinearLayout>
+</layout>

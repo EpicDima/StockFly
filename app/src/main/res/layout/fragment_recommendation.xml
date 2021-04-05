@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="loading"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="error"
+            type="androidx.lifecycle.LiveData&lt;Boolean>" />
+
+        <variable
+            name="empty"
+            type="Boolean" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/WithoutOverScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/ProgressBar"
+                android:layout_marginTop="@dimen/centerwidget_margin_top"
+                android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/error_textview"
+                style="@style/ErrorTextView"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/centerwidget_margin_top"
+                android:gravity="center"
+                android:visibility="@{error ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ru.yandex.stockfly.ui.company.recomendation.RecommendationView
+                android:id="@+id/recommendation_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/recommendation_view_height"
+                android:layout_marginTop="32dp"
+                android:visibility="@{loading || error ? View.INVISIBLE : View.VISIBLE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/begin_date"
+                style="@style/SingleLineTextView"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="36dp"
+                android:visibility="@{loading || error || empty ? View.INVISIBLE : View.VISIBLE}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recommendation_view"
+                tools:text="Март 2020" />
+
+            <TextView
+                android:id="@+id/end_date"
+                style="@style/SingleLineTextView"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="20dp"
+                android:visibility="@{loading || error || empty ? View.INVISIBLE : View.VISIBLE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recommendation_view"
+                tools:text="Апрель 2021" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/period_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="@{loading || error || empty  ? View.INVISIBLE : View.VISIBLE}"
+                app:haloColor="@color/dark_translucent"
+                app:haloRadius="14dp"
+                app:labelBehavior="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/begin_date"
+                app:thumbColor="@color/black"
+                app:thumbElevation="0dp"
+                app:thumbRadius="8dp"
+                app:tickColorActive="@color/dark"
+                app:tickColorInactive="@color/black"
+                app:tickVisible="false"
+                app:trackColorActive="@color/black"
+                app:trackColorInactive="@color/light"
+                app:trackHeight="6dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

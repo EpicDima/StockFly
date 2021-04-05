@@ -10,6 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -50,8 +51,9 @@
                         style="@style/SingleLineTextView"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/search_size"
-                        android:layout_marginStart="44dp"
-                        android:layout_marginEnd="48dp"
+                        android:layout_marginStart="@dimen/search_size"
+                        android:layout_marginEnd="@dimen/search_size"
+                        android:gravity="start|center_vertical"
                         android:text="@string/search_hint"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,7 +69,6 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 style="@style/TabLayout"
-                android:layout_gravity="bottom"
                 android:layout_marginStart="@dimen/main_tablayout_side_margin"
                 android:layout_marginEnd="@dimen/main_tablayout_side_margin" />
 

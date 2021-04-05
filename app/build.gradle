@@ -13,17 +13,14 @@ android {
         applicationId "ru.yandex.stockfly"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode 1
-        versionName "0.1"
+        versionCode 3
+        versionName "0.3"
 
         buildConfigField "String", "API_KEY", API_KEY
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments += [
-                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
-                        "room.incremental"     : "true",
-                        "room.expandProjection": "true"]
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
@@ -91,9 +88,4 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
     implementation "io.coil-kt:coil:$coil_version"
-
-    testImplementation "junit:junit:4.13.2"
-
-    androidTestImplementation "androidx.test.ext:junit:1.1.2"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 }

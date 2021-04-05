@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.yandex.stockfly.base.BaseDiffUtilCallback
 import ru.yandex.stockfly.databinding.ItemNewsItemBinding
 import ru.yandex.stockfly.model.NewsItem
+import ru.yandex.stockfly.other.Formatter
 
 class NewsAdapter(
     private val clickListener: OnNewsItemClickListener
@@ -33,6 +34,7 @@ class NewsAdapter(
                 }
                 this.newsItem = newsItem
                 this.position = position
+                this.formatter = Formatter
                 executePendingBindings()
             }
         }

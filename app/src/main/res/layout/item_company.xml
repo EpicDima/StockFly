@@ -23,7 +23,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="4dp"
-        app:cardBackgroundColor="@{position % 2 == 1 ? @color/white : @color/light}"
+        app:cardBackgroundColor="@{position % 2 == 0 ? @color/light : @color/white}"
         app:cardCornerRadius="@dimen/company_border_radius"
         app:cardElevation="0dp"
         tools:cardBackgroundColor="@color/light">
@@ -37,7 +37,8 @@
                 android:layout_width="@dimen/company_logo_size"
                 android:layout_height="@dimen/company_logo_size"
                 android:layout_margin="8dp"
-                app:cardCornerRadius="@dimen/company_border_radius"
+                app:cardBackgroundColor="@color/transparent"
+                app:cardCornerRadius="@dimen/image_corner_radius"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +46,11 @@
 
                 <ImageView
                     android:id="@+id/logo"
+                    companyItemImageUrl="@{company.logoUrl}"
                     android:layout_width="@dimen/company_logo_size"
                     android:layout_height="@dimen/company_logo_size"
-                    android:contentDescription="@string/company_logo"
-                    app:imageUrl="@{company.logoUrl}" />
+                    android:background="@{(position % 2 == 0) ? @color/white : @color/light}"
+                    android:contentDescription="@string/company_logo" />
 
             </androidx.cardview.widget.CardView>
 

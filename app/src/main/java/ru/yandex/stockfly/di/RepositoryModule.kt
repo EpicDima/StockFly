@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import ru.yandex.stockfly.api.ApiService
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
+import ru.yandex.stockfly.db.dao.RecommendationDao
 import ru.yandex.stockfly.repository.AppRepository
 import ru.yandex.stockfly.repository.Repository
 import javax.inject.Singleton
@@ -23,9 +24,17 @@ object RepositoryModule {
         apiService: ApiService,
         companyDao: CompanyDao,
         newsItemDao: NewsItemDao,
+        recommendationDao: RecommendationDao,
         preferences: SharedPreferences,
         adapter: JsonAdapter<List<String>>,
     ): Repository {
-        return AppRepository(apiService, companyDao, newsItemDao, preferences, adapter)
+        return AppRepository(
+            apiService,
+            companyDao,
+            newsItemDao,
+            recommendationDao,
+            preferences,
+            adapter
+        )
     }
 }

@@ -1,0 +1,290 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "e055d403f6e9a6df4cccdeb8e261b6a7",
+    "entities": [
+      {
+        "tableName": "companies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ticker` TEXT NOT NULL, `name` TEXT NOT NULL, `country` TEXT NOT NULL, `currency` TEXT NOT NULL, `webUrl` TEXT NOT NULL, `logoUrl` TEXT NOT NULL, `exchange` TEXT NOT NULL, `ipo` TEXT NOT NULL, `marketCapitalization` REAL NOT NULL, `shareOutstanding` REAL NOT NULL, `phone` TEXT NOT NULL, `favourite` INTEGER NOT NULL, `current` REAL, `open` REAL, `high` REAL, `low` REAL, `previousClose` REAL, PRIMARY KEY(`ticker`))",
+        "fields": [
+          {
+            "fieldPath": "ticker",
+            "columnName": "ticker",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "webUrl",
+            "columnName": "webUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logoUrl",
+            "columnName": "logoUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exchange",
+            "columnName": "exchange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ipo",
+            "columnName": "ipo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCapitalization",
+            "columnName": "marketCapitalization",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shareOutstanding",
+            "columnName": "shareOutstanding",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "favourite",
+            "columnName": "favourite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quote.current",
+            "columnName": "current",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quote.open",
+            "columnName": "open",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quote.high",
+            "columnName": "high",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quote.low",
+            "columnName": "low",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quote.previousClose",
+            "columnName": "previousClose",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ticker"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "news",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `ticker` TEXT NOT NULL, `datetime` INTEGER NOT NULL, `headline` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `summary` TEXT NOT NULL, `source` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`ticker`) REFERENCES `companies`(`ticker`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ticker",
+            "columnName": "ticker",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "datetime",
+            "columnName": "datetime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "headline",
+            "columnName": "headline",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "summary",
+            "columnName": "summary",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_news_ticker",
+            "unique": false,
+            "columnNames": [
+              "ticker"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_news_ticker` ON `${TABLE_NAME}` (`ticker`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "companies",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "ticker"
+            ],
+            "referencedColumns": [
+              "ticker"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "recommendations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ticker` TEXT NOT NULL, `period` TEXT NOT NULL, `strongBuy` INTEGER NOT NULL, `buy` INTEGER NOT NULL, `hold` INTEGER NOT NULL, `sell` INTEGER NOT NULL, `strongSell` INTEGER NOT NULL, PRIMARY KEY(`period`), FOREIGN KEY(`ticker`) REFERENCES `companies`(`ticker`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "ticker",
+            "columnName": "ticker",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "period",
+            "columnName": "period",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strongBuy",
+            "columnName": "strongBuy",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "buy",
+            "columnName": "buy",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hold",
+            "columnName": "hold",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sell",
+            "columnName": "sell",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "strongSell",
+            "columnName": "strongSell",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "period"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_recommendations_ticker",
+            "unique": false,
+            "columnNames": [
+              "ticker"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recommendations_ticker` ON `${TABLE_NAME}` (`ticker`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "companies",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "ticker"
+            ],
+            "referencedColumns": [
+              "ticker"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e055d403f6e9a6df4cccdeb8e261b6a7')"
+    ]
+  }
+}

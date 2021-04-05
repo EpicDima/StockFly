@@ -24,8 +24,8 @@ class CompanyViewModel @Inject constructor(
     val company: LiveData<Company> = _company
 
     init {
+        startTimeoutJob()
         startJob(Dispatchers.Main) {
-            startTimeoutJob()
             repository.getCompanyWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
                     _company.postValue(it)
@@ -45,6 +45,7 @@ class CompanyViewModel @Inject constructor(
     }
 
     override fun onError(e: Throwable) {
+        stopTimeoutJob()
         setError()
     }
 }

@@ -24,8 +24,8 @@ class NewsViewModel @Inject constructor(
 
     init {
         startLoading()
+        startTimeoutJob()
         startJob(Dispatchers.Main) {
-            startTimeoutJob()
             repository.getCompanyNewsWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
                     _news.postValue(it)
@@ -41,6 +41,7 @@ class NewsViewModel @Inject constructor(
     }
 
     override fun onError(e: Throwable) {
+        stopTimeoutJob()
         setError()
         stopLoading()
     }

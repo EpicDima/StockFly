@@ -14,11 +14,11 @@ data class CompanyDto(
     val webUrl: String,
     @Json(name = "logo")
     val logoUrl: String,
-//    val exchange: String,
-//    val ipo: String,
-//    val marketCapitalization: Long,
-//    val shareOutstanding: Double,
-//    val phone: String,
+    val exchange: String,
+    val ipo: String,
+    val marketCapitalization: Double,
+    val shareOutstanding: Double,
+    val phone: String,
 )
 
 
@@ -30,10 +30,10 @@ fun CompanyDto.toModel(): Company {
         currency,
         webUrl,
         logoUrl,
-//        exchange,
-//        ipo,
-//        marketCapitalization,
-//        shareOutstanding,
-//        phone
+        exchange,
+        ipo,
+        marketCapitalization,
+        shareOutstanding,
+        phone
     )
 }

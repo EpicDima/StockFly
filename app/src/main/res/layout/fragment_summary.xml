@@ -1,39 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="ru.yandex.stockfly.model.Company" />
+
+        <import type="ru.yandex.stockfly.other.ExtensionsKt" />
 
         <variable
             name="company"
             type="androidx.lifecycle.LiveData&lt;Company>" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
+        style="@style/WithoutOverScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="216dp"
-            android:layout_height="216dp"
-            android:layout_marginTop="64dp"
-            android:contentDescription="@string/company_logo"
-            app:imageUrl="@{company.logoUrl}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/WarningTextView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/centerwidget_margin_top"
-            android:gravity="center"
-            android:text="@string/work_in_progress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/image_view"
+                imageUrl="@{company.logoUrl}"
+                android:layout_width="@dimen/summary_logo_size"
+                android:layout_height="@dimen/summary_logo_size"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/company_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fullname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:text="@{company.name}"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_view"
+                tools:text="KJjasdhjkh KJHkjashdjh JHkjhasfjkh JKHafjksdhjkashjkfh jkhasfjkh asjklhfljkhaskjhf jklahs" />
+
+            <LinearLayout
+                android:id="@+id/phone_field"
+                style="@style/SummaryField"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toStartOf="@id/weburl_field"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fullname">
+
+                <TextView
+                    android:id="@+id/phone_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/phone_number" />
+
+                <TextView
+                    android:id="@+id/phone_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{company.phone}"
+                    tools:text="3726472123" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weburl_field"
+                style="@style/SummaryField"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/phone_field"
+                app:layout_constraintTop_toBottomOf="@+id/fullname">
+
+                <TextView
+                    android:id="@+id/weburl_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/website" />
+
+                <TextView
+                    android:id="@+id/weburl_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{company.webUrl}"
+                    tools:text="apple.com" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/country_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toStartOf="@id/currency_field"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone_field">
+
+                <TextView
+                    android:id="@+id/country_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/country" />
+
+                <TextView
+                    android:id="@+id/country_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{company.countryName}"
+                    tools:text="US" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/currency_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/country_field"
+                app:layout_constraintTop_toBottomOf="@+id/weburl_field">
+
+                <TextView
+                    android:id="@+id/currency_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/currency" />
+
+                <TextView
+                    android:id="@+id/currency_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{company.currency}"
+                    tools:text="USD" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/so_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toStartOf="@id/mc_field"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/country_field">
+
+                <TextView
+                    android:id="@+id/so_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/shares_outstanding" />
+
+                <TextView
+                    android:id="@+id/so_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{ExtensionsKt.toLocalString(company.shareOutstanding)}"
+                    tools:text="3824763472" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mc_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/so_field"
+                app:layout_constraintTop_toBottomOf="@+id/currency_field">
+
+                <TextView
+                    android:id="@+id/mc_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/market_capitalization" />
+
+                <TextView
+                    android:id="@+id/mc_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{ExtensionsKt.toLocalString(company.marketCapitalization)}"
+                    tools:text="435634636" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/exchange_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toStartOf="@id/ipo_field"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/so_field">
+
+                <TextView
+                    android:id="@+id/exchange_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/exchange" />
+
+                <TextView
+                    android:id="@+id/exchange_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text="@{company.exchange}"
+                    tools:text="NASDAQ/NMS" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ipo_field"
+                style="@style/SummaryField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/exchange_field"
+                app:layout_constraintTop_toBottomOf="@+id/mc_field">
+
+                <TextView
+                    android:id="@+id/ipo_title"
+                    style="@style/SummaryFieldTitle"
+                    android:text="@string/ipo_date" />
+
+                <TextView
+                    android:id="@+id/ipo_value"
+                    style="@style/SummaryFieldValue"
+                    android:layout_marginTop="4dp"
+                    android:text='@{company != null ? ExtensionsKt.ipoLocalDateString(company) : ""}'
+                    tools:text="1980-12-12" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </layout>

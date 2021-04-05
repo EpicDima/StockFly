@@ -39,5 +39,11 @@ interface ApplicationApiService : ApiService {
         @Query("to") to: Long,
         @Query("token") token: String
     ): StockCandleDto
+
+    @GET("stock/recommendation")
+    override suspend fun getCompanyRecommendations(
+        @Query("symbol") ticker: String,
+        @Query("token") token: String
+    ): List<RecommendationDto>
 }
 

@@ -36,6 +36,9 @@ class ChartViewModel @Inject constructor(
     private val _stockCandles = MutableLiveData<StockCandles?>()
     val stockCandles: LiveData<StockCandles?> = _stockCandles
 
+    // In-memory кэш. Решил, что сохранять в базу не надо,
+    // так как слишком уж много данных, может не прав и
+    // если не прав, то пока не контролирую максимальный объём сохраняемых данных.
     private val cacheMap: MutableMap<StockCandleParam, StockCandles> = mutableMapOf()
 
     private fun updateChart(newStockCandleParam: StockCandleParam = StockCandleParam.MONTH) {
@@ -45,7 +48,7 @@ class ChartViewModel @Inject constructor(
                 _stockCandles.postValue(cacheMap[newStockCandleParam])
             } else {
                 beforeUpdateStart()
-                startJob {
+                startJob(stopImmediately = true) {
                     val stockCandles = repository.getStockCandles(ticker, newStockCandleParam)
                     if (stopTimeoutJob()) {
                         _stockCandles.postValue(stockCandles)

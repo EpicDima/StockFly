@@ -21,8 +21,8 @@ interface ApiService {
 
     suspend fun getCompanyNews(
         ticker: String,
-        from: String = getStringDateNow(),
-        to: String = getStringDateWeekEarlier(),
+        from: String = getStringDateWeekEarlier(),
+        to: String = getStringDateNow(),
         token: String = API_KEY
     ): List<NewsItemDto>
 
@@ -38,4 +38,9 @@ interface ApiService {
         to: Long,
         token: String = API_KEY
     ): StockCandleDto
+
+    suspend fun getCompanyRecommendations(
+        ticker: String,
+        token: String = API_KEY
+    ): List<RecommendationDto>
 }

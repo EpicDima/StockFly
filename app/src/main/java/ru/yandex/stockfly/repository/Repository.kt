@@ -3,10 +3,7 @@ package ru.yandex.stockfly.repository
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import ru.yandex.stockfly.model.Company
-import ru.yandex.stockfly.model.NewsItem
-import ru.yandex.stockfly.model.SearchItem
-import ru.yandex.stockfly.model.StockCandles
+import ru.yandex.stockfly.model.*
 import ru.yandex.stockfly.other.StockCandleParam
 
 interface Repository {
@@ -29,4 +26,9 @@ interface Repository {
         ticker: String,
         coroutineScope: CoroutineScope = GlobalScope
     ): LiveData<List<NewsItem>>
+
+    fun getCompanyRecommendationsWithRefresh(
+        ticker: String,
+        coroutineScope: CoroutineScope
+    ): LiveData<List<Recommendation>>
 }

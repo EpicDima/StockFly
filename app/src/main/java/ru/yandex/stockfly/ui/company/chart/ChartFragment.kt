@@ -14,6 +14,7 @@ import ru.yandex.stockfly.databinding.FragmentChartBinding
 import ru.yandex.stockfly.other.StockCandleParam
 import ru.yandex.stockfly.other.color
 import ru.yandex.stockfly.other.drawable
+import ru.yandex.stockfly.other.setArgument
 
 @AndroidEntryPoint
 class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
@@ -22,11 +23,7 @@ class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
 
         @JvmStatic
         fun newInstance(ticker: String): ChartFragment {
-            return ChartFragment().apply {
-                arguments = Bundle().apply {
-                    putString(TICKER_KEY, ticker)
-                }
-            }
+            return ChartFragment().setArgument(TICKER_KEY, ticker)
         }
     }
 
@@ -41,20 +38,10 @@ class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
             loading = viewModel.loading
             company = viewModel.company
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupDateButtons()
         setupBuyButton()
-        viewModel.stockCandles.observe(viewLifecycleOwner) {
-            binding.chart.updateData(it)
-        }
-        viewModel.stockCandleParam.observe(viewLifecycleOwner) {
-            unselectButtonByParam(viewModel.previousStockCandleParam)
-            selectButtonByParam(it)
-            binding.chart.updateFormat(it.format)
-        }
+        setupObservers()
+        return binding.root
     }
 
     private fun setupDateButtons() {
@@ -73,10 +60,21 @@ class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.bought_stock, company.ticker, company.currentString),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.stockCandles.observe(viewLifecycleOwner) {
+            binding.chart.updateData(it)
+        }
+        viewModel.stockCandleParam.observe(viewLifecycleOwner) {
+            unselectButtonByParam(viewModel.previousStockCandleParam)
+            selectButtonByParam(it)
+            binding.chart.updateFormat(it.format)
         }
     }
 

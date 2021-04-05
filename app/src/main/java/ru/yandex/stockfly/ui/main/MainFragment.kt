@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
 import ru.yandex.stockfly.base.BaseFragment
 import ru.yandex.stockfly.databinding.FragmentMainBinding
+import ru.yandex.stockfly.other.customize
 import ru.yandex.stockfly.other.getDimensionInSp
 import ru.yandex.stockfly.other.set
 import ru.yandex.stockfly.ui.SearchFragmentOpener
@@ -48,25 +47,14 @@ class MainFragment : BaseFragment<MainViewModel, FragmentMainBinding>() {
 
     private fun setupTabs() {
         binding.apply {
-            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    tab.set(
-                        resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
-                        R.color.black
-                    )
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                    tab.set(resources.getDimensionInSp(R.dimen.main_tab_textsize), R.color.dark)
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab) {}
+            tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
+                it.set(
+                    resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
+                    R.color.black
+                )
+            }, onUnselect = {
+                it.set(resources.getDimensionInSp(R.dimen.main_tab_textsize), R.color.dark)
             })
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.customView = View.inflate(context, R.layout.main_tab_item_layout, null)
-                tab.text = titles[position]
-                viewPager.currentItem = tab.position
-            }.attach()
             tabLayout.getTabAt(0)?.select()
         }
     }

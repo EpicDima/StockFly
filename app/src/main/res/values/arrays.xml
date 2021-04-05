@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_tabs">
+        <item>@string/stocks</item>
+        <item>@string/favourite</item>
+    </string-array>
+
+    <string-array name="main_tabs_empty_list">
+        <item>@string/stocks_empty_list</item>
+        <item>@string/favourite_empty_list</item>
+    </string-array>
+
+    <string-array name="company_tabs">
+        <item>@string/chart</item>
+        <item>@string/summary</item>
+        <item>@string/news</item>
+        <item>@string/recommendations</item>
+    </string-array>
+</resources>

@@ -1,37 +1,35 @@
 package ru.yandex.stockfly.ui
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
 import ru.yandex.stockfly.ui.company.CompanyFragment
 import ru.yandex.stockfly.ui.main.MainFragment
 import ru.yandex.stockfly.ui.search.SearchFragment
+import ru.yandex.stockfly.ui.web.WebViewFragment
 
 private const val FRAGMENT_MAIN = "main"
 private const val FRAGMENT_SEARCH = "search"
 private const val FRAGMENT_COMPANY = "company"
+private const val FRAGMENT_WEBVIEW = "webview"
 
 class MainRouter(
     private val fragmentManager: FragmentManager,
     private val containerId: Int
 ) {
 
-    private val mainFragment: Fragment = createMainFragment()
-
-    private fun createMainFragment(): Fragment {
-        var fragment = getFragment(FRAGMENT_MAIN)
-        if (fragment == null) {
-            fragment = MainFragment.newInstance()
+    init {
+        if (fragmentManager.findFragmentByTag(FRAGMENT_MAIN) == null) {
+            val mainFragment = MainFragment.newInstance()
             fragmentManager.commitNow {
-                add(containerId, fragment, FRAGMENT_MAIN)
+                add(containerId, mainFragment, FRAGMENT_MAIN)
             }
         }
-        return fragment
     }
 
-    private fun getFragment(name: String): Fragment? {
-        return fragmentManager.findFragmentByTag(name)
+    private fun FragmentTransaction.hideCurrent() {
+        fragmentManager.findFragmentById(containerId)?.let { hide(it) }
     }
 
     fun back(): Boolean {
@@ -45,7 +43,7 @@ class MainRouter(
 
     fun openSearchFragment() {
         fragmentManager.commit {
-            hide(mainFragment)
+            hideCurrent()
             add(containerId, SearchFragment.newInstance(), FRAGMENT_SEARCH)
             addToBackStack(FRAGMENT_SEARCH)
         }
@@ -53,16 +51,19 @@ class MainRouter(
 
     fun openCompanyFragment(ticker: String) {
         fragmentManager.apply {
-            val searchFragment = getFragment(FRAGMENT_SEARCH)
             commit {
-                if (mainFragment.isVisible) {
-                    hide(mainFragment)
-                } else if (searchFragment != null) {
-                    hide(searchFragment)
-                }
+                hideCurrent()
                 add(containerId, CompanyFragment.newInstance(ticker), FRAGMENT_COMPANY)
                 addToBackStack(FRAGMENT_COMPANY)
             }
+        }
+    }
+
+    fun openWebViewFragment(url: String) {
+        fragmentManager.commit {
+            hideCurrent()
+            add(containerId, WebViewFragment.newInstance(url), FRAGMENT_WEBVIEW)
+            addToBackStack(FRAGMENT_WEBVIEW)
         }
     }
 }

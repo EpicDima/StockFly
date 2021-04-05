@@ -71,8 +71,8 @@
                         android:id="@+id/search_edit_text"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/menu_button_size"
-                        android:layout_marginStart="44dp"
-                        android:layout_marginEnd="48dp"
+                        android:layout_marginStart="@dimen/menu_button_size"
+                        android:layout_marginEnd="@dimen/menu_button_size"
                         android:background="@null"
                         android:fontFamily="@font/montserrat_semibold"
                         android:imeOptions="actionSearch"
@@ -126,7 +126,7 @@
                     android:id="@+id/popular_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
                     android:orientation="vertical"
                     android:visibility="@{showPopular ? View.VISIBLE : View.GONE}"
                     tools:visibility="gone">
@@ -142,7 +142,6 @@
                         android:layout_marginTop="8dp" />
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/searched_layout"

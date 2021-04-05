@@ -11,8 +11,6 @@ import ru.yandex.stockfly.model.StockCandles
 import ru.yandex.stockfly.other.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 class ChartView @JvmOverloads constructor(
     context: Context,
@@ -39,10 +37,12 @@ class ChartView @JvmOverloads constructor(
         suggestionToPointDistance - suggestionTriangleHeight
     private val suggestionShadowSize = 4.0f.dpToPx(context)
     private val suggestionShadowDown = 4.0f.dpToPx(context)
+
+    private val noDataTextSize = 18.0f.spToPx(context)
     private val suggestionPriceTextSize = 16.0f.spToPx(context)
     private val suggestionDateTimeTextSize = 12.0f.spToPx(context)
-    private val noDataTextSize = 18.0f.spToPx(context)
 
+    private val noDataColor = context.color(R.color.black)
     private val lineColor = context.color(R.color.black)
     private val startGradientColor = context.color(R.color.grey)
     private val endGradientColor = context.color(R.color.white)
@@ -53,10 +53,15 @@ class ChartView @JvmOverloads constructor(
     private val suggestionShadowColor = context.color(R.color.dark_translucent)
     private val suggestionPriceColor = context.color(R.color.white)
     private val suggestionDateTimeColor = context.color(R.color.dark)
-    private val noDataColor = context.color(R.color.black)
 
     private val noDataText = context.getString(R.string.no_data)
 
+    private val noDataPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = noDataColor
+        textSize = noDataTextSize
+        textAlign = Paint.Align.CENTER
+        typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
+    }
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = lineWidth
@@ -89,12 +94,6 @@ class ChartView @JvmOverloads constructor(
         textSize = suggestionDateTimeTextSize
         textAlign = Paint.Align.CENTER
         typeface = ResourcesCompat.getFont(context, R.font.montserrat_semibold)
-    }
-    private val noDataPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = noDataColor
-        textSize = noDataTextSize
-        textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
     }
 
     private val arrowDownIcon = context.drawable(R.drawable.ic_arrow_down)
@@ -161,12 +160,7 @@ class ChartView @JvmOverloads constructor(
     }
 
     private fun drawNoData(canvas: Canvas) {
-        canvas.drawText(
-            noDataText,
-            width * 0.5f,
-            height * 0.5f,
-            noDataPaint
-        )
+        canvas.drawText(noDataText, width * 0.5f, height * 0.5f, noDataPaint)
     }
 
     private fun drawLine(values: DoubleArray, canvas: Canvas) {
@@ -200,7 +194,7 @@ class ChartView @JvmOverloads constructor(
             dateTime
         )
 
-        val suggestionWidth = max(priceWidth, dateTimeWidth) + suggestionStartEndPadding * 2
+        val suggestionWidth = maxOf(priceWidth, dateTimeWidth) + suggestionStartEndPadding * 2
         val suggestionHeight =
             priceHeight + dateTimeHeight + suggestionTopBottomPadding * 2 + suggestionPriceToDateTimeDistance
 
@@ -352,11 +346,8 @@ class ChartView @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
-            if (length != 0) {
+            if (length > 0) {
                 selectedIndex = event.x.fromRealX()
-                if (selectedIndex >= length) {
-                    selectedIndex = length - 1
-                }
                 invalidate()
             }
             return performClick()
@@ -375,7 +366,8 @@ class ChartView @JvmOverloads constructor(
     }
 
     private fun Float.fromRealX(): Int {
-        return (this * length / width).roundToInt()
+        val value = this * length / width
+        return if (value >= length) length - 1 else value.toInt()
     }
 
     private fun Double.toRealY(): Float {

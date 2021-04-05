@@ -6,18 +6,21 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
+import ru.yandex.stockfly.db.dao.RecommendationDao
 import ru.yandex.stockfly.db.entity.CompanyEntity
 import ru.yandex.stockfly.db.entity.NewsItemEntity
+import ru.yandex.stockfly.db.entity.RecommendationEntity
 
 private const val DATABASE_NAME = "stockfly.db"
 
 @Database(
-    version = 1,
-    entities = [CompanyEntity::class, NewsItemEntity::class]
+    version = 5,
+    entities = [CompanyEntity::class, NewsItemEntity::class, RecommendationEntity::class]
 )
 abstract class AppDatabase : RoomDatabase(), ru.yandex.stockfly.db.Database {
     abstract override fun companyDao(): CompanyDao
     abstract override fun newsItemDao(): NewsItemDao
+    abstract override fun recommendationDao(): RecommendationDao
 }
 
 fun buildDatabase(context: Context): AppDatabase {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Так конечно неправильно делать... -->
+
+    <color name="black">#FFFFFF</color>
+    <color name="darker">#F0F4F7</color>
+    <color name="dark">#C6C6C6</color>
+    <color name="grey">#BABABA</color>
+    <color name="light">#303030</color>
+    <color name="white">#1A1A1A</color>
+
+</resources>

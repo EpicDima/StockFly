@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#1A1A1A</color>
-    <color name="white">#FFFFFF</color>
-    <color name="transparent">#00000000</color>
-
+    <color name="darker">#909090</color>
     <color name="dark">#BABABA</color>
     <color name="grey">#DCDCDC</color>
+    <color name="light">#F0F4F7</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="darker_translucent">#B0000000</color>
+    <color name="dark_translucent">#3C000000</color>
+    <color name="light_translucent">#22FFFFFF</color>
 
     <color name="green">#24B25D</color>
     <color name="red">#B22424</color>
     <color name="yellow">#FFCA1C</color>
+    <color name="persian_green">#0BAD9D</color>
+    <color name="shamrock">#32E184</color>
+    <color name="ripe_lemon">#F7D61B</color>
+    <color name="ryb_orange">#FB9E02</color>
+    <color name="deep_carmine_pink">#FC323C</color>
 
-    <color name="darker_translucent">#B0000000</color>
-    <color name="dark_translucent">#3C000000</color>
-
-    <color name="light">#F0F4F7</color>
-    <color name="light_translucent">#22FFFFFF</color>
 </resources>

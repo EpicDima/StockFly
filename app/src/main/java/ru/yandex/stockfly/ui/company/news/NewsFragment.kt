@@ -1,7 +1,5 @@
 package ru.yandex.stockfly.ui.company.news
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.base.BaseFragment
 import ru.yandex.stockfly.databinding.FragmentNewsBinding
+import ru.yandex.stockfly.other.setArgument
+import ru.yandex.stockfly.ui.WebViewFragmentOpener
 
 @AndroidEntryPoint
 class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
@@ -19,11 +19,7 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
 
         @JvmStatic
         fun newInstance(ticker: String): NewsFragment {
-            return NewsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(TICKER_KEY, ticker)
-                }
-            }
+            return NewsFragment().setArgument(TICKER_KEY, ticker)
         }
     }
 
@@ -38,12 +34,15 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
             loading = viewModel.loading
             error = viewModel.error
         }
+        setupList()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    private fun setupList() {
         val adapter = NewsAdapter { url ->
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            (requireParentFragment().requireActivity() as WebViewFragmentOpener).openWebViewFragment(
+                url
+            )
         }
         binding.recyclerView.apply {
             this.adapter = adapter

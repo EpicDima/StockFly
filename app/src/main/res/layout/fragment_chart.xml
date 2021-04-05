@@ -85,7 +85,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/datetime_buttons_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/date_buttons_height"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="16dp"
@@ -96,7 +96,7 @@
                 <TextView
                     android:id="@+id/day_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
                     android:text="@string/d_day"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/week_button"
@@ -106,8 +106,8 @@
                 <TextView
                     android:id="@+id/week_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginStart="@dimen/datebutton_side_margin"
-                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
                     android:text="@string/w_week"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/month_button"
@@ -117,8 +117,8 @@
                 <TextView
                     android:id="@+id/month_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginStart="@dimen/datebutton_side_margin"
-                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
                     android:text="@string/m_month"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/six_months_button"
@@ -128,8 +128,8 @@
                 <TextView
                     android:id="@+id/six_months_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginStart="@dimen/datebutton_side_margin"
-                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
                     android:text="@string/six_m_six_months"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/year_button"
@@ -139,8 +139,8 @@
                 <TextView
                     android:id="@+id/year_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginStart="@dimen/datebutton_side_margin"
-                    android:layout_marginEnd="@dimen/datebutton_side_margin"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
                     android:text="@string/one_y_one_year"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/all_time_button"
@@ -150,7 +150,8 @@
                 <TextView
                     android:id="@+id/all_time_button"
                     style="@style/DateTimeButton"
-                    android:layout_marginStart="@dimen/datebutton_side_margin"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:maxLines="1"
                     android:text="@string/all_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

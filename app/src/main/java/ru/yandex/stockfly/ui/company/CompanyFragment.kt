@@ -8,17 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
 import ru.yandex.stockfly.base.BaseFragment
 import ru.yandex.stockfly.databinding.FragmentCompanyBinding
 import ru.yandex.stockfly.model.Company
+import ru.yandex.stockfly.other.customize
 import ru.yandex.stockfly.other.getDimensionInSp
 import ru.yandex.stockfly.other.set
+import ru.yandex.stockfly.other.setArgument
 import ru.yandex.stockfly.ui.company.chart.ChartFragment
 import ru.yandex.stockfly.ui.company.news.NewsFragment
+import ru.yandex.stockfly.ui.company.recomendation.RecommendationFragment
 import ru.yandex.stockfly.ui.company.summary.SummaryFragment
 
 @AndroidEntryPoint
@@ -28,11 +29,7 @@ class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>()
 
         @JvmStatic
         fun newInstance(ticker: String): CompanyFragment {
-            return CompanyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(TICKER_KEY, ticker)
-                }
-            }
+            return CompanyFragment().setArgument(TICKER_KEY, ticker)
         }
     }
 
@@ -54,16 +51,8 @@ class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>()
             viewPager.isUserInputEnabled = false
         }
         setSingleEventForTabAdapterCreation()
+        setupClickListeners()
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.backButton.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-        binding.favouriteButton.setOnClickListener {
-            viewModel.changeFavourite()
-        }
     }
 
     private fun setSingleEventForTabAdapterCreation() {
@@ -82,26 +71,24 @@ class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>()
 
     private fun setupTabs() {
         binding.apply {
-            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    tab.set(
-                        resources.getDimensionInSp(R.dimen.company_tab_selected_textsize),
-                        R.color.black
-                    )
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                    tab.set(resources.getDimensionInSp(R.dimen.company_tab_textsize), R.color.dark)
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab) {}
+            tabLayout.customize(viewPager, R.layout.company_tab_item_layout, titles, onSelect = {
+                it.set(
+                    resources.getDimensionInSp(R.dimen.company_tab_selected_textsize),
+                    R.color.black
+                )
+            }, onUnselect = {
+                it.set(resources.getDimensionInSp(R.dimen.company_tab_textsize), R.color.dark)
             })
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.customView = View.inflate(context, R.layout.company_tab_item_layout, null)
-                tab.text = titles[position]
-                viewPager.currentItem = tab.position
-            }.attach()
             tabLayout.getTabAt(0)?.select()
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.backButton.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        binding.favouriteButton.setOnClickListener {
+            viewModel.changeFavourite()
         }
     }
 
@@ -121,6 +108,7 @@ class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>()
                 0 -> ChartFragment.newInstance(ticker)
                 1 -> SummaryFragment.newInstance(ticker)
                 2 -> NewsFragment.newInstance(ticker)
+                3 -> RecommendationFragment.newInstance(ticker)
                 else -> throw RuntimeException("Unknown company tab fragment on position '$position'")
             }
         }

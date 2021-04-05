@@ -54,14 +54,14 @@ class SearchViewModel @Inject constructor(
         val text = query.trim()
         return if (text.isNotEmpty()) {
             beforeSearchStart()
-            startJob {
+            startJob(stopImmediately = true) {
+                repository.addSearchRequest(text)
                 val list = repository.search(text)
                 if (stopTimeoutJob()) {
                     onLoad(list)
                     stopLoading()
                 }
             }
-            repository.addSearchRequest(text)
             true
         } else {
             false

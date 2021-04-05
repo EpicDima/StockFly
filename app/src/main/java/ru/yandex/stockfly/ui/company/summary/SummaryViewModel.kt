@@ -28,6 +28,7 @@ class SummaryViewModel @Inject constructor(
             repository.getCompany(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
                     _company.postValue(it)
+                    stopLoading()
                 }
             }
         }
@@ -38,6 +39,7 @@ class SummaryViewModel @Inject constructor(
     }
 
     override fun onError(e: Throwable) {
+        stopTimeoutJob()
         setError()
     }
 }

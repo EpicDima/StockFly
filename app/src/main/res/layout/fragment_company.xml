@@ -29,96 +29,89 @@
             android:background="@null"
             app:elevation="0dp">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways|snap">
+                android:layout_height="@dimen/menu_button_size"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/back_button"
+                    android:layout_width="@dimen/menu_button_size"
                     android:layout_height="@dimen/menu_button_size"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
-                        android:id="@+id/back_button"
-                        android:layout_width="@dimen/menu_button_size"
-                        android:layout_height="@dimen/menu_button_size"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:src="@drawable/ic_back"
+                        tools:ignore="ContentDescription" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:src="@drawable/ic_back"
-                            tools:ignore="ContentDescription" />
+                </LinearLayout>
 
-                    </LinearLayout>
+                <TextView
+                    android:id="@+id/ticker"
+                    style="@style/Ticker"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text="@{company.ticker}"
+                    app:layout_constraintEnd_toStartOf="@+id/favourite_button"
+                    app:layout_constraintStart_toEndOf="@+id/back_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="AAPL" />
 
-                    <TextView
-                        android:id="@+id/ticker"
-                        style="@style/Ticker"
-                        android:layout_width="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="8dp"
-                        android:gravity="center"
-                        android:text="@{company.ticker}"
-                        app:layout_constraintEnd_toStartOf="@+id/favourite_button"
-                        app:layout_constraintStart_toEndOf="@+id/back_button"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="AAPL" />
+                <TextView
+                    android:id="@+id/name"
+                    style="@style/CompanyName"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text="@{company.name}"
+                    app:layout_constraintEnd_toStartOf="@+id/favourite_button"
+                    app:layout_constraintStart_toEndOf="@+id/back_button"
+                    app:layout_constraintTop_toBottomOf="@+id/ticker"
+                    tools:text="MMMA" />
 
-                    <TextView
-                        android:id="@+id/name"
-                        style="@style/CompanyName"
-                        android:layout_width="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
-                        android:gravity="center"
-                        android:text="@{company.name}"
-                        app:layout_constraintEnd_toStartOf="@+id/favourite_button"
-                        app:layout_constraintStart_toEndOf="@+id/back_button"
-                        app:layout_constraintTop_toBottomOf="@+id/ticker"
-                        tools:text="MMMA" />
+                <LinearLayout
+                    android:id="@+id/favourite_button"
+                    android:layout_width="@dimen/menu_button_size"
+                    android:layout_height="@dimen/menu_button_size"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal"
+                    android:visibility="@{company != null ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
-                        android:id="@+id/favourite_button"
-                        android:layout_width="@dimen/menu_button_size"
-                        android:layout_height="@dimen/menu_button_size"
-                        android:gravity="center_vertical|end"
-                        android:orientation="horizontal"
-                        android:visibility="@{company != null ? View.VISIBLE : View.INVISIBLE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                    <ImageView
+                        android:id="@+id/favourite_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:src="@{company.favourite ? @drawable/ic_star_selected : @drawable/ic_star}"
+                        tools:ignore="ContentDescription" />
 
-                        <ImageView
-                            android:id="@+id/favourite_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="2dp"
-                            android:src="@{company.favourite ? @drawable/ic_star_selected : @drawable/ic_star}"
-                            tools:ignore="ContentDescription" />
+                </LinearLayout>
 
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 style="@style/TabLayout"
-                android:layout_marginStart="@dimen/company_tablayout_side_margin"
-                android:layout_marginEnd="@dimen/company_tablayout_side_margin"
+                android:paddingStart="@dimen/company_tablayout_side_padding"
+                android:paddingEnd="@dimen/company_tablayout_side_padding"
                 android:visibility="@{(company == null || error) ? View.GONE : View.VISIBLE}" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -134,7 +127,8 @@
                 android:visibility="@{(company != null || error) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
             <TextView
                 style="@style/ErrorTextView"
@@ -142,15 +136,15 @@
                 android:visibility="@{error ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             style="@style/ViewPager"
-            android:visibility="@{(company == null || error) ? View.INVISIBLE : View.VISIBLE}"
-            tools:visibility="gone" />
+            android:visibility="@{(company == null || error) ? View.INVISIBLE : View.VISIBLE}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

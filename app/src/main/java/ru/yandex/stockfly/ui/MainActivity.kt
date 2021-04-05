@@ -6,23 +6,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentOpener {
-
-    private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentOpener,
+    WebViewFragmentOpener {
 
     private lateinit var router: MainRouter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         router = MainRouter(supportFragmentManager, binding.fragmentContainer.id)
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -38,6 +31,10 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
     override fun openCompanyFragment(ticker: String) {
         router.openCompanyFragment(ticker)
     }
+
+    override fun openWebViewFragment(url: String) {
+        router.openWebViewFragment(url)
+    }
 }
 
 
@@ -48,4 +45,9 @@ interface SearchFragmentOpener {
 
 interface CompanyFragmentOpener {
     fun openCompanyFragment(ticker: String)
+}
+
+
+interface WebViewFragmentOpener {
+    fun openWebViewFragment(url: String)
 }

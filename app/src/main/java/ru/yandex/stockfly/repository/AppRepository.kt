@@ -13,12 +13,10 @@ import ru.yandex.stockfly.api.ApiService
 import ru.yandex.stockfly.api.response.toModel
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
+import ru.yandex.stockfly.db.dao.RecommendationDao
 import ru.yandex.stockfly.db.entity.toEntity
 import ru.yandex.stockfly.db.entity.toModel
-import ru.yandex.stockfly.model.Company
-import ru.yandex.stockfly.model.NewsItem
-import ru.yandex.stockfly.model.SearchItem
-import ru.yandex.stockfly.model.StockCandles
+import ru.yandex.stockfly.model.*
 import ru.yandex.stockfly.other.MAX_SEARCHED_REQUESTS
 import ru.yandex.stockfly.other.StockCandleParam
 import ru.yandex.stockfly.other.getSearched
@@ -28,6 +26,7 @@ class AppRepository(
     private val apiService: ApiService,
     private val companyDao: CompanyDao,
     private val newsItemDao: NewsItemDao,
+    private val recommendationDao: RecommendationDao,
     private val preferences: SharedPreferences,
     private val stringListAdapter: JsonAdapter<List<String>>,
 ) : Repository {
@@ -168,9 +167,36 @@ class AppRepository(
                 newsItemDao.upsert(
                     apiService.getCompanyNews(ticker).map { it.toModel().toEntity(ticker) }.toList()
                 )
+                newsItemDao.select(ticker).let { list ->
+                    news.postValue(list.map { it.toModel() })
+                }
             } catch (ignored: Exception) {
             }
         }
         return news
+    }
+
+    override fun getCompanyRecommendationsWithRefresh(
+        ticker: String,
+        coroutineScope: CoroutineScope
+    ): LiveData<List<Recommendation>> {
+        val recommendations = MutableLiveData<List<Recommendation>>()
+        coroutineScope.launch(Dispatchers.IO) {
+            recommendationDao.select(ticker).let { list ->
+                recommendations.postValue(list.map { it.toModel() })
+            }
+            try {
+                recommendationDao.upsert(
+                    apiService.getCompanyRecommendations(ticker).map {
+                        it.toModel().toEntity(ticker)
+                    }.toList()
+                )
+                recommendationDao.select(ticker).let { list ->
+                    recommendations.postValue(list.map { it.toModel() })
+                }
+            } catch (ignored: Exception) {
+            }
+        }
+        return recommendations
     }
 }

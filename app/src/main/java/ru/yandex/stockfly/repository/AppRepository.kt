@@ -1,6 +1,7 @@
 package ru.yandex.stockfly.repository
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import ru.yandex.stockfly.api.response.toModel
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
 import ru.yandex.stockfly.db.dao.RecommendationDao
+import ru.yandex.stockfly.db.dao.StockCandlesDao
 import ru.yandex.stockfly.db.entity.toEntity
 import ru.yandex.stockfly.db.entity.toModel
 import ru.yandex.stockfly.model.*
@@ -27,6 +29,7 @@ class AppRepository(
     private val companyDao: CompanyDao,
     private val newsItemDao: NewsItemDao,
     private val recommendationDao: RecommendationDao,
+    private val stockCandlesDao: StockCandlesDao,
     private val preferences: SharedPreferences,
     private val stringListAdapter: JsonAdapter<List<String>>,
 ) : Repository {
@@ -134,69 +137,92 @@ class AppRepository(
         ticker: String,
         coroutineScope: CoroutineScope
     ): LiveData<Company> {
-        val company = MutableLiveData<Company>()
-        coroutineScope.launch(Dispatchers.IO) {
-            companyDao.select(ticker)?.let {
-                company.postValue(it.toModel())
+        return getDataWithRefresh(coroutineScope,
+            getFromDatabase = {
+                companyDao.select(ticker)!!.toModel()
+            },
+            getFromApi = {
+                getCompanyWithQuote(ticker)!!
+            },
+            refreshDatabaseAndGetNew = { value ->
+                companyDao.upsert(value.toEntity())
+                companyDao.select(ticker)!!.toModel()
             }
-            getCompanyWithQuote(ticker)?.let {
-                companyDao.upsert(it.toEntity())
-                companyDao.select(ticker)?.let { entity ->
-                    company.postValue(entity.toModel())
-                }
-            }
-        }
-        return company
+        )
     }
 
-    override suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles {
+    override suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles? {
+        val (from, _) = param.getTimeInterval()
+        return stockCandlesDao.select(ticker, param, from).map { it.toModel() }
+            .toStockCandles()
+    }
+
+    override suspend fun getStockCandlesWithRefresh(
+        ticker: String,
+        param: StockCandleParam
+    ): StockCandles? {
         val (from, to) = param.getTimeInterval()
-        return apiService.getStockCandle(ticker, param.resolution, from, to).toModel()
+        val fromApi = apiService.getStockCandles(ticker, param.resolution, from, to).toModel()
+        val forDb = fromApi.toStockCandleItems().map { it.toEntity(ticker, param) }
+        val fromDb = stockCandlesDao.upsertAndSelect(ticker, param, from, forDb)
+        return fromDb.map { it.toModel() }.toStockCandles()
     }
 
     override fun getCompanyNewsWithRefresh(
         ticker: String,
         coroutineScope: CoroutineScope
     ): LiveData<List<NewsItem>> {
-        val news = MutableLiveData<List<NewsItem>>()
-        coroutineScope.launch(Dispatchers.IO) {
-            newsItemDao.select(ticker).let { list ->
-                news.postValue(list.map { it.toModel() })
+        return getDataWithRefresh(coroutineScope,
+            getFromDatabase = {
+                newsItemDao.select(ticker).map { it.toModel() }
+            },
+            getFromApi = {
+                apiService.getCompanyNews(ticker).map { it.toModel() }
+            },
+            refreshDatabaseAndGetNew = { value ->
+                newsItemDao.upsertAndSelect(ticker, value.map { it.toEntity(ticker) })
+                    .map { it.toModel() }
             }
-            try {
-                newsItemDao.upsert(
-                    apiService.getCompanyNews(ticker).map { it.toModel().toEntity(ticker) }.toList()
-                )
-                newsItemDao.select(ticker).let { list ->
-                    news.postValue(list.map { it.toModel() })
-                }
-            } catch (ignored: Exception) {
-            }
-        }
-        return news
+        )
     }
 
     override fun getCompanyRecommendationsWithRefresh(
         ticker: String,
         coroutineScope: CoroutineScope
     ): LiveData<List<Recommendation>> {
-        val recommendations = MutableLiveData<List<Recommendation>>()
+        return getDataWithRefresh(coroutineScope,
+            getFromDatabase = {
+                recommendationDao.select(ticker).map { it.toModel() }
+            },
+            getFromApi = {
+                apiService.getCompanyRecommendations(ticker).map { it.toModel() }
+            },
+            refreshDatabaseAndGetNew = { value ->
+                recommendationDao.upsertAndSelect(ticker, value.map { it.toEntity(ticker) })
+                    .map { it.toModel() }
+            }
+        )
+    }
+
+    private fun <T> getDataWithRefresh(
+        coroutineScope: CoroutineScope,
+        getFromDatabase: suspend () -> T,
+        getFromApi: suspend () -> T,
+        refreshDatabaseAndGetNew: suspend (value: T) -> T
+    ): LiveData<T> {
+        val liveData = MutableLiveData<T>()
         coroutineScope.launch(Dispatchers.IO) {
-            recommendationDao.select(ticker).let { list ->
-                recommendations.postValue(list.map { it.toModel() })
-            }
-            try {
-                recommendationDao.upsert(
-                    apiService.getCompanyRecommendations(ticker).map {
-                        it.toModel().toEntity(ticker)
-                    }.toList()
-                )
-                recommendationDao.select(ticker).let { list ->
-                    recommendations.postValue(list.map { it.toModel() })
+            kotlin.runCatching { getFromDatabase() }
+                .onSuccess { databaseData -> liveData.postValue(databaseData) }
+                .onFailure { Log.w("REPOSITORY", "getFromDatabase", it) }
+            kotlin.runCatching { getFromApi() }
+                .onSuccess { apiData ->
+                    kotlin.runCatching { refreshDatabaseAndGetNew(apiData) }
+                        .onSuccess { databaseData -> liveData.postValue(databaseData) }
+                        .onFailure { Log.w("REPOSITORY", "refreshDbAndGetNew", it) }
                 }
-            } catch (ignored: Exception) {
-            }
+                .onFailure { Log.w("REPOSITORY", "getFromApi", it) }
         }
-        return recommendations
+        return liveData
     }
 }

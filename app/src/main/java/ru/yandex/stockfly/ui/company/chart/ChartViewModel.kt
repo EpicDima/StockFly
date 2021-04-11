@@ -36,25 +36,24 @@ class ChartViewModel @Inject constructor(
     private val _stockCandles = MutableLiveData<StockCandles?>()
     val stockCandles: LiveData<StockCandles?> = _stockCandles
 
-    // In-memory кэш. Решил, что сохранять в базу не надо,
-    // так как слишком уж много данных, может не прав и
-    // если не прав, то пока не контролирую максимальный объём сохраняемых данных.
-    private val cacheMap: MutableMap<StockCandleParam, StockCandles> = mutableMapOf()
+    private var _brandNewData = false
+    val brandNewData: Boolean
+        get() = _brandNewData
+
+    private val cache: MutableMap<StockCandleParam, StockCandles> = mutableMapOf()
 
     private fun updateChart(newStockCandleParam: StockCandleParam = StockCandleParam.MONTH) {
         if (_stockCandleParam.value != newStockCandleParam) {
+            _brandNewData = false
             beforeUpdate(newStockCandleParam)
-            if (cacheMap.containsKey(newStockCandleParam)) {
-                _stockCandles.postValue(cacheMap[newStockCandleParam])
+            if (cache.containsKey(newStockCandleParam)) {
+                _brandNewData = true
+                _stockCandles.postValue(cache[newStockCandleParam])
+                stopLoading()
             } else {
                 beforeUpdateStart()
                 startJob(stopImmediately = true) {
-                    val stockCandles = repository.getStockCandles(ticker, newStockCandleParam)
-                    if (stopTimeoutJob()) {
-                        _stockCandles.postValue(stockCandles)
-                        cacheMap[newStockCandleParam] = stockCandles
-                        stopLoading()
-                    }
+                    doJob(newStockCandleParam)
                 }
             }
         }
@@ -63,12 +62,43 @@ class ChartViewModel @Inject constructor(
     private fun beforeUpdate(newStockCandleParam: StockCandleParam) {
         _previousStockCandleParam = _stockCandleParam.value
         _stockCandleParam.postValue(newStockCandleParam)
+        stopJob()
     }
 
     private fun beforeUpdateStart() {
-        stopJob()
         startLoading()
         startTimeoutJob()
+    }
+
+    private suspend fun doJob(newStockCandleParam: StockCandleParam) {
+        val newStockCandles = repository.getStockCandles(ticker, newStockCandleParam)
+        if (newStockCandles != null) {
+            _brandNewData = true
+            setNewStockCandles(newStockCandleParam, newStockCandles)
+        }
+        val newRefreshedStockCandles =
+            repository.getStockCandlesWithRefresh(ticker, newStockCandleParam)
+        if (newRefreshedStockCandles != null) {
+            _brandNewData = (newStockCandles == null)
+            setNewStockCandles(newStockCandleParam, newRefreshedStockCandles)
+        }
+        if (newStockCandles == null && newRefreshedStockCandles == null) {
+            setNewStockCandles(newStockCandleParam)
+        }
+    }
+
+    private fun setNewStockCandles(
+        newStockCandleParam: StockCandleParam,
+        stockCandlesNew: StockCandles? = null
+    ) {
+        stopTimeoutJob()
+        if (stockCandlesNew != null) {
+            cache[newStockCandleParam] = stockCandlesNew
+        } else {
+            cache.remove(newStockCandleParam)
+        }
+        _stockCandles.postValue(stockCandlesNew)
+        stopLoading()
     }
 
     override fun onTimeout() {

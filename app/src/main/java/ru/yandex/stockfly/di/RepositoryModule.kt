@@ -10,6 +10,7 @@ import ru.yandex.stockfly.api.ApiService
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
 import ru.yandex.stockfly.db.dao.RecommendationDao
+import ru.yandex.stockfly.db.dao.StockCandlesDao
 import ru.yandex.stockfly.repository.AppRepository
 import ru.yandex.stockfly.repository.Repository
 import javax.inject.Singleton
@@ -25,6 +26,7 @@ object RepositoryModule {
         companyDao: CompanyDao,
         newsItemDao: NewsItemDao,
         recommendationDao: RecommendationDao,
+        stockCandlesDao: StockCandlesDao,
         preferences: SharedPreferences,
         adapter: JsonAdapter<List<String>>,
     ): Repository {
@@ -33,6 +35,7 @@ object RepositoryModule {
             companyDao,
             newsItemDao,
             recommendationDao,
+            stockCandlesDao,
             preferences,
             adapter
         )

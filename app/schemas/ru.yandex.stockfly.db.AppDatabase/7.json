@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 5,
-    "identityHash": "07ba2fe297ac7a645e8194d7ae8df387",
+    "version": 7,
+    "identityHash": "de26529ff61362b0b23c9489ad3d7662",
     "entities": [
       {
         "tableName": "companies",
@@ -283,7 +283,7 @@
       },
       {
         "tableName": "stock_candle_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ticker` TEXT NOT NULL, `resolution` TEXT NOT NULL, `price` REAL NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`ticker`, `resolution`, `timestamp`), FOREIGN KEY(`ticker`) REFERENCES `companies`(`ticker`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ticker` TEXT NOT NULL, `param` INTEGER NOT NULL, `price` REAL NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`ticker`, `param`, `timestamp`), FOREIGN KEY(`ticker`) REFERENCES `companies`(`ticker`) ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)",
         "fields": [
           {
             "fieldPath": "ticker",
@@ -292,9 +292,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "resolution",
-            "columnName": "resolution",
-            "affinity": "TEXT",
+            "fieldPath": "param",
+            "columnName": "param",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -313,7 +313,7 @@
         "primaryKey": {
           "columnNames": [
             "ticker",
-            "resolution",
+            "param",
             "timestamp"
           ],
           "autoGenerate": false
@@ -346,7 +346,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '07ba2fe297ac7a645e8194d7ae8df387')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'de26529ff61362b0b23c9489ad3d7662')"
     ]
   }
 }

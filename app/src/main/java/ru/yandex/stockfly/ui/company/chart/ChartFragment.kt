@@ -69,7 +69,7 @@ class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
 
     private fun setupObservers() {
         viewModel.stockCandles.observe(viewLifecycleOwner) {
-            binding.chart.updateData(it)
+            binding.chart.updateData(it, viewModel.brandNewData)
         }
         viewModel.stockCandleParam.observe(viewLifecycleOwner) {
             unselectButtonByParam(viewModel.previousStockCandleParam)

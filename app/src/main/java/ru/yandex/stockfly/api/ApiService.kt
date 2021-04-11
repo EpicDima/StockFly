@@ -31,13 +31,13 @@ interface ApiService {
         token: String = API_KEY
     ): QuoteDto
 
-    suspend fun getStockCandle(
+    suspend fun getStockCandles(
         ticker: String,
         resolution: String,
         from: Long,
         to: Long,
         token: String = API_KEY
-    ): StockCandleDto
+    ): StockCandlesDto
 
     suspend fun getCompanyRecommendations(
         ticker: String,

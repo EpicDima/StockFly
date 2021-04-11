@@ -10,6 +10,7 @@ import ru.yandex.stockfly.db.buildDatabase
 import ru.yandex.stockfly.db.dao.CompanyDao
 import ru.yandex.stockfly.db.dao.NewsItemDao
 import ru.yandex.stockfly.db.dao.RecommendationDao
+import ru.yandex.stockfly.db.dao.StockCandlesDao
 import javax.inject.Singleton
 
 @Module
@@ -38,5 +39,11 @@ object DatabaseModule {
     @Provides
     fun provideRecommendationDao(database: Database): RecommendationDao {
         return database.recommendationDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideStockCandlesDao(database: Database): StockCandlesDao {
+        return database.stockCandlesDao()
     }
 }

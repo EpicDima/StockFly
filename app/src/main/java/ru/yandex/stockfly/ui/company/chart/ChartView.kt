@@ -1,5 +1,6 @@
 package ru.yandex.stockfly.ui.company.chart
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -11,6 +12,7 @@ import ru.yandex.stockfly.model.StockCandles
 import ru.yandex.stockfly.other.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class ChartView @JvmOverloads constructor(
     context: Context,
@@ -20,6 +22,12 @@ class ChartView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     // все числа лучше вынести и также лучше сделать аттрибуты для этой вьюшки
+
+    private val heightAnimationDuration = 400L
+
+    private var heightAnimator: ValueAnimator? = null
+
+    private var realHeight: Int = 0
 
     private val lineWidth = 2.0f.dpToPx(context)
     private val circleRadius = 4.0f.dpToPx(context)
@@ -116,30 +124,55 @@ class ChartView @JvmOverloads constructor(
 
     private var selectedIndex = -1
 
-    fun updateData(newData: StockCandles?) {
+    fun updateData(newData: StockCandles?, withAnimation: Boolean = true) {
         data = newData
         min = data?.price?.minOfOrNull { it } ?: 0.0
         max = data?.price?.maxOfOrNull { it } ?: 0.0
         length = data?.price?.size ?: 0
         selectedIndex = -1
-        invalidate()
+        if (length > 1 && withAnimation) {
+            startAnimation()
+        } else {
+            invalidate()
+        }
     }
 
     fun updateFormat(format: SimpleDateFormat) {
         dateTimeFormat = format
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
+    private fun startAnimation() {
+        heightAnimator?.cancel()
+        heightAnimator = ValueAnimator.ofInt(
+            chartPaddingSize.toInt(),
+            (height - chartPaddingSize).toInt()
+        ).apply {
+            duration = heightAnimationDuration
+            addUpdateListener {
+                realHeight = it.animatedValue as Int
+                changeLineGradient()
+                invalidate()
+            }
+        }
+        heightAnimator?.start()
+    }
+
+    private fun changeLineGradient() {
         lineGradientPaint.shader = LinearGradient(
             0.0f,
             0.0f,
             0.0f,
-            h.toFloat(),
+            realHeight.toFloat(),
             startGradientColor,
             endGradientColor,
             Shader.TileMode.CLAMP
         )
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        realHeight = h
+        changeLineGradient()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -165,17 +198,17 @@ class ChartView @JvmOverloads constructor(
 
     private fun drawLine(values: DoubleArray, canvas: Canvas) {
         linePath.moveTo(0.toRealX(), values.first().toRealY())
-        for (i in 1 until values.size) {
+        for (i in 1 until values.size - 1) {
             linePath.lineTo(i.toRealX(), values[i].toRealY())
         }
-        linePath.lineTo(length.toRealX(), values.last().toRealY())
+        linePath.lineTo(values.lastIndex.toRealX(), values.last().toRealY())
         canvas.drawPath(linePath, linePaint)
     }
 
     private fun drawGradient(canvas: Canvas) {
         gradientPath.set(linePath)
-        gradientPath.lineTo(width.toFloat(), height.toFloat())
-        gradientPath.lineTo(0.0f, height.toFloat())
+        gradientPath.lineTo(width.toFloat(), realHeight.toFloat())
+        gradientPath.lineTo(0.0f, realHeight.toFloat())
         gradientPath.close()
         canvas.drawPath(gradientPath, lineGradientPaint)
     }
@@ -362,16 +395,15 @@ class ChartView @JvmOverloads constructor(
 
 
     private fun Int.toRealX(): Float {
-        return (width * this / length).toFloat()
+        return (width * this / (length - 1)).toFloat()
     }
 
     private fun Float.fromRealX(): Int {
-        val value = this * length / width
-        return if (value >= length) length - 1 else value.toInt()
+        return (this * (length - 1) / width).roundToInt()
     }
 
     private fun Double.toRealY(): Float {
-        return height - ((height - chartPaddingSize * 2) * (this - min) / (max - min)).toFloat() - chartPaddingSize
+        return realHeight - ((realHeight - chartPaddingSize * 2) * (this - min) / (max - min)).toFloat() - chartPaddingSize
     }
 
     private fun Paint.getTextWidthAndHeight(text: String): Pair<Int, Int> {

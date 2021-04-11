@@ -43,3 +43,22 @@ data class StockCandleItem(
         return format.format(Date(timestamp * 1000L)).capitalize(Locale.ROOT)
     }
 }
+
+
+fun StockCandles.toStockCandleItems(): List<StockCandleItem> {
+    return List(price.size) { idx -> getItem(idx) }
+}
+
+
+fun List<StockCandleItem>.toStockCandles(): StockCandles? {
+    if (isEmpty()) {
+        return null
+    }
+    val prices = DoubleArray(size)
+    val timestamps = LongArray(size)
+    for (i in indices) {
+        prices[i] = get(i).price
+        timestamps[i] = get(i).timestamp
+    }
+    return StockCandles(prices, timestamps)
+}

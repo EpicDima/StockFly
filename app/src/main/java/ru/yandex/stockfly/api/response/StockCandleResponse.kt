@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import ru.yandex.stockfly.model.StockCandles
 
 @JsonClass(generateAdapter = true)
-data class StockCandleDto(
+data class StockCandlesDto(
     @Json(name = "c")
     val price: DoubleArray = doubleArrayOf(),
     @Json(name = "t")
@@ -16,7 +16,7 @@ data class StockCandleDto(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as StockCandleDto
+        other as StockCandlesDto
 
         if (!price.contentEquals(other.price)) return false
         if (!timestamp.contentEquals(other.timestamp)) return false
@@ -32,6 +32,6 @@ data class StockCandleDto(
 }
 
 
-fun StockCandleDto.toModel(): StockCandles {
+fun StockCandlesDto.toModel(): StockCandles {
     return StockCandles(price, timestamp)
 }

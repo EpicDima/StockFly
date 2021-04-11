@@ -32,13 +32,13 @@ interface ApplicationApiService : ApiService {
     ): QuoteDto
 
     @GET("stock/candle")
-    override suspend fun getStockCandle(
+    override suspend fun getStockCandles(
         @Query("symbol") ticker: String,
         @Query("resolution") resolution: String,
         @Query("from") from: Long,
         @Query("to") to: Long,
         @Query("token") token: String
-    ): StockCandleDto
+    ): StockCandlesDto
 
     @GET("stock/recommendation")
     override suspend fun getCompanyRecommendations(

@@ -95,19 +95,11 @@ fun Company.ipoLocalDateString(): String {
     }
 }
 
-fun Float.toLocalString(): String {
-    return Formatter.getNumberFormat().format(this)
-}
-
 fun Double.toLocalString(): String {
     return Formatter.getNumberFormat().format(this)
 }
 
 fun Int.toLocalString(): String {
-    return Formatter.getNumberFormat().format(this)
-}
-
-fun Long.toLocalString(): String {
     return Formatter.getNumberFormat().format(this)
 }
 

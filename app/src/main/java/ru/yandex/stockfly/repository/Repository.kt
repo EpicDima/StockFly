@@ -21,7 +21,8 @@ interface Repository {
         coroutineScope: CoroutineScope = GlobalScope
     ): LiveData<Company>
 
-    suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles
+    suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles?
+    suspend fun getStockCandlesWithRefresh(ticker: String, param: StockCandleParam): StockCandles?
     fun getCompanyNewsWithRefresh(
         ticker: String,
         coroutineScope: CoroutineScope = GlobalScope

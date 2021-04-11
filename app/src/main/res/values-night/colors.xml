@@ -4,7 +4,7 @@
     <!-- Так конечно неправильно делать... -->
 
     <color name="black">#FFFFFF</color>
-    <color name="darker">#F0F4F7</color>
+    <color name="darker">#D1D1D1</color>
     <color name="dark">#C6C6C6</color>
     <color name="grey">#BABABA</color>
     <color name="light">#303030</color>

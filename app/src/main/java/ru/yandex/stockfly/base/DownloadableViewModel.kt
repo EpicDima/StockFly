@@ -42,6 +42,10 @@ abstract class DownloadableViewModel : ViewModel() {
         _loading.postValue(false)
     }
 
+    protected open fun jobDone() {
+        jobIsDone.set(true)
+    }
+
     protected fun startJob(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         stopImmediately: Boolean = false,

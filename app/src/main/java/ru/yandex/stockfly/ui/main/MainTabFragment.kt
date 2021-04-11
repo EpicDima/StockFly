@@ -1,5 +1,6 @@
 package ru.yandex.stockfly.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,9 @@ import ru.yandex.stockfly.ui.CompanyFragmentOpener
 class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>() {
     companion object {
         const val TAB_NUMBER_KEY = "tab_number"
+
+        const val STOCKS_TAB_NUMBER = 0
+        const val FAVOURITE_TAB_NUMBER = 1
 
         @JvmStatic
         fun newInstance(tabNumber: Int): MainTabFragment {
@@ -37,10 +41,12 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
             emptyTextview.text =
                 resources.getStringArray(R.array.main_tabs_empty_list)[getTabNumber()]
         }
+        setupList()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setupList() {
         val adapter = CompanyAdapter { ticker ->
             (requireParentFragment().requireActivity() as CompanyFragmentOpener)
                 .openCompanyFragment(ticker)
@@ -53,6 +59,11 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
         }
         viewModel.companies.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            if (getTabNumber() == FAVOURITE_TAB_NUMBER) {
+                // по причине того, что цвет фона связан с позицией,
+                // которая присваивается в onBind и пока самый простой способ сделать так
+                adapter.notifyDataSetChanged()
+            }
             binding.empty = it.isEmpty()
         }
     }

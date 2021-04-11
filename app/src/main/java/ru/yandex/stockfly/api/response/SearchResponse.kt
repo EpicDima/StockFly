@@ -2,7 +2,7 @@ package ru.yandex.stockfly.api.response
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.yandex.stockfly.model.SearchItem
+import ru.yandex.stockfly.model.Company
 
 @JsonClass(generateAdapter = true)
 data class SearchResponse(
@@ -19,6 +19,6 @@ data class SearchDto(
 )
 
 
-fun SearchDto.toModel(): SearchItem {
-    return SearchItem(ticker, name)
+fun SearchDto.toModel(): Company {
+    return Company(ticker = ticker, name = name)
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.yandex.stockfly.base.DownloadableViewModel
-import ru.yandex.stockfly.model.SearchItem
+import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
 import javax.inject.Inject
 
@@ -31,8 +31,8 @@ class SearchViewModel @Inject constructor(
     private val _searched = MutableLiveData(repository.searchedRequests.toList())
     val searched: LiveData<List<String>> = _searched
 
-    private val _result = MutableLiveData<List<SearchItem>>()
-    val result: LiveData<List<SearchItem>> = _result
+    private val _result = MutableLiveData<List<Company>>()
+    val result: LiveData<List<Company>> = _result
 
     init {
         reset()
@@ -40,13 +40,14 @@ class SearchViewModel @Inject constructor(
 
     fun reset() {
         stopJob()
+        stopTimeoutJob()
         resetError()
         stopLoading()
         _showPopular.value = _popular.value!!.isNotEmpty()
         _showSearched.value = _searched.value!!.isNotEmpty()
         _showResult.value = false
         _emptyResult.value = false
-        _searched.postValue(repository.searchedRequests.toList())
+        _searched.value = repository.searchedRequests.toList()
         _result.value = emptyList()
     }
 
@@ -60,6 +61,7 @@ class SearchViewModel @Inject constructor(
                 if (stopTimeoutJob()) {
                     onLoad(list)
                     stopLoading()
+                    getMoreInformation(list)
                 }
             }
             true
@@ -69,21 +71,30 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun beforeSearchStart() {
+        resetError()
+        stopJob()
         startLoading()
         _showResult.value = false
         _emptyResult.value = false
         _showPopular.value = false
         _showSearched.value = false
-        stopJob()
         startTimeoutJob()
     }
 
-    private fun onLoad(list: List<SearchItem>) {
+    private fun onLoad(list: List<Company>) {
         _result.postValue(list)
         if (list.isNotEmpty()) {
             _showResult.postValue(true)
         } else {
             _emptyResult.postValue(true)
+        }
+    }
+
+    private suspend fun getMoreInformation(list: List<Company>) {
+        val mutableList = list.toMutableList()
+        list.forEachIndexed { index, company ->
+            mutableList[index] = repository.getCompanyForSearch(company)
+            _result.postValue(mutableList.toList())
         }
     }
 

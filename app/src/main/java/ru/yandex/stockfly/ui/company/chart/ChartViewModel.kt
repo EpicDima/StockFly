@@ -73,6 +73,9 @@ class ChartViewModel @Inject constructor(
     private suspend fun doJob(newStockCandleParam: StockCandleParam) {
         val newStockCandles = repository.getStockCandles(ticker, newStockCandleParam)
         if (newStockCandles != null) {
+            if (newStockCandles.price.size > 1) {
+                jobDone()
+            }
             _brandNewData = true
             setNewStockCandles(newStockCandleParam, newStockCandles)
         }
@@ -108,7 +111,9 @@ class ChartViewModel @Inject constructor(
 
     override fun onError(e: Throwable) {
         stopTimeoutJob()
-        _stockCandles.postValue(null)
+        if (stopJob()) {
+            _stockCandles.postValue(null)
+        }
         stopLoading()
     }
 

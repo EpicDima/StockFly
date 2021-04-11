@@ -24,6 +24,7 @@ import ru.yandex.stockfly.R
 import ru.yandex.stockfly.base.BaseFragment
 import ru.yandex.stockfly.databinding.FragmentSearchBinding
 import ru.yandex.stockfly.ui.CompanyFragmentOpener
+import ru.yandex.stockfly.ui.main.CompanyAdapter
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
@@ -59,13 +60,10 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         setupSearchField()
         setupButtons()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.popularRecyclerView.setupSearchChipList(viewModel.popular)
         binding.searchedRecyclerView.setupSearchChipList(viewModel.searched)
         setupResultList()
+        return binding.root
     }
 
     override fun onStart() {
@@ -74,7 +72,7 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     }
 
     private fun setupResultList() {
-        val resultAdapter = SearchItemAdapter { ticker ->
+        val resultAdapter = CompanyAdapter { ticker ->
             (requireActivity() as CompanyFragmentOpener).openCompanyFragment(ticker)
         }
         binding.resultRecyclerView.apply {
@@ -83,7 +81,9 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             itemAnimator = null
             setHasFixedSize(true)
         }
-        viewModel.result.observe(viewLifecycleOwner) { resultAdapter.submitList(it) }
+        viewModel.result.observe(viewLifecycleOwner) {
+            resultAdapter.submitList(it)
+        }
     }
 
     private fun setupSearchField() {

@@ -3,7 +3,10 @@ package ru.yandex.stockfly.repository
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
-import ru.yandex.stockfly.model.*
+import ru.yandex.stockfly.model.Company
+import ru.yandex.stockfly.model.NewsItem
+import ru.yandex.stockfly.model.Recommendation
+import ru.yandex.stockfly.model.StockCandles
 import ru.yandex.stockfly.other.StockCandleParam
 
 interface Repository {
@@ -11,7 +14,8 @@ interface Repository {
     val favourites: LiveData<List<Company>>
     val searchedRequests: List<String>
 
-    suspend fun search(query: String): List<SearchItem>
+    suspend fun search(query: String): List<Company>
+    suspend fun getCompanyForSearch(company: Company): Company
     fun addSearchRequest(request: String)
     fun refreshCompanies(coroutineScope: CoroutineScope = GlobalScope)
     suspend fun changeFavourite(company: Company): Int

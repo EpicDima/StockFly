@@ -11,7 +11,7 @@
     <string name="not_empty_request">Поисковой запрос не должен быть пустой строкой</string>
     <string name="no_results">Результатов не найдено</string>
     <string name="popular_title">Популярные запросы</string>
-    <string name="searched_title">Вы искали это</string>
+    <string name="searched_title">Вы искали</string>
     <string name="search_result_title">Акции</string>
     <string name="buy_stock">Купить акцию за %1$s</string>
     <string name="bought_stock">Вы купили %1$s за %2$s</string>

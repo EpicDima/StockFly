@@ -111,84 +111,77 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            style="@style/WithoutOverScroll"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
+                android:id="@+id/popular_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                android:visibility="@{showPopular ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone">
 
-                <LinearLayout
-                    android:id="@+id/popular_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="vertical"
-                    android:visibility="@{showPopular ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone">
+                <TextView
+                    android:id="@+id/popular_title"
+                    style="@style/SearchTitle"
+                    android:text="@string/popular_title" />
 
-                    <TextView
-                        android:id="@+id/popular_title"
-                        style="@style/SearchTitle"
-                        android:text="@string/popular_title" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/popular_recycler_view"
-                        style="@style/HorizontalList"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/searched_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:orientation="vertical"
-                    android:visibility="@{showSearched ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/searched_title"
-                        style="@style/SearchTitle"
-                        android:text="@string/searched_title" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/searched_recycler_view"
-                        style="@style/HorizontalList"
-                        android:layout_marginTop="8dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/result_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical"
-                    android:visibility="@{showResult ? View.VISIBLE : View.GONE}"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/result_title"
-                        style="@style/SearchTitle"
-                        android:text="@string/search_result_title" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/result_recycler_view"
-                        style="@style/VerticalList"
-                        android:layout_marginTop="4dp"
-                        tools:visibility="visible" />
-
-                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/popular_recycler_view"
+                    style="@style/HorizontalList"
+                    android:layout_marginTop="8dp" />
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:id="@+id/searched_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                android:visibility="@{showSearched ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone">
+
+                <TextView
+                    android:id="@+id/searched_title"
+                    style="@style/SearchTitle"
+                    android:text="@string/searched_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searched_recycler_view"
+                    style="@style/HorizontalList"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/result_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:visibility="@{showResult ? View.VISIBLE : View.GONE}"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/result_title"
+                    style="@style/SearchTitle"
+                    android:text="@string/search_result_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/result_recycler_view"
+                    style="@style/VerticalList"
+                    android:layout_marginTop="4dp"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

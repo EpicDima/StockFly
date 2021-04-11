@@ -72,8 +72,10 @@ class AppRepository(
         refreshCompaniesObserver = Observer<List<Company>> { list ->
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    companyDao.upsert(list.mapNotNull { getCompanyWithQuote(it.ticker)?.toEntity() }
-                        .toList())
+                    companyDao.update(list.mapNotNull {
+                        val favourite = companyDao.select(it.ticker)!!.favourite
+                        getCompanyWithQuote(it.ticker)?.toEntity()?.copy(favourite = favourite)
+                    })
                     launch(Dispatchers.Main) {
                         _companies.removeObserver(refreshCompaniesObserver)
                     }
@@ -84,23 +86,41 @@ class AppRepository(
     }
 
     private suspend fun getCompanyWithQuote(ticker: String): Company? {
-        var company: Company? = null
         return try {
-            company = apiService.getCompany(ticker).toModel()
             val quote = apiService.getQuote(ticker).toModel()
-            company.copy(quote = quote)
+            apiService.getCompany(ticker).toModel().copy(quote = quote)
         } catch (e: Exception) {
-            company
+            null
         }
     }
 
-    override suspend fun search(query: String): List<SearchItem> {
+    override suspend fun search(query: String): List<Company> {
+        return apiService.search(query).result
+            .filter { !isWrongTicker(it.ticker) }
+            .map {
+                val company = companyDao.select(it.ticker)
+                company?.toModel() ?: it.toModel()
+            }
+    }
+
+    private fun isWrongTicker(ticker: String): Boolean {
         // Проверка на символы . и : надо, потому что в бесплатной версии API есть поддержка
         // только US symbols, поэтому остальные просто выкидываются, иначе будет много
-        // компаний без данных о стоимости
-        return apiService.search(query).result
-            .filter { !(it.ticker.contains(".") || it.ticker.contains(":")) }
-            .map { it.toModel() }
+        // компаний без информации
+        return ticker.contains(".") || ticker.contains(":")
+    }
+
+    override suspend fun getCompanyForSearch(company: Company): Company {
+        val updatedCompany = getCompanyWithQuote(company.ticker)
+        return if (updatedCompany != null) {
+            if (company.favourite) {
+                updatedCompany.copy(favourite = company.favourite)
+            } else {
+                updatedCompany
+            }
+        } else {
+            company
+        }
     }
 
     override fun addSearchRequest(request: String) {
@@ -109,7 +129,7 @@ class AppRepository(
             if (size >= MAX_SEARCHED_REQUESTS) {
                 dropLast(1)
             }
-        }.toList()
+        }.toList() // для копирования списка
         _searchedRequests.clear()
         _searchedRequests.addAll(list.distinct())
         preferences.setSearched(searchedRequests, stringListAdapter)
@@ -145,8 +165,7 @@ class AppRepository(
                 getCompanyWithQuote(ticker)!!
             },
             refreshDatabaseAndGetNew = { value ->
-                companyDao.upsert(value.toEntity())
-                companyDao.select(ticker)!!.toModel()
+                companyDao.upsertAndSelect(value.toEntity()).toModel()
             }
         )
     }

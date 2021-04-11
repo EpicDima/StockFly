@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
+import ru.yandex.stockfly.ui.main.MainTabFragment.Companion.FAVOURITE_TAB_NUMBER
 import ru.yandex.stockfly.ui.main.MainTabFragment.Companion.TAB_NUMBER_KEY
 import javax.inject.Inject
-
-private const val STOCKS_TAB_NUMBER = 0
-private const val FAVOURITE_TAB_NUMBER = 1
 
 @HiltViewModel
 class MainTabViewModel @Inject constructor(

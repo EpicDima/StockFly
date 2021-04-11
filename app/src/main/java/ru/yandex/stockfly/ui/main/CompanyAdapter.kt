@@ -31,6 +31,7 @@ class CompanyAdapter(
                 root.setOnClickListener {
                     clickListener.onClick(company.ticker)
                 }
+                this.logo.setImageDrawable(null)
                 this.company = company
                 this.position = position
                 executePendingBindings()

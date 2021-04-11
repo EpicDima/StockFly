@@ -23,11 +23,11 @@ class ChartView @JvmOverloads constructor(
 
     // все числа лучше вынести и также лучше сделать аттрибуты для этой вьюшки
 
-    private val heightAnimationDuration = 400L
+    private val lengthAnimationDuration = 650L
 
-    private var heightAnimator: ValueAnimator? = null
+    private var lengthAnimator: ValueAnimator? = null
 
-    private var realHeight: Int = 0
+    private var realLength: Int = 0
 
     private val lineWidth = 2.0f.dpToPx(context)
     private val circleRadius = 4.0f.dpToPx(context)
@@ -142,19 +142,20 @@ class ChartView @JvmOverloads constructor(
     }
 
     private fun startAnimation() {
-        heightAnimator?.cancel()
-        heightAnimator = ValueAnimator.ofInt(
-            chartPaddingSize.toInt(),
-            (height - chartPaddingSize).toInt()
-        ).apply {
-            duration = heightAnimationDuration
+        lengthAnimator?.cancel()
+        lengthAnimator = ValueAnimator.ofInt(2, length).apply {
+            duration = lengthAnimationDuration
             addUpdateListener {
-                realHeight = it.animatedValue as Int
-                changeLineGradient()
+                realLength = it.animatedValue as Int
                 invalidate()
             }
         }
-        heightAnimator?.start()
+        lengthAnimator?.start()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        changeLineGradient()
     }
 
     private fun changeLineGradient() {
@@ -162,17 +163,11 @@ class ChartView @JvmOverloads constructor(
             0.0f,
             0.0f,
             0.0f,
-            realHeight.toFloat(),
+            height.toFloat(),
             startGradientColor,
             endGradientColor,
             Shader.TileMode.CLAMP
         )
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        realHeight = h
-        changeLineGradient()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -198,17 +193,17 @@ class ChartView @JvmOverloads constructor(
 
     private fun drawLine(values: DoubleArray, canvas: Canvas) {
         linePath.moveTo(0.toRealX(), values.first().toRealY())
-        for (i in 1 until values.size - 1) {
+        for (i in 1 until realLength - 1) {
             linePath.lineTo(i.toRealX(), values[i].toRealY())
         }
-        linePath.lineTo(values.lastIndex.toRealX(), values.last().toRealY())
+        linePath.lineTo((realLength - 1).toRealX(), values[realLength - 1].toRealY())
         canvas.drawPath(linePath, linePaint)
     }
 
     private fun drawGradient(canvas: Canvas) {
         gradientPath.set(linePath)
-        gradientPath.lineTo(width.toFloat(), realHeight.toFloat())
-        gradientPath.lineTo(0.0f, realHeight.toFloat())
+        gradientPath.lineTo((realLength - 1).toRealX(), height.toFloat())
+        gradientPath.lineTo(0.0f, height.toFloat())
         gradientPath.close()
         canvas.drawPath(gradientPath, lineGradientPaint)
     }
@@ -379,7 +374,7 @@ class ChartView @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
-            if (length > 0) {
+            if (length > 0 && length == realLength) {
                 selectedIndex = event.x.fromRealX()
                 invalidate()
             }
@@ -403,7 +398,7 @@ class ChartView @JvmOverloads constructor(
     }
 
     private fun Double.toRealY(): Float {
-        return realHeight - ((realHeight - chartPaddingSize * 2) * (this - min) / (max - min)).toFloat() - chartPaddingSize
+        return height - ((height - chartPaddingSize * 2) * (this - min) / (max - min)).toFloat() - chartPaddingSize
     }
 
     private fun Paint.getTextWidthAndHeight(text: String): Pair<Int, Int> {

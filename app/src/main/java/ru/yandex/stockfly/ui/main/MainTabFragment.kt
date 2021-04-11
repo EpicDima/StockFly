@@ -49,6 +49,7 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
             this.adapter = adapter
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
+            setHasFixedSize(true)
         }
         viewModel.companies.observe(viewLifecycleOwner) {
             adapter.submitList(it)

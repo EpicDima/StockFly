@@ -81,6 +81,7 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             adapter = resultAdapter
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
+            setHasFixedSize(true)
         }
         viewModel.result.observe(viewLifecycleOwner) { resultAdapter.submitList(it) }
     }

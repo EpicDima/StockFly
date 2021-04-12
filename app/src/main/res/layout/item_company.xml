@@ -57,7 +57,7 @@
             <TextView
                 android:id="@+id/ticker"
                 style="@style/Ticker"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="14dp"
                 android:text="@{company.ticker}"
@@ -93,12 +93,13 @@
             <TextView
                 android:id="@+id/current"
                 style="@style/SingleLineTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="14dp"
                 android:layout_marginEnd="17dp"
                 android:fontFamily="@font/montserrat_bold"
+                android:gravity="end"
                 android:text="@{company.currentString}"
                 android:textSize="@dimen/company_current_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +111,7 @@
             <TextView
                 android:id="@+id/change"
                 style="@style/SingleLineTextView"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="14dp"

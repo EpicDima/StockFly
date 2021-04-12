@@ -16,7 +16,7 @@ import ru.yandex.stockfly.model.NewsItem
         onDelete = ForeignKey.CASCADE,
         deferred = true
     )],
-    indices = [Index("ticker")]
+    indices = [Index("ticker"), Index("datetime")]
 )
 data class NewsItemEntity(
     @PrimaryKey

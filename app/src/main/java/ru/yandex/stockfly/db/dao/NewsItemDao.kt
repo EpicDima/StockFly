@@ -10,11 +10,11 @@ interface NewsItemDao {
     suspend fun select(ticker: String): List<NewsItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun upsert(news: List<NewsItemEntity>)
+    suspend fun insert(news: List<NewsItemEntity>)
 
     @Transaction
-    suspend fun upsertAndSelect(ticker: String, news: List<NewsItemEntity>): List<NewsItemEntity> {
-        upsert(news)
+    suspend fun insertAndSelect(ticker: String, news: List<NewsItemEntity>): List<NewsItemEntity> {
+        insert(news)
         return select(ticker)
     }
 }

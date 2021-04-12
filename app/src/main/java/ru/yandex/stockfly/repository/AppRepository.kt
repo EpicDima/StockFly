@@ -183,7 +183,7 @@ class AppRepository(
         val (from, to) = param.getTimeInterval()
         val fromApi = apiService.getStockCandles(ticker, param.resolution, from, to).toModel()
         val forDb = fromApi.toStockCandleItems().map { it.toEntity(ticker, param) }
-        val fromDb = stockCandlesDao.upsertAndSelect(ticker, param, from, forDb)
+        val fromDb = stockCandlesDao.insertAndSelect(ticker, param, from, forDb)
         return fromDb.map { it.toModel() }.toStockCandles()
     }
 
@@ -199,7 +199,7 @@ class AppRepository(
                 apiService.getCompanyNews(ticker).map { it.toModel() }
             },
             refreshDatabaseAndGetNew = { value ->
-                newsItemDao.upsertAndSelect(ticker, value.map { it.toEntity(ticker) })
+                newsItemDao.insertAndSelect(ticker, value.map { it.toEntity(ticker) })
                     .map { it.toModel() }
             }
         )
@@ -217,7 +217,7 @@ class AppRepository(
                 apiService.getCompanyRecommendations(ticker).map { it.toModel() }
             },
             refreshDatabaseAndGetNew = { value ->
-                recommendationDao.upsertAndSelect(ticker, value.map { it.toEntity(ticker) })
+                recommendationDao.insertAndSelect(ticker, value.map { it.toEntity(ticker) })
                     .map { it.toModel() }
             }
         )

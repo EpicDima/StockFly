@@ -19,6 +19,22 @@ fun getStringDateWeekEarlier(): String {
     return FORMAT_DATE_API.format(date.time)
 }
 
+fun getDateWeek(number: Int): Pair<Long, Long> {
+    val start = Calendar.getInstance()
+    start.add(Calendar.DAY_OF_YEAR, -WEEK * number)
+    val end = Calendar.getInstance()
+    end.add(Calendar.DAY_OF_YEAR, -WEEK * (number - 1))
+    return Pair(start.time.time / 1000L, end.time.time / 1000L)
+}
+
+fun getStringDateWeek(number: Int): Pair<String, String> {
+    val (from, to) = getDateWeek(number)
+    return Pair(
+        FORMAT_DATE_API.format(Date(from * 1000L)),
+        FORMAT_DATE_API.format(Date(to * 1000L))
+    )
+}
+
 
 private const val PATTERN_WITH_MINUTES = "HH:mm dd MMM yyyy"
 private const val PATTERN_DATE = "dd MMM yyyy"

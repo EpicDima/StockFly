@@ -15,7 +15,7 @@ import ru.yandex.stockfly.model.Recommendation
         onDelete = ForeignKey.CASCADE,
         deferred = true
     )],
-    indices = [Index("ticker")]
+    indices = [Index("ticker"), Index("period")]
 )
 data class RecommendationEntity(
     val ticker: String = "",

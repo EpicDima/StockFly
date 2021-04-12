@@ -16,7 +16,7 @@ import ru.yandex.stockfly.other.StockCandleParam
         onDelete = ForeignKey.CASCADE,
         deferred = true
     )],
-    indices = [Index("ticker")]
+    indices = [Index("ticker"), Index("param"), Index("timestamp")]
 )
 data class StockCandleItemEntity(
     val ticker: String = "",

@@ -40,9 +40,8 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
 
     private fun setupList() {
         val adapter = NewsAdapter { url ->
-            (requireParentFragment().requireActivity() as WebViewFragmentOpener).openWebViewFragment(
-                url
-            )
+            (requireParentFragment().requireActivity() as WebViewFragmentOpener)
+                .openWebViewFragment(url)
         }
         binding.recyclerView.apply {
             this.adapter = adapter

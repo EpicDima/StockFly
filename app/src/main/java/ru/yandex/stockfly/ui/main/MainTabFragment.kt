@@ -45,7 +45,6 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setupList() {
         val adapter = CompanyAdapter { ticker ->
             (requireParentFragment().requireActivity() as CompanyFragmentOpener)
@@ -58,12 +57,7 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
             setHasFixedSize(true)
         }
         viewModel.companies.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            if (getTabNumber() == FAVOURITE_TAB_NUMBER) {
-                // по причине того, что цвет фона связан с позицией,
-                // которая присваивается в onBind и пока самый простой способ сделать так
-                adapter.notifyDataSetChanged()
-            }
+            adapter.submitCompanyList(it)
             binding.empty = it.isEmpty()
         }
     }

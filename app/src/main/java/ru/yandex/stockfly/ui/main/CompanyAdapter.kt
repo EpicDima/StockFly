@@ -10,7 +10,7 @@ import ru.yandex.stockfly.model.Company
 
 class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
-) : AsyncListAdapter<Company, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
+) : AsyncListAdapter<CompanyItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -19,21 +19,24 @@ class CompanyAdapter(
     }
 
     override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
-        holder.bind(getItem(position), position, clickListener)
+        holder.bind(getItem(position), clickListener)
     }
 
+    fun submitCompanyList(list: List<Company>) {
+        super.submitList(list.mapIndexed { index, company -> CompanyItem(company, index) })
+    }
 
     class CompanyViewHolder(private val binding: ItemCompanyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(company: Company, position: Int, clickListener: OnCompanyClickListener) {
+        fun bind(companyItem: CompanyItem, clickListener: OnCompanyClickListener) {
             binding.apply {
                 root.setOnClickListener {
-                    clickListener.onClick(company.ticker)
+                    clickListener.onClick(companyItem.company.ticker)
                 }
                 this.logo.setImageDrawable(null)
-                this.company = company
-                this.position = position
+                this.company = companyItem.company
+                this.position = companyItem.position
                 executePendingBindings()
             }
         }
@@ -45,8 +48,19 @@ class CompanyAdapter(
     }
 }
 
-private val DIFF_CALLBACK = object : BaseDiffUtilCallback<Company>() {
-    override fun areItemsTheSame(oldItem: Company, newItem: Company): Boolean {
-        return oldItem.ticker == newItem.ticker
+
+data class CompanyItem(
+    val company: Company,
+    var position: Int
+)
+
+
+private val DIFF_CALLBACK = object : BaseDiffUtilCallback<CompanyItem>() {
+    override fun areItemsTheSame(oldItem: CompanyItem, newItem: CompanyItem): Boolean {
+        return oldItem.position == newItem.position
+    }
+
+    override fun areContentsTheSame(oldItem: CompanyItem, newItem: CompanyItem): Boolean {
+        return oldItem.company == newItem.company
     }
 }

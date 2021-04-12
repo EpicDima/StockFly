@@ -82,7 +82,7 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             setHasFixedSize(true)
         }
         viewModel.result.observe(viewLifecycleOwner) {
-            resultAdapter.submitList(it)
+            resultAdapter.submitCompanyList(it)
         }
     }
 

@@ -72,4 +72,9 @@ class RecommendationFragment :
             }
         }
     }
+
+    override fun onStart() {
+        binding.recommendationView.startAnimation()
+        super.onStart()
+    }
 }

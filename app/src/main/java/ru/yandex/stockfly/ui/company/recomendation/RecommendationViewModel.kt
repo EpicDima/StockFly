@@ -45,6 +45,10 @@ class RecommendationViewModel @Inject constructor(
             }
         }
 
+    private var _brandNewData = true
+    val brandNewData: Boolean
+        get() = _brandNewData
+
     private val _periodRange = MutableLiveData<Pair<String, String>>()
     val periodRange: LiveData<Pair<String, String>> = _periodRange
 
@@ -66,6 +70,7 @@ class RecommendationViewModel @Inject constructor(
                     _beginIndex = maxOf(0, it.lastIndex - DEFAULT_RANGE)
                     _endIndex = it.lastIndex
                     updatePeriodRange()
+                    _brandNewData = false
                     stopLoading()
                 }
             }
@@ -74,6 +79,7 @@ class RecommendationViewModel @Inject constructor(
 
     private fun updatePeriodRange() {
         if (_recommendations.isNotEmpty()) {
+            _brandNewData = true
             _periodRange.postValue(
                 Pair(
                     _recommendations[beginIndex].periodFormatted,

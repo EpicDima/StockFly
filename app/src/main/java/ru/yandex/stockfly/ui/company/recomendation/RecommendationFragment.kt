@@ -67,7 +67,7 @@ class RecommendationFragment :
             binding.apply {
                 beginDate.text = it.first
                 endDate.text = it.second
-                recommendationView.updateData(viewModel.recommendations)
+                recommendationView.updateData(viewModel.recommendations, viewModel.brandNewData)
                 binding.empty = viewModel.recommendations.isEmpty()
             }
         }

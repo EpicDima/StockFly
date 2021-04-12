@@ -114,12 +114,17 @@ class RecommendationView @JvmOverloads constructor(
 
     private var selectedIndex = -1
 
-    fun updateData(newRecommendations: List<Recommendation>?) {
+    fun updateData(
+        newRecommendations: List<Recommendation>?,
+        withResetSelectedIndex: Boolean = true
+    ) {
         recommendations = newRecommendations
         max = recommendations?.maxOfOrNull { it.sum.toDouble() } ?: 0.0
         length = recommendations?.size ?: 0
         calculateBarSizes()
-        selectedIndex = -1
+        if (withResetSelectedIndex) {
+            selectedIndex = -1
+        }
         invalidate()
     }
 

@@ -124,12 +124,18 @@ class ChartView @JvmOverloads constructor(
 
     private var selectedIndex = -1
 
-    fun updateData(newData: StockCandles?, withAnimation: Boolean = true) {
+    fun updateData(
+        newData: StockCandles?,
+        withAnimation: Boolean = true,
+        withResetSelectedIndex: Boolean = true
+    ) {
         data = newData
         min = data?.price?.minOfOrNull { it } ?: 0.0
         max = data?.price?.maxOfOrNull { it } ?: 0.0
         length = data?.price?.size ?: 0
-        selectedIndex = -1
+        if (withResetSelectedIndex) {
+            selectedIndex = -1
+        }
         if (length > 1 && withAnimation) {
             startAnimation()
         } else {

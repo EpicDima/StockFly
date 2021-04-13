@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +18,12 @@ import ru.yandex.stockfly.db.dao.StockCandlesDao
 import ru.yandex.stockfly.db.entity.toEntity
 import ru.yandex.stockfly.db.entity.toModel
 import ru.yandex.stockfly.model.*
-import ru.yandex.stockfly.other.MAX_SEARCHED_REQUESTS
 import ru.yandex.stockfly.other.StockCandleParam
 import ru.yandex.stockfly.other.getSearched
 import ru.yandex.stockfly.other.setSearched
+
+private const val EMPTY_JSON_STRING = "[]"
+private const val MAX_SEARCHED_REQUESTS = 50
 
 class AppRepository(
     private val apiService: ApiService,
@@ -40,16 +41,12 @@ class AppRepository(
     private val _favourites = MutableLiveData<List<Company>>()
     override val favourites: LiveData<List<Company>> = _favourites
 
-    private val _searchedRequests: MutableList<String> =
-        preferences.getSearched(stringListAdapter).toMutableList()
-    override val searchedRequests: List<String> = _searchedRequests
-
-    private lateinit var refreshCompaniesObserver: Observer<List<Company>>
+    override val searchedRequests: List<String>
+        get() = getSearched(stringListAdapter)
 
     init {
         observeCompanies()
         observeFavourites()
-        createRefreshObserver()
     }
 
     private fun observeCompanies() {
@@ -68,21 +65,8 @@ class AppRepository(
         }
     }
 
-    private fun createRefreshObserver() {
-        refreshCompaniesObserver = Observer<List<Company>> { list ->
-            GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    companyDao.update(list.mapNotNull {
-                        val favourite = companyDao.select(it.ticker)!!.favourite
-                        getCompanyWithQuote(it.ticker)?.toEntity()?.copy(favourite = favourite)
-                    })
-                    launch(Dispatchers.Main) {
-                        _companies.removeObserver(refreshCompaniesObserver)
-                    }
-                } catch (ignored: Exception) {
-                }
-            }
-        }
+    private fun getSearched(adapter: JsonAdapter<List<String>>): List<String> {
+        return adapter.fromJson(preferences.getSearched() ?: EMPTY_JSON_STRING)!!
     }
 
     private suspend fun getCompanyWithQuote(ticker: String): Company? {
@@ -97,10 +81,7 @@ class AppRepository(
     override suspend fun search(query: String): List<Company> {
         return apiService.search(query).result
             .filter { !isWrongTicker(it.ticker) }
-            .map {
-                val company = companyDao.select(it.ticker)
-                company?.toModel() ?: it.toModel()
-            }
+            .map { companyDao.select(it.ticker)?.toModel() ?: it.toModel() }
     }
 
     private fun isWrongTicker(ticker: String): Boolean {
@@ -124,19 +105,22 @@ class AppRepository(
     }
 
     override fun addSearchRequest(request: String) {
-        val list = _searchedRequests.apply {
-            add(0, request)
-            if (size >= MAX_SEARCHED_REQUESTS) {
-                dropLast(1)
-            }
-        }.toList() // для копирования списка
-        _searchedRequests.clear()
-        _searchedRequests.addAll(list.distinct())
-        preferences.setSearched(searchedRequests, stringListAdapter)
+        val list = searchedRequests.toMutableList()
+        list.add(0, request)
+        setSearched(list, stringListAdapter)
     }
 
-    override fun refreshCompanies(coroutineScope: CoroutineScope) {
-        _companies.observeForever(refreshCompaniesObserver)
+    private fun setSearched(searched: List<String>, adapter: JsonAdapter<List<String>>) {
+        val list = searched.subList(0, minOf(searched.size, MAX_SEARCHED_REQUESTS)).distinct()
+        preferences.setSearched(adapter.toJson(list))
+    }
+
+    override suspend fun refreshCompanies() {
+        val list = companyDao.selectAllAsList()
+        companyDao.update(list.mapNotNull {
+            val favourite = companyDao.select(it.ticker)!!.favourite
+            getCompanyWithQuote(it.ticker)?.toEntity()?.copy(favourite = favourite)
+        })
     }
 
     override suspend fun changeFavourite(company: Company): Int {
@@ -233,14 +217,20 @@ class AppRepository(
         coroutineScope.launch(Dispatchers.IO) {
             kotlin.runCatching { getFromDatabase() }
                 .onSuccess { databaseData -> liveData.postValue(databaseData) }
-                .onFailure { Log.w("REPOSITORY", "getFromDatabase", it) }
+                .onFailure { Log.w(this@AppRepository::class.simpleName, "getFromDatabase", it) }
             kotlin.runCatching { getFromApi() }
                 .onSuccess { apiData ->
                     kotlin.runCatching { refreshDatabaseAndGetNew(apiData) }
                         .onSuccess { databaseData -> liveData.postValue(databaseData) }
-                        .onFailure { Log.w("REPOSITORY", "refreshDbAndGetNew", it) }
+                        .onFailure {
+                            Log.w(
+                                this@AppRepository::class.simpleName,
+                                "refreshDbAndGetNew",
+                                it
+                            )
+                        }
                 }
-                .onFailure { Log.w("REPOSITORY", "getFromApi", it) }
+                .onFailure { Log.w(this@AppRepository::class.simpleName, "getFromApi", it) }
         }
         return liveData
     }

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentChartBinding
 import ru.yandex.stockfly.other.StockCandleParam
 import ru.yandex.stockfly.other.color
@@ -17,7 +17,7 @@ import ru.yandex.stockfly.other.drawable
 import ru.yandex.stockfly.other.setArgument
 
 @AndroidEntryPoint
-class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
+class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding>() {
     companion object {
         const val TICKER_KEY = "ticker_chart"
 
@@ -27,7 +27,7 @@ class ChartFragment : BaseFragment<ChartViewModel, FragmentChartBinding>() {
         }
     }
 
-    override val viewModel: ChartViewModel by viewModels()
+    override val _viewModel: ChartViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

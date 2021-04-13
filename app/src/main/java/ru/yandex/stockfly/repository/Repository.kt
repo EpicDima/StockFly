@@ -17,7 +17,7 @@ interface Repository {
     suspend fun search(query: String): List<Company>
     suspend fun getCompanyForSearch(company: Company): Company
     fun addSearchRequest(request: String)
-    fun refreshCompanies(coroutineScope: CoroutineScope = GlobalScope)
+    suspend fun refreshCompanies()
     suspend fun changeFavourite(company: Company): Int
     fun getCompany(ticker: String, coroutineScope: CoroutineScope = GlobalScope): LiveData<Company>
     fun getCompanyWithRefresh(

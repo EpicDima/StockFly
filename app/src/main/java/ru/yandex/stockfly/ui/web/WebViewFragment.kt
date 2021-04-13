@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.webkit.*
 import androidx.fragment.app.Fragment
 import ru.yandex.stockfly.databinding.FragmentWebviewBinding
+import ru.yandex.stockfly.other.setArgument
 
 
 class WebViewFragment : Fragment() {
@@ -20,11 +21,7 @@ class WebViewFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(url: String): WebViewFragment {
-            return WebViewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(URL_KEY, url)
-                }
-            }
+            return WebViewFragment().setArgument(URL_KEY, url)
         }
     }
 

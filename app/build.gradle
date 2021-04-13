@@ -44,6 +44,18 @@ android {
         buildConfig true
         dataBinding true
     }
+
+    flavorDimensions "search"
+    productFlavors {
+        detailed {
+            dimension "search"
+            buildConfigField "boolean", "DETAILED_SEARCH", "true"
+        }
+        undetailed {
+            dimension "search"
+            buildConfigField "boolean", "DETAILED_SEARCH", "false"
+        }
+    }
 }
 
 dependencies {

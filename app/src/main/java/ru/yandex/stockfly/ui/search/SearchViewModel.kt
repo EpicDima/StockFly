@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.yandex.stockfly.BuildConfig
 import ru.yandex.stockfly.base.DownloadableViewModel
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
@@ -64,7 +65,9 @@ class SearchViewModel @Inject constructor(
                 if (stopTimeoutJob()) {
                     onLoad(list)
                     stopLoading()
-                    getMoreInformation(list)
+                    if (BuildConfig.DETAILED_SEARCH) {
+                        getMoreInformation(list)
+                    }
                 }
             }
             true

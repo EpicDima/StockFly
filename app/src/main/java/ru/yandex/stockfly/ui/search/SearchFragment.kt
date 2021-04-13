@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentSearchBinding
 import ru.yandex.stockfly.ui.CompanyFragmentOpener
 import ru.yandex.stockfly.ui.main.CompanyAdapter
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
+class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
     companion object {
         @JvmStatic
         fun newInstance(): SearchFragment {
@@ -35,7 +35,7 @@ class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
     }
 
-    override val viewModel: SearchViewModel by viewModels()
+    override val _viewModel: SearchViewModel by viewModels()
 
     private val onChipClick: (String) -> Unit = {
         binding.searchEditText.apply {

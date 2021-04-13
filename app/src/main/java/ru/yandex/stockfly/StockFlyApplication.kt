@@ -7,6 +7,7 @@ import coil.ImageLoaderFactory
 import coil.request.CachePolicy
 import dagger.hilt.android.HiltAndroidApp
 import ru.yandex.stockfly.other.Formatter
+import ru.yandex.stockfly.other.Refresher
 import ru.yandex.stockfly.other.locale
 import javax.inject.Inject
 
@@ -14,7 +15,15 @@ import javax.inject.Inject
 class StockFlyApplication : Application(), ImageLoaderFactory {
 
     @Inject
+    lateinit var refresher: Refresher
+
+    @Inject
     lateinit var formatter: Formatter
+
+    override fun onCreate() {
+        super.onCreate()
+        refresher.refresh()
+    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         formatter.updateLocale(newConfig.locale())

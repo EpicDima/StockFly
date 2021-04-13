@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentCompanyBinding
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.other.customize
@@ -23,7 +23,7 @@ import ru.yandex.stockfly.ui.company.recomendation.RecommendationFragment
 import ru.yandex.stockfly.ui.company.summary.SummaryFragment
 
 @AndroidEntryPoint
-class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>() {
+class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
     companion object {
         const val TICKER_KEY = "ticker"
 
@@ -33,7 +33,7 @@ class CompanyFragment : BaseFragment<CompanyViewModel, FragmentCompanyBinding>()
         }
     }
 
-    override val viewModel: CompanyViewModel by viewModels()
+    override val _viewModel: CompanyViewModel by viewModels()
 
     private lateinit var titles: Array<String>
 

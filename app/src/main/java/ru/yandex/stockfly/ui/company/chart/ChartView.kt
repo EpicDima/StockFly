@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
 import ru.yandex.stockfly.R
 import ru.yandex.stockfly.model.StockCandles
@@ -13,6 +14,8 @@ import ru.yandex.stockfly.other.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
+
+private const val NO_POSITION = -1
 
 class ChartView @JvmOverloads constructor(
     context: Context,
@@ -23,7 +26,7 @@ class ChartView @JvmOverloads constructor(
 
     // все числа лучше вынести и также лучше сделать аттрибуты для этой вьюшки
 
-    private val lengthAnimationDuration = 650L
+    private val lengthAnimationDuration = 600L
 
     private var lengthAnimator: ValueAnimator? = null
 
@@ -122,7 +125,7 @@ class ChartView @JvmOverloads constructor(
     private var max: Double = 0.0
     private var length: Int = 0
 
-    private var selectedIndex = -1
+    private var selectedIndex = NO_POSITION
 
     fun updateData(
         newData: StockCandles?,
@@ -134,7 +137,7 @@ class ChartView @JvmOverloads constructor(
         max = data?.price?.maxOfOrNull { it } ?: 0.0
         length = data?.price?.size ?: 0
         if (withResetSelectedIndex) {
-            selectedIndex = -1
+            selectedIndex = NO_POSITION
         }
         if (length > 1 && withAnimation) {
             startAnimation()
@@ -155,6 +158,9 @@ class ChartView @JvmOverloads constructor(
                 realLength = it.animatedValue as Int
                 invalidate()
             }
+        }
+        lengthAnimator?.doOnEnd {
+            realLength = length // на случай обновления во время анимации
         }
         lengthAnimator?.start()
     }
@@ -182,7 +188,7 @@ class ChartView @JvmOverloads constructor(
             if (stockCandle != null && length > 1) {
                 drawLine(stockCandle.price, canvas)
                 drawGradient(canvas)
-                if (selectedIndex != -1) {
+                if (selectedIndex != NO_POSITION) {
                     drawSuggestion(stockCandle, canvas)
                 }
                 linePath.reset()
@@ -379,12 +385,22 @@ class ChartView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        parent.requestDisallowInterceptTouchEvent(true)
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
-            if (length > 0 && length == realLength) {
-                selectedIndex = event.x.fromRealX()
-                invalidate()
+            if (length > 0 && (lengthAnimator == null || lengthAnimator?.isRunning != true)) {
+                val newSelectedIndex = event.x.fromRealX()
+                if (selectedIndex != newSelectedIndex) {
+                    selectedIndex = newSelectedIndex
+                    invalidate()
+                    return performClick()
+                }
             }
-            return performClick()
+        } else if (event.action == MotionEvent.ACTION_UP) {
+            if (selectedIndex != NO_POSITION) {
+                selectedIndex = NO_POSITION
+                invalidate()
+                return performClick()
+            }
         }
         return false
     }

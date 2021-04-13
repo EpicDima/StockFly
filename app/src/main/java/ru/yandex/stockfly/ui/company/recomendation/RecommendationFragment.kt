@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import dagger.hilt.android.AndroidEntryPoint
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentRecommendationBinding
 import ru.yandex.stockfly.other.setArgument
 
 @AndroidEntryPoint
 class RecommendationFragment :
-    BaseFragment<RecommendationViewModel, FragmentRecommendationBinding>() {
+    BaseViewModelFragment<RecommendationViewModel, FragmentRecommendationBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker_recommendations"
@@ -24,7 +24,7 @@ class RecommendationFragment :
         }
     }
 
-    override val viewModel: RecommendationViewModel by viewModels()
+    override val _viewModel: RecommendationViewModel by viewModels()
 
     private val initialObserver: Observer<Pair<String, String>> by lazy {
         Observer<Pair<String, String>> {

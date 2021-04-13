@@ -110,6 +110,13 @@ fun <T : Fragment> T.setArgument(key: String, value: String): T {
     return this
 }
 
+fun <T : Fragment> T.setArgument(key: String, value: Int): T {
+    arguments = Bundle().apply {
+        putInt(key, value)
+    }
+    return this
+}
+
 
 fun TabLayout.customize(
     viewPager: ViewPager2,

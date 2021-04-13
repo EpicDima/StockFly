@@ -15,6 +15,8 @@ private typealias PaintQuintuple = Quintuple<Paint, Paint, Paint, Paint, Paint>
 private typealias StringQuintuple = Quintuple<String, String, String, String, String>
 private typealias ValuesTextSizes = Quintuple<Pair<Int, Int>, Pair<Int, Int>, Pair<Int, Int>, Pair<Int, Int>, Pair<Int, Int>>
 
+private const val NO_POSITION = -1
+
 class RecommendationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -112,7 +114,7 @@ class RecommendationView @JvmOverloads constructor(
     private var barSidePadding: Double = 0.0
     private var partHeight: Double = 0.0
 
-    private var selectedIndex = -1
+    private var selectedIndex = NO_POSITION
 
     fun updateData(
         newRecommendations: List<Recommendation>?,
@@ -123,7 +125,7 @@ class RecommendationView @JvmOverloads constructor(
         length = recommendations?.size ?: 0
         calculateBarSizes()
         if (withResetSelectedIndex) {
-            selectedIndex = -1
+            selectedIndex = NO_POSITION
         }
         invalidate()
     }
@@ -181,7 +183,7 @@ class RecommendationView @JvmOverloads constructor(
         }
         if (!nullOrEmpty) {
             bitmap.eraseColor(0)
-            if (selectedIndex == -1) {
+            if (selectedIndex == NO_POSITION) {
                 recommendations?.forEachIndexed { i, rec -> drawDefaultBar(i, rec, fakeCanvas) }
             } else {
                 recommendations?.let {
@@ -409,12 +411,22 @@ class RecommendationView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        parent.requestDisallowInterceptTouchEvent(true)
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
             if (length > 0) {
-                selectedIndex = event.x.fromRealX()
-                invalidate()
+                val newSelectedIndex = event.x.fromRealX()
+                if (selectedIndex != newSelectedIndex) {
+                    selectedIndex = newSelectedIndex
+                    invalidate()
+                    return performClick()
+                }
             }
-            return performClick()
+        } else if (event.action == MotionEvent.ACTION_UP) {
+            if (selectedIndex != NO_POSITION) {
+                selectedIndex = NO_POSITION
+                invalidate()
+                return performClick()
+            }
         }
         return false
     }

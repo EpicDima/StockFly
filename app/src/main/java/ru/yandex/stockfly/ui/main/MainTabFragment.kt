@@ -1,6 +1,5 @@
 package ru.yandex.stockfly.ui.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentTabMainBinding
+import ru.yandex.stockfly.other.setArgument
 import ru.yandex.stockfly.ui.CompanyFragmentOpener
 
 @AndroidEntryPoint
-class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>() {
+class MainTabFragment : BaseViewModelFragment<MainTabViewModel, FragmentTabMainBinding>() {
     companion object {
         const val TAB_NUMBER_KEY = "tab_number"
 
@@ -23,15 +23,11 @@ class MainTabFragment : BaseFragment<MainTabViewModel, FragmentTabMainBinding>()
 
         @JvmStatic
         fun newInstance(tabNumber: Int): MainTabFragment {
-            return MainTabFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(TAB_NUMBER_KEY, tabNumber)
-                }
-            }
+            return MainTabFragment().setArgument(TAB_NUMBER_KEY, tabNumber)
         }
     }
 
-    override val viewModel: MainTabViewModel by viewModels()
+    override val _viewModel: MainTabViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

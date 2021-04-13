@@ -11,6 +11,9 @@ interface CompanyDao {
     suspend fun select(ticker: String): CompanyEntity?
 
     @Query("SELECT * FROM companies")
+    suspend fun selectAllAsList(): List<CompanyEntity>
+
+    @Query("SELECT * FROM companies")
     fun selectAll(): LiveData<List<CompanyEntity>>
 
     @Query("SELECT * FROM companies WHERE favourite = 1")

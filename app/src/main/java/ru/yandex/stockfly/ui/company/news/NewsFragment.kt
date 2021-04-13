@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentNewsBinding
 import ru.yandex.stockfly.other.setArgument
 import ru.yandex.stockfly.ui.WebViewFragmentOpener
 
 @AndroidEntryPoint
-class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
+class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     companion object {
         const val TICKER_KEY = "ticker_news"
 
@@ -23,7 +23,7 @@ class NewsFragment : BaseFragment<NewsViewModel, FragmentNewsBinding>() {
         }
     }
 
-    override val viewModel: NewsViewModel by viewModels()
+    override val _viewModel: NewsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

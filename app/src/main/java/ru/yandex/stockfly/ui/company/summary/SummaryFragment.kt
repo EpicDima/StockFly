@@ -9,14 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import ru.yandex.stockfly.base.BaseFragment
+import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentSummaryBinding
 import ru.yandex.stockfly.other.setArgument
 import ru.yandex.stockfly.ui.WebViewFragmentOpener
 
 
 @AndroidEntryPoint
-class SummaryFragment : BaseFragment<SummaryViewModel, FragmentSummaryBinding>() {
+class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
     companion object {
         const val TICKER_KEY = "ticker_summary"
 
@@ -26,7 +26,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel, FragmentSummaryBinding>()
         }
     }
 
-    override val viewModel: SummaryViewModel by viewModels()
+    override val _viewModel: SummaryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

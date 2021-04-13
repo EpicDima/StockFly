@@ -7,8 +7,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.yandex.stockfly.other.APP_PREFERENCES
 import javax.inject.Singleton
+
+private const val APP_PREFERENCES = "app_preferences"
 
 @Module
 @InstallIn(SingletonComponent::class)

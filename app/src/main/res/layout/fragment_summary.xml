@@ -47,6 +47,7 @@
                 android:gravity="center"
                 android:text="@{company.name}"
                 android:textColor="@color/black"
+                android:textIsSelectable="true"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +115,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text="@{company.countryName}"
+                    android:textIsSelectable="true"
                     tools:text="US" />
 
             </LinearLayout>
@@ -135,6 +137,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text="@{company.currency}"
+                    android:textIsSelectable="true"
                     tools:text="USD" />
 
             </LinearLayout>
@@ -156,6 +159,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text="@{ExtensionsKt.toLocalString(company.shareOutstanding)}"
+                    android:textIsSelectable="true"
                     tools:text="3824763472" />
 
             </LinearLayout>
@@ -177,6 +181,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text="@{ExtensionsKt.toLocalString(company.marketCapitalization)}"
+                    android:textIsSelectable="true"
                     tools:text="435634636" />
 
             </LinearLayout>
@@ -198,6 +203,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text="@{company.exchange}"
+                    android:textIsSelectable="true"
                     tools:text="NASDAQ/NMS" />
 
             </LinearLayout>
@@ -219,6 +225,7 @@
                     style="@style/SummaryFieldValue"
                     android:layout_marginTop="4dp"
                     android:text='@{company != null ? ExtensionsKt.ipoLocalDateString(company) : ""}'
+                    android:textIsSelectable="true"
                     tools:text="1980-12-12" />
 
             </LinearLayout>

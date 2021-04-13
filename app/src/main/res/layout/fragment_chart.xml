@@ -36,6 +36,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
                 android:text='@{company != null ? company.currentString : ""}'
+                android:textIsSelectable="true"
                 android:textSize="@dimen/chart_current_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

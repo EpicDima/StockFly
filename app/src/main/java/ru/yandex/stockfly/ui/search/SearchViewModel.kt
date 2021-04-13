@@ -2,7 +2,10 @@ package ru.yandex.stockfly.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.yandex.stockfly.base.DownloadableViewModel
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
@@ -93,8 +96,10 @@ class SearchViewModel @Inject constructor(
     private suspend fun getMoreInformation(list: List<Company>) {
         val mutableList = list.toMutableList()
         list.forEachIndexed { index, company ->
-            mutableList[index] = repository.getCompanyForSearch(company)
-            _result.postValue(mutableList.toList())
+            viewModelScope.launch(Dispatchers.IO) {
+                mutableList[index] = repository.getCompanyForSearch(company)
+                _result.postValue(mutableList.toList())
+            }
         }
     }
 

@@ -25,7 +25,7 @@
 
             <ImageView
                 android:id="@+id/image_view"
-                imageUrl="@{company.logoUrl}"
+                companySummaryLogoUrl="@{company.logoUrl}"
                 android:layout_width="@dimen/summary_logo_size"
                 android:layout_height="@dimen/summary_logo_size"
                 android:layout_marginStart="8dp"

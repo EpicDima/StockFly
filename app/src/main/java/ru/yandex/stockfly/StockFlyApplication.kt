@@ -23,7 +23,6 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
 
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(applicationContext)
-            .crossfade(64)
             .diskCachePolicy(CachePolicy.ENABLED)
             .build()
     }

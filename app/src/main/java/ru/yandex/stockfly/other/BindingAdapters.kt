@@ -1,43 +1,61 @@
 package ru.yandex.stockfly.other
 
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import coil.load
-import coil.request.CachePolicy
 
-@BindingAdapter("imageUrl")
-fun bindImageWithGoneOnError(imgView: ImageView, imgUrl: String?) {
-    imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-        imgView.load(imgUri) {
-            target(onStart = {
-                imgView.setImageDrawable(null)
-            }, onSuccess = {
-                imgView.setImageDrawable(it)
-            }, onError = {
-                imgView.visibility = View.GONE
-            })
-        }
+private fun bindImageWithGoneOnError(imageView: ImageView, imageUrl: String?) {
+    if (imageUrl == null) {
+        imageView.visibility = View.GONE
+        return
+    }
+    imageView.load(createUri(imageUrl)) {
+        target(onStart = {
+            imageView.setImageDrawable(null)
+        }, onSuccess = {
+            imageView.visibility = View.VISIBLE
+            imageView.setImageDrawable(it)
+        }, onError = {
+            imageView.visibility = View.GONE
+        })
     }
 }
 
-// Не работает почему-то, когда два значения в одной аннотации, даже при изменении requireAll
-@BindingAdapter("newsItemImageUrl")
-fun bindImageWithGoneOnError2(imgView: ImageView, imgUrl: String?) {
-    bindImageWithGoneOnError(imgView, imgUrl)
+private fun createUri(url: String): Uri {
+    return url.toUri().buildUpon().scheme("https").build()
 }
 
-@BindingAdapter("companyItemImageUrl")
-fun bindImageWithoutBackgroundOnSuccess(imgView: ImageView, imgUrl: String?) {
-    imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-        imgView.load(imgUri) {
-            diskCachePolicy(CachePolicy.ENABLED)
+
+@BindingAdapter("newsItemImageUrl")
+fun bindNewsImageInNewsItem(imageView: ImageView, imageUrl: String?) {
+    bindImageWithGoneOnError(imageView, imageUrl)
+}
+
+
+@BindingAdapter("companySummaryLogoUrl")
+fun bindCompanyLogoInCompanySummary(imageView: ImageView, logoUrl: String?) {
+    bindImageWithGoneOnError(imageView, logoUrl)
+}
+
+
+@BindingAdapter("companyItemLogoUrl", "backgroundColor", requireAll = true)
+fun bindCompanyLogoAndBackgroundColorInCompanyItem(
+    imageView: ImageView,
+    logoUrl: String?,
+    backgroundColor: Int
+) {
+    imageView.setBackgroundColor(backgroundColor)
+    if (logoUrl == null) {
+        return
+    }
+    imageView.apply {
+        load(createUri(logoUrl)) {
             target {
-                imgView.background = null
-                imgView.setImageDrawable(it)
+                background = null
+                setImageDrawable(it)
             }
         }
     }

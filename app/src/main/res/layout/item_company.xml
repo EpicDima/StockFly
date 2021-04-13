@@ -46,10 +46,10 @@
 
                 <ImageView
                     android:id="@+id/logo"
-                    companyItemImageUrl="@{company.logoUrl}"
+                    backgroundColor="@{(position % 2 == 0) ? @color/white : @color/light}"
+                    companyItemLogoUrl="@{company.logoUrl}"
                     android:layout_width="@dimen/company_logo_size"
                     android:layout_height="@dimen/company_logo_size"
-                    android:background="@{(position % 2 == 0) ? @color/white : @color/light}"
                     android:contentDescription="@string/company_logo" />
 
             </androidx.cardview.widget.CardView>

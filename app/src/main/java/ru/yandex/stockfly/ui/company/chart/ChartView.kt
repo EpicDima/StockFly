@@ -142,6 +142,9 @@ class ChartView @JvmOverloads constructor(
         if (length > 1 && withAnimation) {
             startAnimation()
         } else {
+            if (lengthAnimator == null || lengthAnimator?.isRunning != true) {
+                realLength = length
+            }
             invalidate()
         }
     }
@@ -160,7 +163,8 @@ class ChartView @JvmOverloads constructor(
             }
         }
         lengthAnimator?.doOnEnd {
-            realLength = length // на случай обновления во время анимации
+            realLength = length
+            invalidate()
         }
         lengthAnimator?.start()
     }

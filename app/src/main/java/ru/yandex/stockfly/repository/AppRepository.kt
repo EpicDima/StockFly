@@ -21,6 +21,7 @@ import ru.yandex.stockfly.model.*
 import ru.yandex.stockfly.other.StockCandleParam
 import ru.yandex.stockfly.other.getSearched
 import ru.yandex.stockfly.other.setSearched
+import java.util.*
 
 private const val EMPTY_JSON_STRING = "[]"
 private const val MAX_SEARCHED_REQUESTS = 50
@@ -118,13 +119,34 @@ class AppRepository(
     override suspend fun refreshCompanies() {
         val list = companyDao.selectAllAsList()
         companyDao.update(list.mapNotNull {
-            val favourite = companyDao.select(it.ticker)!!.favourite
-            getCompanyWithQuote(it.ticker)?.toEntity()?.copy(favourite = favourite)
+            val existing = companyDao.select(it.ticker)!!
+            getCompanyWithQuote(it.ticker)?.toEntity()?.copy(
+                favourite = existing.favourite,
+                favouriteNumber = existing.favouriteNumber
+            )
         })
     }
 
-    override suspend fun changeFavourite(company: Company): Int {
-        return companyDao.updateFavourite(company.ticker, !company.favourite)
+    override suspend fun changeFavourite(company: Company) {
+        companyDao.updateFavourite(company.ticker, !company.favourite)
+        val list = companyDao
+            .selectFavouritesAsList()
+            .mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) }
+        companyDao.update(list)
+    }
+
+    override suspend fun changeFavouriteNumber(from: Int, to: Int) {
+        val list = companyDao.selectFavouritesAsList().toMutableList()
+        if (from < to) {
+            for (i in from until to) {
+                Collections.swap(list, i, i + 1)
+            }
+        } else {
+            for (i in from downTo to + 1) {
+                Collections.swap(list, i, i - 1)
+            }
+        }
+        companyDao.update(list.mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) })
     }
 
     override fun getCompany(ticker: String, coroutineScope: CoroutineScope): LiveData<Company> {

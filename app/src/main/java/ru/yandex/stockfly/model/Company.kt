@@ -16,6 +16,7 @@ data class Company(
     val phone: String = "",
     val quote: Quote? = null,
     val favourite: Boolean = false,
+    val favouriteNumber: Int = 0,
 ) {
     val currentString: String
         get() = quote?.currentString ?: ""

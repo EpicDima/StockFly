@@ -20,7 +20,8 @@ data class CompanyEntity(
     val phone: String = "",
     @Embedded
     val quote: QuoteEntity? = null,
-    val favourite: Boolean = false
+    val favourite: Boolean = false,
+    val favouriteNumber: Int = 0,
 )
 
 
@@ -38,7 +39,8 @@ fun CompanyEntity.toModel(): Company {
         shareOutstanding,
         phone,
         quote?.toModel(),
-        favourite
+        favourite,
+        favouriteNumber
     )
 }
 
@@ -57,7 +59,8 @@ fun Company.toEntity(): CompanyEntity {
         shareOutstanding,
         phone,
         quote?.toEntity(),
-        favourite
+        favourite,
+        favouriteNumber
     )
 }
 

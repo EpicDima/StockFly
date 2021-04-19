@@ -41,4 +41,7 @@
     <string name="six_m_six_months" translatable="false">6М</string>
     <string name="one_y_one_year" translatable="false">1Г</string>
     <string name="all_time">Всё</string>
+    <string name="shortcut_search_long_label">Поиск</string>
+    <string name="shortcut_search_short_label">Поиск</string>
+    <string name="shortcut_search_disabled_label">Отключённый поиск</string>
 </resources>

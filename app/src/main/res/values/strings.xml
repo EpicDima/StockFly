@@ -57,5 +57,8 @@
     <string name="hold_value" translatable="false">Hold: %1$s</string>
     <string name="buy_value" translatable="false">Buy: %1$s</string>
     <string name="strong_buy_value" translatable="false">Strong buy: %1$s</string>
+    <string name="shortcut_search_long_label">Search</string>
+    <string name="shortcut_search_short_label">Search</string>
+    <string name="shortcut_search_disabled_label">Disabled search</string>
 
 </resources>

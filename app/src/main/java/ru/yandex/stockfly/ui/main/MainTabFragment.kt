@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
@@ -51,6 +52,12 @@ class MainTabFragment : BaseViewModelFragment<MainTabViewModel, FragmentTabMainB
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
             setHasFixedSize(true)
+        }
+        if (getTabNumber() == FAVOURITE_TAB_NUMBER) {
+            ItemTouchHelper(FavouriteCompanyDragCallback { from, to ->
+                viewModel.changeFavouriteNumber(from, to)
+                adapter.notifyItemMoved(from, to)
+            }).attachToRecyclerView(binding.recyclerView)
         }
         viewModel.companies.observe(viewLifecycleOwner) {
             adapter.submitCompanyList(it)

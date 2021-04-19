@@ -18,7 +18,7 @@ import ru.yandex.stockfly.db.other.StockCandleParamConverter
 private const val DATABASE_NAME = "stockfly.db"
 
 @Database(
-    version = 8,
+    version = 9,
     entities = [
         CompanyEntity::class,
         NewsItemEntity::class,

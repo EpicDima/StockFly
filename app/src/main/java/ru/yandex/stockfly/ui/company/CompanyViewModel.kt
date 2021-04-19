@@ -35,9 +35,8 @@ class CompanyViewModel @Inject constructor(
     }
 
     fun changeFavourite() = viewModelScope.launch(Dispatchers.IO) {
-        if (repository.changeFavourite(company.value!!) > 0) {
-            _company.postValue(company.value!!.copy(favourite = !company.value!!.favourite))
-        }
+        repository.changeFavourite(company.value!!)
+        _company.postValue(company.value!!.copy(favourite = !company.value!!.favourite))
     }
 
     override fun onTimeout() {

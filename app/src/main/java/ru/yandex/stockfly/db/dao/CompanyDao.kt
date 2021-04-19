@@ -16,7 +16,10 @@ interface CompanyDao {
     @Query("SELECT * FROM companies")
     fun selectAll(): LiveData<List<CompanyEntity>>
 
-    @Query("SELECT * FROM companies WHERE favourite = 1")
+    @Query("SELECT * FROM companies WHERE favourite = 1 ORDER BY favouriteNumber")
+    suspend fun selectFavouritesAsList(): List<CompanyEntity>
+
+    @Query("SELECT * FROM companies WHERE favourite = 1 ORDER BY favouriteNumber")
     fun selectFavourites(): LiveData<List<CompanyEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -31,14 +34,19 @@ interface CompanyDao {
     @Update
     suspend fun update(companies: List<CompanyEntity>)
 
-    @Query("UPDATE companies SET favourite = :favourite WHERE ticker = :ticker")
-    suspend fun updateFavourite(ticker: String, favourite: Boolean): Int
+    @Query("UPDATE companies SET favourite = :favourite, favouriteNumber = :favouriteNumber WHERE ticker = :ticker")
+    suspend fun updateFavourite(ticker: String, favourite: Boolean, favouriteNumber: Int = Int.MAX_VALUE): Int
 
     @Transaction
     suspend fun upsertAndSelect(company: CompanyEntity): CompanyEntity {
         if (insert(company) == -1L) {
-            val favourite = select(company.ticker)!!.favourite
-            update(company.copy(favourite = favourite))
+            val existing = select(company.ticker)!!
+            update(
+                company.copy(
+                    favourite = existing.favourite,
+                    favouriteNumber = existing.favouriteNumber
+                )
+            )
         }
         return select(company.ticker)!!
     }

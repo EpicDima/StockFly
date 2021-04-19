@@ -8,7 +8,7 @@ import ru.yandex.stockfly.base.BaseDiffUtilCallback
 import ru.yandex.stockfly.databinding.ItemCompanyBinding
 import ru.yandex.stockfly.model.Company
 
-class CompanyAdapter(
+open class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
 ) : AsyncListAdapter<CompanyItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
@@ -26,8 +26,10 @@ class CompanyAdapter(
         super.submitList(list.mapIndexed { index, company -> CompanyItem(company, index) })
     }
 
-    class CompanyViewHolder(private val binding: ItemCompanyBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+
+    class CompanyViewHolder(
+        private val binding: ItemCompanyBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(companyItem: CompanyItem, clickListener: OnCompanyClickListener) {
             binding.apply {

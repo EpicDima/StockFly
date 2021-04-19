@@ -1,6 +1,5 @@
 package ru.yandex.stockfly.ui.company.recomendation
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -25,10 +24,6 @@ class RecommendationView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     // все числа лучше вынести и также лучше сделать аттрибуты для этой вьюшки
-
-    private val saturationAnimationDuration = 700L
-
-    private var saturationAnimator: ValueAnimator? = null
 
     private val maxBarContentWidth = 48.0f.dpToPx(context)
     private val suggestionStartEndPadding = 16.0f.dpToPx(context)
@@ -98,12 +93,8 @@ class RecommendationView @JvmOverloads constructor(
         getValueTextPaint().apply { color = sellColor },
         getValueTextPaint().apply { color = strongSellColor },
     )
-    private val grayscalePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val textBoundRect = Rect()
-
-    private lateinit var bitmap: Bitmap
-    private lateinit var fakeCanvas: Canvas
 
     private var recommendations: List<Recommendation>? = null
 
@@ -130,33 +121,9 @@ class RecommendationView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun startAnimation() {
-        if (length != 0) {
-            saturationAnimator?.cancel()
-            saturationAnimator = ValueAnimator.ofFloat(0.0f, 1.0f).apply {
-                duration = saturationAnimationDuration
-                addUpdateListener {
-                    changeSaturation(it.animatedValue as Float)
-                    invalidate()
-                }
-            }
-            saturationAnimator?.start()
-        }
-    }
-
-    private fun changeSaturation(saturation: Float) {
-        grayscalePaint.apply {
-            val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(saturation)
-            colorFilter = ColorMatrixColorFilter(colorMatrix)
-        }
-    }
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateBarSizes()
-        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        fakeCanvas = Canvas(bitmap)
     }
 
     private fun calculateBarSizes() {
@@ -182,17 +149,15 @@ class RecommendationView @JvmOverloads constructor(
             return
         }
         if (!nullOrEmpty) {
-            bitmap.eraseColor(0)
             if (selectedIndex == NO_POSITION) {
-                recommendations?.forEachIndexed { i, rec -> drawDefaultBar(i, rec, fakeCanvas) }
+                recommendations?.forEachIndexed { i, rec -> drawDefaultBar(i, rec, canvas) }
             } else {
                 recommendations?.let {
-                    it.forEachIndexed { i, rec -> drawUnselectedBar(i, rec, fakeCanvas) }
-                    drawDefaultBar(selectedIndex, it[selectedIndex], fakeCanvas)
-                    drawSuggestion(it[selectedIndex], fakeCanvas)
+                    it.forEachIndexed { i, rec -> drawUnselectedBar(i, rec, canvas) }
+                    drawDefaultBar(selectedIndex, it[selectedIndex], canvas)
+                    drawSuggestion(it[selectedIndex], canvas)
                 }
             }
-            canvas.drawBitmap(bitmap, 0.0f, 0.0f, grayscalePaint)
         } else {
             drawNoData(canvas)
         }

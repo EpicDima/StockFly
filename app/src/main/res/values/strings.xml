@@ -6,7 +6,7 @@
     <string name="stocks">Stocks</string>
     <string name="favourite">Favourite</string>
 
-    <string name="stocks_empty_list">You haven’t searched or viewed any companies or tickers</string>
+    <string name="stocks_empty_list">You have not searched or viewed</string>
     <string name="favourite_empty_list">You didn’t mark any companies as favorites</string>
 
     <string name="company_logo">Company’s logo</string>
@@ -51,6 +51,7 @@
     <string name="market_capitalization">Market capitalization</string>
 
     <string name="no_recommendations">No recommendations</string>
+
     <!-- Не знаю, как некриво перевести следующие строки, поэтому оставил так -->
     <string name="strong_sell_value" translatable="false">Strong sell: %1$s</string>
     <string name="sell_value" translatable="false">Sell: %1$s</string>

@@ -28,7 +28,7 @@ class CompanyViewModel @Inject constructor(
         startJob(Dispatchers.Main) {
             repository.getCompanyWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
-                    _company.postValue(it)
+                    _company.postValue(it) // XMMMMMMMMM
                 }
             }
         }
@@ -36,7 +36,6 @@ class CompanyViewModel @Inject constructor(
 
     fun changeFavourite() = viewModelScope.launch(Dispatchers.IO) {
         repository.changeFavourite(company.value!!)
-        _company.postValue(company.value!!.copy(favourite = !company.value!!.favourite))
     }
 
     override fun onTimeout() {

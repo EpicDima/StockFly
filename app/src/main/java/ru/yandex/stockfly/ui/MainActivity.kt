@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
     WebViewFragmentOpener {
 
     companion object {
-        private const val FRAGMENT_KEY = "open_fragment"
+        const val FRAGMENT_KEY = "open_fragment"
 
         const val SEARCH_FRAGMENT_VALUE = "open_search_fragment"
         const val COMPANY_FRAGMENT_VALUE_PREFIX = "open_company_"

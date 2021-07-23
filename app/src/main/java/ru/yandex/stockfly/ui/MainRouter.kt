@@ -9,15 +9,17 @@ import ru.yandex.stockfly.ui.main.MainFragment
 import ru.yandex.stockfly.ui.search.SearchFragment
 import ru.yandex.stockfly.ui.web.WebViewFragment
 
-private const val FRAGMENT_MAIN = "main"
-private const val FRAGMENT_SEARCH = "search"
-private const val FRAGMENT_COMPANY = "company"
-private const val FRAGMENT_WEBVIEW = "webview"
-
 class MainRouter(
     private val fragmentManager: FragmentManager,
     private val containerId: Int
 ) {
+
+    companion object {
+        private const val FRAGMENT_MAIN = "main"
+        private const val FRAGMENT_SEARCH = "search"
+        private const val FRAGMENT_COMPANY = "company"
+        private const val FRAGMENT_WEBVIEW = "webview"
+    }
 
     init {
         if (fragmentManager.findFragmentByTag(FRAGMENT_MAIN) == null) {

@@ -2,15 +2,15 @@ package ru.yandex.stockfly.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.yandex.stockfly.base.AsyncListAdapter
 import ru.yandex.stockfly.base.BaseDiffUtilCallback
 import ru.yandex.stockfly.databinding.ItemSearchChipBinding
 
 
 class SearchChipAdapter(
     private val clickListener: OnSearchChipClickListener
-) : AsyncListAdapter<String, SearchChipAdapter.SearchChipViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<String, SearchChipAdapter.SearchChipViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchChipViewHolder {
         val inflater = LayoutInflater.from(parent.context)

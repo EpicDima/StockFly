@@ -44,7 +44,6 @@ fun CompanyEntity.toModel(): Company {
     )
 }
 
-
 fun Company.toEntity(): CompanyEntity {
     return CompanyEntity(
         ticker,
@@ -77,7 +76,6 @@ data class QuoteEntity(
 fun QuoteEntity.toModel(): Quote {
     return Quote(current, open, high, low, previousClose)
 }
-
 
 fun Quote.toEntity(): QuoteEntity {
     return QuoteEntity(current, open, high, low, previousClose)

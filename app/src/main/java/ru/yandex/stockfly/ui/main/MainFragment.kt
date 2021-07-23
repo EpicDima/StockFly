@@ -14,10 +14,16 @@ import ru.yandex.stockfly.other.customize
 import ru.yandex.stockfly.other.getDimensionInSp
 import ru.yandex.stockfly.other.set
 import ru.yandex.stockfly.ui.SearchFragmentOpener
+import ru.yandex.stockfly.ui.main.all.AllMainTabFragment
+import ru.yandex.stockfly.ui.main.favourite.FavouriteMainTabFragment
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
     companion object {
+
+        const val ALL_TAB_NUMBER = 0
+        const val FAVOURITE_TAB_NUMBER = 1
+
         @JvmStatic
         fun newInstance(): MainFragment {
             return MainFragment()
@@ -67,7 +73,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
 
         override fun createFragment(position: Int): Fragment {
-            return MainTabFragment.newInstance(position)
+            return when (position) {
+                ALL_TAB_NUMBER -> AllMainTabFragment.newInstance(position)
+                FAVOURITE_TAB_NUMBER -> FavouriteMainTabFragment.newInstance(position)
+                else -> throw RuntimeException("Unknown main tab fragment on position '$position'")
+            }
         }
     }
 }

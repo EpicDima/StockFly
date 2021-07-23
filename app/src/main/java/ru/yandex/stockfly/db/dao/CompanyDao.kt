@@ -34,9 +34,6 @@ interface CompanyDao {
     @Update
     suspend fun update(companies: List<CompanyEntity>)
 
-    @Query("UPDATE companies SET favourite = :favourite, favouriteNumber = :favouriteNumber WHERE ticker = :ticker")
-    suspend fun updateFavourite(ticker: String, favourite: Boolean, favouriteNumber: Int = Int.MAX_VALUE): Int
-
     @Transaction
     suspend fun upsertAndSelect(company: CompanyEntity): CompanyEntity {
         if (insert(company) == -1L) {

@@ -2,15 +2,15 @@ package ru.yandex.stockfly.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.yandex.stockfly.base.AsyncListAdapter
 import ru.yandex.stockfly.base.BaseDiffUtilCallback
 import ru.yandex.stockfly.databinding.ItemCompanyBinding
 import ru.yandex.stockfly.model.Company
 
 open class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
-) : AsyncListAdapter<CompanyItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<CompanyItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
         val inflater = LayoutInflater.from(parent.context)

@@ -1,4 +1,4 @@
-package ru.yandex.stockfly.ui.main
+package ru.yandex.stockfly.ui.main.favourite
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +19,6 @@ class FavouriteCompanyDragCallback(
     ): Boolean {
         onMoveListener(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
         return true
-    }
-
-    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        super.onSelectedChanged(viewHolder, actionState)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}

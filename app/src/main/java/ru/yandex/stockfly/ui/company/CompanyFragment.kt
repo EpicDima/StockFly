@@ -27,6 +27,11 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     companion object {
         const val TICKER_KEY = "ticker"
 
+        private const val CHART_TAB_NUMBER = 0
+        private const val SUMMARY_TAB_NUMBER = 1
+        private const val NEWS_TAB_NUMBER = 2
+        private const val RECOMMENDATION_TAB_NUMBER = 3
+
         @JvmStatic
         fun newInstance(ticker: String): CompanyFragment {
             return CompanyFragment().setArgument(TICKER_KEY, ticker)
@@ -105,10 +110,10 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ChartFragment.newInstance(ticker)
-                1 -> SummaryFragment.newInstance(ticker)
-                2 -> NewsFragment.newInstance(ticker)
-                3 -> RecommendationFragment.newInstance(ticker)
+                CHART_TAB_NUMBER -> ChartFragment.newInstance(ticker)
+                SUMMARY_TAB_NUMBER -> SummaryFragment.newInstance(ticker)
+                NEWS_TAB_NUMBER -> NewsFragment.newInstance(ticker)
+                RECOMMENDATION_TAB_NUMBER -> RecommendationFragment.newInstance(ticker)
                 else -> throw RuntimeException("Unknown company tab fragment on position '$position'")
             }
         }

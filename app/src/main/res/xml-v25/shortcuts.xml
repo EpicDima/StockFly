@@ -15,9 +15,6 @@
 
             <!-- from MainActivity -->
             <extra android:name="open_fragment" android:value="open_search_fragment" />
-
         </intent>
-
     </shortcut>
-
 </shortcuts>

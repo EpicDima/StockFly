@@ -9,6 +9,7 @@ const val BASE_URL = "https://finnhub.io/api/v1/"
 private const val API_KEY = BuildConfig.API_KEY
 
 interface ApiService {
+
     suspend fun search(
         query: String,
         token: String = API_KEY

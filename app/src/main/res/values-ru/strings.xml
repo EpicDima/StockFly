@@ -33,7 +33,7 @@
     <string name="recommendations">Рекомендации</string>
     <string name="stocks">Акции</string>
     <string name="favourite">Избранное</string>
-    <string name="stocks_empty_list">Вы не искали и не просматривали никаких компаний или тикеров</string>
+    <string name="stocks_empty_list">Вы не искали и не просматривали</string>
     <string name="favourite_empty_list">Вы ничего не отметили как избранное</string>
     <string name="d_day" translatable="false">Д</string>
     <string name="w_week" translatable="false">Н</string>

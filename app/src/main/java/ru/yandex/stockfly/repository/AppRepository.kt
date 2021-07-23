@@ -128,7 +128,8 @@ class AppRepository(
     }
 
     override suspend fun changeFavourite(company: Company) {
-        companyDao.updateFavourite(company.ticker, !company.favourite)
+        val fromDb = companyDao.select(company.ticker)!!.toModel()
+        companyDao.update(fromDb.copy(favourite = !fromDb.favourite).toEntity())
         val list = companyDao
             .selectFavouritesAsList()
             .mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) }

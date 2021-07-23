@@ -5,6 +5,7 @@ import retrofit2.http.Query
 import ru.yandex.stockfly.api.response.*
 
 interface ApplicationApiService : ApiService {
+
     @GET("search")
     override suspend fun search(
         @Query("q") query: String,
@@ -46,4 +47,3 @@ interface ApplicationApiService : ApiService {
         @Query("token") token: String
     ): List<RecommendationDto>
 }
-

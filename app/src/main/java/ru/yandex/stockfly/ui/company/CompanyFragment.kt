@@ -70,6 +70,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
                 )
             setupTabs()
             viewModel.company.removeObserver(createAdapterObserver)
+            binding.company = viewModel.company
         }
         viewModel.company.observe(viewLifecycleOwner, createAdapterObserver)
     }

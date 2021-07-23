@@ -17,12 +17,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
+import ru.yandex.stockfly.shortcut.ShortcutConfigurator
 import ru.yandex.stockfly.ui.MainActivity
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouriteMainTabViewModel @Inject constructor(
     private val repository: Repository,
+    private val shortcutConfigurator: ShortcutConfigurator,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -31,7 +33,7 @@ class FavouriteMainTabViewModel @Inject constructor(
     init {
         companies.observeForever {
             viewModelScope.launch {
-                updateShortcuts(it)
+                shortcutConfigurator.updateShortcuts(getApplication(), it)
             }
         }
     }
@@ -40,40 +42,5 @@ class FavouriteMainTabViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.changeFavouriteNumber(from, to)
         }
-    }
-
-    private suspend fun updateShortcuts(list: List<Company>) {
-        ShortcutManagerCompat.removeAllDynamicShortcuts(context())
-        val maxFavouriteShortcutsNumber = ShortcutManagerCompat
-            .getMaxShortcutCountPerActivity(context()) - 1
-        ShortcutManagerCompat.addDynamicShortcuts(
-            context(),
-            list.take(maxFavouriteShortcutsNumber - 1).map { createShortcut(it) }.toList()
-        )
-    }
-
-    private suspend fun createShortcut(company: Company): ShortcutInfoCompat {
-        val intent = Intent(context(), MainActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            putExtra(
-                MainActivity.FRAGMENT_KEY,
-                MainActivity.COMPANY_FRAGMENT_VALUE_PREFIX + company.ticker
-            )
-        }
-        val imageRequest = ImageRequest.Builder(context()).data(company.logoUrl).build()
-        val bitmap = context().imageLoader
-            .execute(imageRequest).drawable?.toBitmap()
-        var shortcutInfoBuilder = ShortcutInfoCompat.Builder(context(), company.ticker)
-            .setShortLabel(company.ticker)
-            .setLongLabel(company.name)
-            .setIntent(intent)
-        if (bitmap != null) {
-            shortcutInfoBuilder = shortcutInfoBuilder.setIcon(IconCompat.createWithBitmap(bitmap))
-        }
-        return shortcutInfoBuilder.build()
-    }
-
-    private fun context(): Context {
-        return getApplication()
     }
 }

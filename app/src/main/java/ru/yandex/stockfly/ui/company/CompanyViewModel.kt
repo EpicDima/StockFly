@@ -1,7 +1,9 @@
 package ru.yandex.stockfly.ui.company
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,11 +12,14 @@ import kotlinx.coroutines.launch
 import ru.yandex.stockfly.base.DownloadableViewModel
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.repository.Repository
+import ru.yandex.stockfly.shortcut.ShortcutConfigurator
 import javax.inject.Inject
 
 @HiltViewModel
 class CompanyViewModel @Inject constructor(
+    context: Context,
     private val repository: Repository,
+    private val shortcutConfigurator: ShortcutConfigurator,
     state: SavedStateHandle
 ) : DownloadableViewModel() {
 
@@ -28,8 +33,14 @@ class CompanyViewModel @Inject constructor(
         startJob(Dispatchers.Main) {
             repository.getCompanyWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
-                    _company.postValue(it) // XMMMMMMMMM
+                    _company.postValue(it)
                 }
+            }
+        }
+
+        repository.favourites.observeForever {
+            viewModelScope.launch {
+                shortcutConfigurator.updateShortcuts(context, it)
             }
         }
     }

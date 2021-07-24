@@ -6,12 +6,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.yandex.stockfly.repository.Repository
-import javax.inject.Inject
 
 private const val REFRESH_INTERVAL = 28800 * 1000L // 8 часов (3 раза в сутки)
 private const val ERROR_INTERVAL = 120 * 1000L // 2 минуты
 
-class Refresher @Inject constructor(
+class Refresher(
     private val repository: Repository,
     private val preferences: SharedPreferences
 ) {

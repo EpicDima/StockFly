@@ -14,7 +14,6 @@ import ru.yandex.stockfly.api.ApplicationApiService
 import ru.yandex.stockfly.api.BASE_URL
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {

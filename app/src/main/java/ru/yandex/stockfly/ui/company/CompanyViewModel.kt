@@ -1,9 +1,7 @@
 package ru.yandex.stockfly.ui.company
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +15,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CompanyViewModel @Inject constructor(
-    context: Context,
     private val repository: Repository,
     private val shortcutConfigurator: ShortcutConfigurator,
     state: SavedStateHandle
@@ -40,7 +37,7 @@ class CompanyViewModel @Inject constructor(
 
         repository.favourites.observeForever {
             viewModelScope.launch {
-                shortcutConfigurator.updateShortcuts(context, it)
+                shortcutConfigurator.updateShortcuts(it)
             }
         }
     }

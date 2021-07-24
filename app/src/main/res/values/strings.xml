@@ -6,8 +6,8 @@
     <string name="stocks">Stocks</string>
     <string name="favourite">Favourite</string>
 
-    <string name="stocks_empty_list">You have not searched or viewed</string>
-    <string name="favourite_empty_list">You didn’t mark any companies as favorites</string>
+    <string name="stocks_empty_list">You have not searched or viewed anything</string>
+    <string name="favourite_empty_list">You did not mark any companies as favorites</string>
 
     <string name="company_logo">Company’s logo</string>
     <string name="favourite_icon">Icon indicating favorite company</string>

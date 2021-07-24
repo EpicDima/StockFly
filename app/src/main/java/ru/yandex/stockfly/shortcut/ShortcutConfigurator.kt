@@ -11,19 +11,21 @@ import coil.request.ImageRequest
 import ru.yandex.stockfly.model.Company
 import ru.yandex.stockfly.ui.MainActivity
 
-class ShortcutConfigurator {
+class ShortcutConfigurator(
+    private val context: Context
+) {
 
-    suspend fun updateShortcuts(context: Context, list: List<Company>) {
+    suspend fun updateShortcuts(list: List<Company>) {
         ShortcutManagerCompat.removeAllDynamicShortcuts(context)
         val maxFavouriteShortcutsNumber = ShortcutManagerCompat
             .getMaxShortcutCountPerActivity(context) - 1
         ShortcutManagerCompat.addDynamicShortcuts(
             context,
-            list.take(maxFavouriteShortcutsNumber - 1).map { createShortcut(context, it) }.toList()
+            list.take(maxFavouriteShortcutsNumber - 1).map { createShortcut(it) }.toList()
         )
     }
 
-    private suspend fun createShortcut(context: Context, company: Company): ShortcutInfoCompat {
+    private suspend fun createShortcut(company: Company): ShortcutInfoCompat {
         val intent = Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             putExtra(

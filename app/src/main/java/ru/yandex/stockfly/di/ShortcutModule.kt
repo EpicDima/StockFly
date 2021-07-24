@@ -1,5 +1,6 @@
 package ru.yandex.stockfly.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,7 @@ object ShortcutModule {
 
     @Singleton
     @Provides
-    fun provideShortcutConfigurator(): ShortcutConfigurator {
-        return ShortcutConfigurator()
+    fun provideShortcutConfigurator(context: Context): ShortcutConfigurator {
+        return ShortcutConfigurator(context)
     }
 }

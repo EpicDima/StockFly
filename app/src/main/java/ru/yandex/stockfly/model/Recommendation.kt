@@ -16,7 +16,7 @@ data class Recommendation(
         get() = FORMAT_DATE_API.parse(period) ?: Date(0)
 
     val periodFormatted: String
-        get() = FORMAT_PERIOD_DATE.format(periodDate).capitalize(Locale.ROOT)
+        get() = FORMAT_PERIOD_DATE.format(periodDate).replaceFirstChar { it.titlecase() }
 
     val sum: Int
         get() = strongBuy + buy + hold + sell + strongSell

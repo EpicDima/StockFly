@@ -40,7 +40,7 @@ data class StockCandleItem(
         get() = FORMAT_PRICE.format(price)
 
     fun getTimestampString(format: SimpleDateFormat): String {
-        return format.format(Date(timestamp * 1000L)).capitalize(Locale.ROOT)
+        return format.format(Date(timestamp * 1000L)).replaceFirstChar { it.titlecase() }
     }
 }
 

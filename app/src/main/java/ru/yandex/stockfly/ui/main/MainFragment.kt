@@ -13,7 +13,7 @@ import ru.yandex.stockfly.databinding.FragmentMainBinding
 import ru.yandex.stockfly.other.customize
 import ru.yandex.stockfly.other.getDimensionInSp
 import ru.yandex.stockfly.other.set
-import ru.yandex.stockfly.ui.SearchFragmentOpener
+import ru.yandex.stockfly.ui.MainRouter
 import ru.yandex.stockfly.ui.main.all.AllMainTabFragment
 import ru.yandex.stockfly.ui.main.favourite.FavouriteMainTabFragment
 
@@ -41,7 +41,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             viewPager.adapter = MainFragmentAdapter(titles.size, this@MainFragment)
             viewPager.isUserInputEnabled = false
             searchLayout.setOnClickListener {
-                (requireActivity() as SearchFragmentOpener).openSearchFragment()
+                (requireActivity() as MainRouter.SearchFragmentOpener).openSearchFragment()
             }
         }
         setupTabs()

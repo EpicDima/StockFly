@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.R
 import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentSearchBinding
-import ru.yandex.stockfly.ui.CompanyFragmentOpener
+import ru.yandex.stockfly.ui.MainRouter
 import ru.yandex.stockfly.ui.main.CompanyAdapter
 
 @AndroidEntryPoint
@@ -73,7 +73,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
 
     private fun setupResultList() {
         val resultAdapter = CompanyAdapter { ticker ->
-            (requireActivity() as CompanyFragmentOpener).openCompanyFragment(ticker)
+            (requireActivity() as MainRouter.CompanyFragmentOpener).openCompanyFragment(ticker)
         }
         binding.resultRecyclerView.apply {
             adapter = resultAdapter

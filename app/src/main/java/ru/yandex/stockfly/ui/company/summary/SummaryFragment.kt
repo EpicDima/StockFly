@@ -12,8 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentSummaryBinding
 import ru.yandex.stockfly.other.setArgument
-import ru.yandex.stockfly.ui.WebViewFragmentOpener
-
+import ru.yandex.stockfly.ui.MainRouter
 
 @AndroidEntryPoint
 class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
@@ -36,7 +35,7 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
             lifecycleOwner = viewLifecycleOwner
             company = viewModel.company
             phoneValue.paintFlags = phoneValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            weburlValue.paintFlags = phoneValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            weburlValue.paintFlags = weburlValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
         setClickListeners()
         return binding.root
@@ -49,9 +48,13 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
             startActivity(intent)
         }
         binding.weburlField.setOnClickListener {
-            (requireParentFragment().requireActivity() as WebViewFragmentOpener).openWebViewFragment(
-                binding.weburlValue.text.toString()
-            )
+            val url = binding.weburlValue.text.toString()
+
+            if (url.startsWith("https://")) {
+                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(url)
+            } else {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            }
         }
     }
 }

@@ -1,9 +1,9 @@
 package ru.yandex.stockfly.ui
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
-import androidx.fragment.app.commitNow
 import ru.yandex.stockfly.ui.company.CompanyFragment
 import ru.yandex.stockfly.ui.main.MainFragment
 import ru.yandex.stockfly.ui.search.SearchFragment
@@ -14,24 +14,34 @@ class MainRouter(
     private val containerId: Int
 ) {
 
-    companion object {
-        private const val FRAGMENT_MAIN = "main"
-        private const val FRAGMENT_SEARCH = "search"
-        private const val FRAGMENT_COMPANY = "company"
-        private const val FRAGMENT_WEBVIEW = "webview"
+    private enum class FragmentPage {
+        MAIN, SEARCH, COMPANY, WEBVIEW;
+
+        val tag: String = toString()
     }
 
     init {
-        if (fragmentManager.findFragmentByTag(FRAGMENT_MAIN) == null) {
+        if (fragmentManager.fragments.isEmpty()) {
             val mainFragment = MainFragment.newInstance()
-            fragmentManager.commitNow {
-                add(containerId, mainFragment, FRAGMENT_MAIN)
+            fragmentManager.commit {
+                openFragment(mainFragment, FragmentPage.MAIN, false)
             }
         }
     }
 
-    private fun FragmentTransaction.hideCurrent() {
-        fragmentManager.findFragmentById(containerId)?.let { hide(it) }
+    private fun FragmentTransaction.openFragment(
+        fragment: Fragment,
+        page: FragmentPage,
+        toBackStack: Boolean = true,
+        changeTagFunction: (tag: String) -> String = { tag -> tag }
+    ) {
+        val tag = changeTagFunction(page.tag)
+
+        replace(containerId, fragment, tag)
+
+        if (toBackStack) {
+            addToBackStack(tag)
+        }
     }
 
     fun back(): Boolean {
@@ -45,27 +55,46 @@ class MainRouter(
 
     fun openSearchFragment() {
         fragmentManager.commit {
-            hideCurrent()
-            add(containerId, SearchFragment.newInstance(), FRAGMENT_SEARCH)
-            addToBackStack(FRAGMENT_SEARCH)
+            openFragment(SearchFragment.newInstance(), FragmentPage.SEARCH)
         }
     }
 
     fun openCompanyFragment(ticker: String) {
-        fragmentManager.apply {
-            commit {
-                hideCurrent()
-                add(containerId, CompanyFragment.newInstance(ticker), FRAGMENT_COMPANY)
-                addToBackStack(FRAGMENT_COMPANY)
+        val companyTag = FragmentPage.COMPANY.tag + ticker
+
+        if (fragmentManager.findFragmentByTag(companyTag) != null) {
+            fragmentManager.popBackStack(companyTag, 0)
+        } else {
+            fragmentManager.commit {
+                openFragment(
+                    CompanyFragment.newInstance(ticker),
+                    FragmentPage.COMPANY,
+                    changeTagFunction = { companyTag })
             }
         }
     }
 
     fun openWebViewFragment(url: String) {
         fragmentManager.commit {
-            hideCurrent()
-            add(containerId, WebViewFragment.newInstance(url), FRAGMENT_WEBVIEW)
-            addToBackStack(FRAGMENT_WEBVIEW)
+            openFragment(WebViewFragment.newInstance(url), FragmentPage.WEBVIEW)
         }
+    }
+
+
+    interface SearchFragmentOpener {
+
+        fun openSearchFragment()
+    }
+
+
+    interface CompanyFragmentOpener {
+
+        fun openCompanyFragment(ticker: String)
+    }
+
+
+    interface WebViewFragmentOpener {
+
+        fun openWebViewFragment(url: String)
     }
 }

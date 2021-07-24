@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import ru.yandex.stockfly.databinding.FragmentWebviewBinding
 import ru.yandex.stockfly.other.setArgument
 
-
 class WebViewFragment : Fragment() {
 
     companion object {

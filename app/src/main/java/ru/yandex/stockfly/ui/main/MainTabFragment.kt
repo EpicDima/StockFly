@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.yandex.stockfly.R
 import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentTabMainBinding
-import ru.yandex.stockfly.ui.CompanyFragmentOpener
+import ru.yandex.stockfly.ui.MainRouter
 
 abstract class MainTabFragment<VM : ViewModel> :
     BaseViewModelFragment<VM, FragmentTabMainBinding>() {
@@ -18,7 +18,7 @@ abstract class MainTabFragment<VM : ViewModel> :
     }
 
     protected val adapter = CompanyAdapter { ticker ->
-        (requireParentFragment().requireActivity() as CompanyFragmentOpener)
+        (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
             .openCompanyFragment(ticker)
     }
 

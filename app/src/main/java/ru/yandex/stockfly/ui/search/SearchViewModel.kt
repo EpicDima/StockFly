@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
 ) : DownloadableViewModel() {
 
     private val _showPopular = MutableLiveData(false)

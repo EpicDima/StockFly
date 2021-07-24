@@ -9,12 +9,9 @@
         android:shortcutShortLabel="@string/shortcut_search_short_label">
 
         <intent
-            android:action="android.intent.action.VIEW"
+            android:action="android.intent.action.SEARCH"
             android:targetClass="ru.yandex.stockfly.ui.MainActivity"
             android:targetPackage="ru.yandex.stockfly">
-
-            <!-- from MainActivity -->
-            <extra android:name="open_fragment" android:value="open_search_fragment" />
         </intent>
     </shortcut>
 </shortcuts>

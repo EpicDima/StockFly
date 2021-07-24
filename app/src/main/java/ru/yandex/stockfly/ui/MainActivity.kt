@@ -7,26 +7,28 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentOpener,
-    WebViewFragmentOpener {
+class MainActivity : AppCompatActivity(),
+    MainRouter.SearchFragmentOpener,
+    MainRouter.CompanyFragmentOpener,
+    MainRouter.WebViewFragmentOpener {
 
-    companion object {
-        const val FRAGMENT_KEY = "open_fragment"
-
-        const val SEARCH_FRAGMENT_VALUE = "open_search_fragment"
-        const val COMPANY_FRAGMENT_VALUE_PREFIX = "open_company_"
-    }
-
-    private lateinit var router: MainRouter
+    private var router: MainRouter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         router = MainRouter(supportFragmentManager, binding.fragmentContainer.id)
+
         if (savedInstanceState == null) {
             openFragmentByIntent(intent)
         }
+    }
+
+    override fun onDestroy() {
+        router = null
+        super.onDestroy()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -35,45 +37,27 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
     }
 
     private fun openFragmentByIntent(intent: Intent?) {
-        intent?.getStringExtra(FRAGMENT_KEY)?.let {
-            if (SEARCH_FRAGMENT_VALUE == it) {
-                openSearchFragment()
-            } else if (it.startsWith(COMPANY_FRAGMENT_VALUE_PREFIX)) {
-                openCompanyFragment(it.removePrefix(COMPANY_FRAGMENT_VALUE_PREFIX))
-            }
+        when (intent?.action) {
+            Intent.ACTION_SEARCH -> openSearchFragment()
+            Intent.ACTION_VIEW -> intent.dataString?.let { openCompanyFragment(it) }
         }
     }
 
     override fun onBackPressed() {
-        if (!router.back()) {
+        if (router?.back() == false) {
             super.onBackPressed()
         }
     }
 
     override fun openSearchFragment() {
-        router.openSearchFragment()
+        router?.openSearchFragment()
     }
 
     override fun openCompanyFragment(ticker: String) {
-        router.openCompanyFragment(ticker)
+        router?.openCompanyFragment(ticker)
     }
 
     override fun openWebViewFragment(url: String) {
-        router.openWebViewFragment(url)
+        router?.openWebViewFragment(url)
     }
-}
-
-
-interface SearchFragmentOpener {
-    fun openSearchFragment()
-}
-
-
-interface CompanyFragmentOpener {
-    fun openCompanyFragment(ticker: String)
-}
-
-
-interface WebViewFragmentOpener {
-    fun openWebViewFragment(url: String)
 }

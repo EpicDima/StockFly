@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.yandex.stockfly.base.BaseViewModelFragment
 import ru.yandex.stockfly.databinding.FragmentNewsBinding
 import ru.yandex.stockfly.other.setArgument
-import ru.yandex.stockfly.ui.WebViewFragmentOpener
+import ru.yandex.stockfly.ui.MainRouter
 
 @AndroidEntryPoint
 class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
@@ -40,7 +40,7 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
 
     private fun setupList() {
         val adapter = NewsAdapter { url ->
-            (requireParentFragment().requireActivity() as WebViewFragmentOpener)
+            (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener)
                 .openWebViewFragment(url)
         }
         binding.recyclerView.apply {

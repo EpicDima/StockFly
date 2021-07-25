@@ -20,4 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-flattenpackagehierarchy
+-obfuscationdictionary obfuscation_dictionary.txt
+-classobfuscationdictionary obfuscation_dictionary.txt
+-packageobfuscationdictionary obfuscation_dictionary.txt
+
 -keepclasseswithmembers class * { @retrofit2.http.* <methods>; }

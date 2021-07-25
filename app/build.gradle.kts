@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -16,7 +18,11 @@ android {
         versionCode = 3
         versionName = "0.3"
 
-        buildConfigField("String", "API_KEY", findProperty("API_KEY").toString())
+        buildConfigField(
+            "String",
+            "API_KEY",
+            gradleLocalProperties(rootDir).getProperty("API_KEY").toString()
+        )
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -45,7 +51,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    
+
     buildFeatures {
         buildConfig = true
         dataBinding = true

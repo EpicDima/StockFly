@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--flattenpackagehierarchy
+-repackageclasses
 -obfuscationdictionary obfuscation_dictionary.txt
 -classobfuscationdictionary obfuscation_dictionary.txt
 -packageobfuscationdictionary obfuscation_dictionary.txt

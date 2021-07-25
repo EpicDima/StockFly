@@ -10,8 +10,8 @@
 
         <intent
             android:action="android.intent.action.SEARCH"
-            android:targetClass="ru.yandex.stockfly.ui.MainActivity"
-            android:targetPackage="ru.yandex.stockfly">
+            android:targetClass="com.epicdima.stockfly.ui.MainActivity"
+            android:targetPackage="com.epicdima.stockfly">
         </intent>
     </shortcut>
 </shortcuts>

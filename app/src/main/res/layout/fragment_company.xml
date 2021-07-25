@@ -7,7 +7,7 @@
 
         <import type="android.view.View" />
 
-        <import type="ru.yandex.stockfly.model.Company" />
+        <import type="com.epicdima.stockfly.model.Company" />
 
         <variable
             name="company"

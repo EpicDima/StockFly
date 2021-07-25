@@ -50,7 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ru.yandex.stockfly.ui.company.recomendation.RecommendationView
+            <com.epicdima.stockfly.ui.company.recomendation.RecommendationView
                 android:id="@+id/recommendation_view"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/recommendation_view_height"

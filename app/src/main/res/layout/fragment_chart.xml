@@ -7,7 +7,7 @@
 
         <import type="android.view.View" />
 
-        <import type="ru.yandex.stockfly.model.Company" />
+        <import type="com.epicdima.stockfly.model.Company" />
 
         <variable
             name="loading"
@@ -75,7 +75,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ru.yandex.stockfly.ui.company.chart.ChartView
+                <com.epicdima.stockfly.ui.company.chart.ChartView
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

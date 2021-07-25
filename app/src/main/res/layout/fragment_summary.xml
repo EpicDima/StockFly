@@ -5,9 +5,9 @@
 
     <data>
 
-        <import type="ru.yandex.stockfly.model.Company" />
+        <import type="com.epicdima.stockfly.model.Company" />
 
-        <import type="ru.yandex.stockfly.other.ExtensionsKt" />
+        <import type="com.epicdima.stockfly.other.ExtensionsKt" />
 
         <variable
             name="company"

@@ -10,7 +10,7 @@ android {
     buildToolsVersion = Android.buildTools
 
     defaultConfig {
-        applicationId = "ru.yandex.stockfly"
+        applicationId = "com.epicdima.stockfly"
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = 3

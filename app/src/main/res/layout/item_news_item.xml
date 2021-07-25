@@ -11,7 +11,7 @@
 
         <variable
             name="newsItem"
-            type="ru.yandex.stockfly.model.NewsItem" />
+            type="com.epicdima.stockfly.model.NewsItem" />
 
         <variable
             name="position"
@@ -19,7 +19,7 @@
 
         <variable
             name="formatter"
-            type="ru.yandex.stockfly.other.Formatter" />
+            type="com.epicdima.stockfly.other.Formatter" />
     </data>
 
     <com.google.android.material.circularreveal.cardview.CircularRevealCardView

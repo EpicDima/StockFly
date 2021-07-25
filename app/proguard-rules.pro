@@ -25,4 +25,16 @@
 -classobfuscationdictionary obfuscation_dictionary.txt
 -packageobfuscationdictionary obfuscation_dictionary.txt
 
+-assumenosideeffects class android.util.Log {
+    public static java.lang.String getStackTraceString(...);
+    public static boolean isLoggable(...);
+    public static int println(...);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+    public static int wtf(...);
+}
+
 -keepclasseswithmembers class * { @retrofit2.http.* <methods>; }

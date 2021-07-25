@@ -5,10 +5,10 @@ import android.content.res.Configuration
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.request.CachePolicy
-import dagger.hilt.android.HiltAndroidApp
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.Refresher
 import com.epicdima.stockfly.other.locale
+import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp

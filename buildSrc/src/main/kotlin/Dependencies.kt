@@ -9,4 +9,5 @@ object Dependencies {
     val retrofit = Retrofit
     val moshi = Moshi
     val other = Other
+    val debug = Debug
 }

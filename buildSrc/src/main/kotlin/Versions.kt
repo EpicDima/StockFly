@@ -32,4 +32,6 @@ object Versions {
     const val timber = "4.7.1"
 
     const val okhttp = "4.9.1"
+
+    const val leakCanary = "2.7"
 }

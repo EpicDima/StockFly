@@ -122,4 +122,8 @@ dependencies {
         implementation(coil)
         implementation(timber)
     }
+
+    Dependencies.debug.apply {
+        debugImplementation(leakCanary)
+    }
 }

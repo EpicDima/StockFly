@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentRecommendationBinding
 import com.epicdima.stockfly.other.setArgument
+import timber.log.Timber
 
 @AndroidEntryPoint
 class RecommendationFragment :
@@ -20,6 +21,7 @@ class RecommendationFragment :
 
         @JvmStatic
         fun newInstance(ticker: String): RecommendationFragment {
+            Timber.i("newInstance with ticker %s", ticker)
             return RecommendationFragment().setArgument(TICKER_KEY, ticker)
         }
     }
@@ -43,6 +45,7 @@ class RecommendationFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
         _binding = FragmentRecommendationBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             loading = viewModel.loading

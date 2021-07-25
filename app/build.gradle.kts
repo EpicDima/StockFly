@@ -105,6 +105,7 @@ dependencies {
     Dependencies.retrofit.apply {
         implementation(retrofit)
         implementation(moshiConverter)
+        implementation(interceptor)
     }
 
     Dependencies.moshi.apply {
@@ -119,5 +120,6 @@ dependencies {
         implementation(activityKtx)
         implementation(fragmentKtx)
         implementation(coil)
+        implementation(timber)
     }
 }

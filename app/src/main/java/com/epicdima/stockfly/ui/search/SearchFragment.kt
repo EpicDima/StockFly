@@ -25,12 +25,14 @@ import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
     companion object {
         @JvmStatic
         fun newInstance(): SearchFragment {
+            Timber.i("newInstance")
             return SearchFragment()
         }
     }
@@ -38,6 +40,8 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
     override val _viewModel: SearchViewModel by viewModels()
 
     private val onChipClick: (String) -> Unit = {
+        Timber.i("onChipClick %s", it)
+
         binding.searchEditText.apply {
             setText(it)
             setSelection(it.length)
@@ -49,6 +53,8 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
+
         _binding = FragmentSearchBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             loading = viewModel.loading
@@ -67,6 +73,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
     }
 
     override fun onStart() {
+        Timber.v("onStart")
         super.onStart()
         showKeyboard()
     }
@@ -121,12 +128,14 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
 
     private fun showKeyboard() {
         if (binding.searchEditText.requestFocus()) {
+            Timber.v("showKeyboard with request focus")
             (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
                 .toggleSoftInput(SHOW_FORCED, HIDE_NOT_ALWAYS)
         }
     }
 
     private fun hideKeyboard() {
+        Timber.v("hideKeyboard")
         binding.searchEditText.apply {
             clearFocus()
             (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)

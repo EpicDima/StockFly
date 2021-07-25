@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Recommendation
 import com.epicdima.stockfly.repository.Repository
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val DEFAULT_RANGE = 12
@@ -60,11 +61,14 @@ class RecommendationViewModel @Inject constructor(
         ) else emptyList()
 
     init {
+        Timber.v("init with ticker '%s'", ticker)
+
         startLoading()
         startTimeoutJob()
         startJob(Dispatchers.Main) {
             repository.getCompanyRecommendationsWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
+                    Timber.i("loaded recommendations %s", it)
                     _recommendations.addAll(it)
                     _length = it.size
                     _beginIndex = maxOf(0, it.lastIndex - DEFAULT_RANGE)
@@ -90,11 +94,13 @@ class RecommendationViewModel @Inject constructor(
     }
 
     override fun onTimeout() {
+        Timber.i("onTimeout")
         setError()
         stopLoading()
     }
 
     override fun onError(e: Throwable) {
+        Timber.w(e, "onError")
         stopTimeoutJob()
         setError()
         stopLoading()

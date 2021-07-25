@@ -10,6 +10,7 @@ import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.ui.MainRouter
+import timber.log.Timber
 
 abstract class MainTabFragment<VM : ViewModel> :
     BaseViewModelFragment<VM, FragmentTabMainBinding>() {
@@ -26,6 +27,8 @@ abstract class MainTabFragment<VM : ViewModel> :
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
+
         _binding = FragmentTabMainBinding.inflate(inflater, container, false).apply {
             recyclerView.apply {
                 adapter = this@MainTabFragment.adapter

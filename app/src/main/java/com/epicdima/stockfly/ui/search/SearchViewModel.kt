@@ -10,6 +10,7 @@ import com.epicdima.stockfly.BuildConfig
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,6 +40,7 @@ class SearchViewModel @Inject constructor(
     val result: LiveData<List<Company>> = _result
 
     init {
+        Timber.v("init")
         reset()
     }
 
@@ -56,6 +58,8 @@ class SearchViewModel @Inject constructor(
     }
 
     fun search(query: String): Boolean {
+        Timber.i("search '%s'", query)
+
         val text = query.trim()
         return if (text.isNotEmpty()) {
             beforeSearchStart()
@@ -88,6 +92,8 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun onLoad(list: List<Company>) {
+        Timber.i("onLoad companies = %s", list)
+
         _result.postValue(list)
         if (list.isNotEmpty()) {
             _showResult.postValue(true)
@@ -107,11 +113,13 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onTimeout() {
+        Timber.i("onTimeout")
         setError()
         stopLoading()
     }
 
     override fun onError(e: Throwable) {
+        Timber.w(e, "onError")
         stopTimeoutJob()
         stopLoading()
         setError()

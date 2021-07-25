@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import com.epicdima.stockfly.other.timeout
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class DownloadableViewModel : ViewModel() {
@@ -59,7 +60,8 @@ abstract class DownloadableViewModel : ViewModel() {
                 if (stopImmediately) {
                     jobIsDone.set(true)
                 }
-            } catch (ignored: CancellationException) {
+            } catch (e: CancellationException) {
+                Timber.w(e)
                 jobIsDone.set(true)
             } catch (e: Exception) {
                 errorOccurred.set(true)

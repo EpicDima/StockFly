@@ -15,6 +15,7 @@ import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.other.color
 import com.epicdima.stockfly.other.drawable
 import com.epicdima.stockfly.other.setArgument
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding>() {
@@ -23,6 +24,7 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
 
         @JvmStatic
         fun newInstance(ticker: String): ChartFragment {
+            Timber.i("newInstance with ticker %s", ticker)
             return ChartFragment().setArgument(TICKER_KEY, ticker)
         }
     }
@@ -33,6 +35,7 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
         _binding = FragmentChartBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             loading = viewModel.loading
@@ -79,6 +82,7 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
     }
 
     private fun unselectButtonByParam(stockCandleParam: StockCandleParam?) {
+        Timber.v("unselect button %s", stockCandleParam)
         when (stockCandleParam) {
             StockCandleParam.DAY -> unselectButton(binding.dayButton)
             StockCandleParam.WEEK -> unselectButton(binding.weekButton)
@@ -90,6 +94,7 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
     }
 
     private fun selectButtonByParam(stockCandleParam: StockCandleParam) {
+        Timber.i("select button %s", stockCandleParam)
         when (stockCandleParam) {
             StockCandleParam.DAY -> selectButton(binding.dayButton)
             StockCandleParam.WEEK -> selectButton(binding.weekButton)

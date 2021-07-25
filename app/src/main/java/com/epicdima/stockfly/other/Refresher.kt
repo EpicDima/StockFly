@@ -6,6 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.epicdima.stockfly.repository.Repository
+import timber.log.Timber
 
 private const val REFRESH_INTERVAL = 28800 * 1000L // 8 часов (3 раза в сутки)
 private const val ERROR_INTERVAL = 120 * 1000L // 2 минуты
@@ -16,6 +17,7 @@ class Refresher(
 ) {
 
     fun refresh() {
+        Timber.i("refresh")
         repeatOnError(this::refreshCompanies)
     }
 
@@ -35,7 +37,7 @@ class Refresher(
                     function()
                     break
                 } catch (e: Exception) {
-                    Log.w(this@Refresher::class.simpleName, "repeatOnError", e)
+                    Timber.w(e, "repeatOnError")
                     delay(ERROR_INTERVAL)
                 }
             }

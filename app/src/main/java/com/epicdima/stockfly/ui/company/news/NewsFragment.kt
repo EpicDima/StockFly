@@ -11,6 +11,7 @@ import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.MainRouter
+import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
@@ -19,6 +20,7 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
 
         @JvmStatic
         fun newInstance(ticker: String): NewsFragment {
+            Timber.i("newInstance with ticker %s", ticker)
             return NewsFragment().setArgument(TICKER_KEY, ticker)
         }
     }
@@ -29,6 +31,7 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
         _binding = FragmentNewsBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             loading = viewModel.loading

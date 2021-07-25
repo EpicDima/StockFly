@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.NewsItem
 import com.epicdima.stockfly.repository.Repository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,10 +24,13 @@ class NewsViewModel @Inject constructor(
     val news: LiveData<List<NewsItem>> = _news
 
     init {
+        Timber.v("init with ticker '%s'", ticker)
+
         startLoading()
         startTimeoutJob()
         startJob(Dispatchers.Main) {
             repository.getCompanyNewsWithRefresh(ticker, viewModelScope).observeForever {
+                Timber.i("loaded news %s", it)
                 if (stopTimeoutJob()) {
                     _news.postValue(it)
                     stopLoading()
@@ -36,11 +40,13 @@ class NewsViewModel @Inject constructor(
     }
 
     override fun onTimeout() {
+        Timber.i("onTimeout")
         setError()
         stopLoading()
     }
 
     override fun onError(e: Throwable) {
+        Timber.w(e, "onError")
         stopTimeoutJob()
         setError()
         stopLoading()

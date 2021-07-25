@@ -10,6 +10,7 @@ import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.model.StockCandles
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.repository.Repository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -105,11 +106,13 @@ class ChartViewModel @Inject constructor(
     }
 
     override fun onTimeout() {
+        Timber.i("onTimeout")
         _stockCandles.postValue(null)
         stopLoading()
     }
 
     override fun onError(e: Throwable) {
+        Timber.w(e, "onError")
         stopTimeoutJob()
         if (stopJob()) {
             _stockCandles.postValue(null)

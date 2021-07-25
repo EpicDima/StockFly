@@ -21,6 +21,7 @@ import com.epicdima.stockfly.ui.company.chart.ChartFragment
 import com.epicdima.stockfly.ui.company.news.NewsFragment
 import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment
 import com.epicdima.stockfly.ui.company.summary.SummaryFragment
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
@@ -34,6 +35,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
         @JvmStatic
         fun newInstance(ticker: String): CompanyFragment {
+            Timber.i("newInstance with ticker %s", ticker)
             return CompanyFragment().setArgument(TICKER_KEY, ticker)
         }
     }
@@ -48,6 +50,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
         titles = resources.getStringArray(R.array.company_tabs)
         _binding = FragmentCompanyBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -61,6 +64,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     }
 
     private fun setSingleEventForTabAdapterCreation() {
+        Timber.v("setSingleEventForTabAdapterCreation")
         createAdapterObserver = Observer<Company> {
             binding.viewPager.adapter =
                 CompanyFragmentAdapter(
@@ -110,6 +114,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         }
 
         override fun createFragment(position: Int): Fragment {
+            Timber.i("createFragment with position %d", position)
             return when (position) {
                 CHART_TAB_NUMBER -> ChartFragment.newInstance(ticker)
                 SUMMARY_TAB_NUMBER -> SummaryFragment.newInstance(ticker)

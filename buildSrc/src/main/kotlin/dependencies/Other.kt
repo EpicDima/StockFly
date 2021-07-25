@@ -13,4 +13,6 @@ object Other {
     const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
 
     const val coil = "io.coil-kt:coil:${Versions.coil}"
+
+    const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 }

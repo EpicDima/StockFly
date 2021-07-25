@@ -8,6 +8,7 @@ import com.epicdima.stockfly.ui.company.CompanyFragment
 import com.epicdima.stockfly.ui.main.MainFragment
 import com.epicdima.stockfly.ui.search.SearchFragment
 import com.epicdima.stockfly.ui.web.WebViewFragment
+import timber.log.Timber
 
 class MainRouter(
     private val fragmentManager: FragmentManager,
@@ -21,7 +22,10 @@ class MainRouter(
     }
 
     init {
+        Timber.v("init")
         if (fragmentManager.fragments.isEmpty()) {
+            Timber.i("new MainFragment")
+
             val mainFragment = MainFragment.newInstance()
             fragmentManager.commit {
                 openFragment(mainFragment, FragmentPage.MAIN, false)
@@ -37,6 +41,14 @@ class MainRouter(
     ) {
         val tag = changeTagFunction(page.tag)
 
+        Timber.i(
+            "openFragment(fragment: %s, page: %s, toBackStack: %s, tag: %s)",
+            fragment,
+            page,
+            toBackStack,
+            tag
+        )
+
         replace(containerId, fragment, tag)
 
         if (toBackStack) {
@@ -45,6 +57,8 @@ class MainRouter(
     }
 
     fun back(): Boolean {
+        Timber.i("back")
+
         return if (fragmentManager.backStackEntryCount > 0) {
             fragmentManager.popBackStack()
             true

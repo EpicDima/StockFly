@@ -13,6 +13,7 @@ import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.MainRouter
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
@@ -21,6 +22,7 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
 
         @JvmStatic
         fun newInstance(ticker: String): SummaryFragment {
+            Timber.i("newInstance with ticker %s", ticker)
             return SummaryFragment().setArgument(TICKER_KEY, ticker)
         }
     }
@@ -31,6 +33,7 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
         _binding = FragmentSummaryBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             company = viewModel.company
@@ -43,16 +46,17 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
 
     private fun setClickListeners() {
         binding.phoneField.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:${binding.phoneValue.text}")
-            startActivity(intent)
+            Timber.i("open phone number '%s'", binding.phoneValue.text)
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${binding.phoneValue.text}")))
         }
         binding.weburlField.setOnClickListener {
             val url = binding.weburlValue.text.toString()
 
             if (url.startsWith("https://")) {
+                    Timber.i("open safe url '%s'", url)
                 (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(url)
             } else {
+                Timber.i("open unsafe url '%s'", url)
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
             }
         }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
 import com.epicdima.stockfly.shortcut.ShortcutConfigurator
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +21,7 @@ class FavouriteMainTabViewModel @Inject constructor(
     val companies: LiveData<List<Company>> = repository.favourites
 
     init {
+        Timber.v("init")
         companies.observeForever {
             viewModelScope.launch {
                 shortcutConfigurator.updateShortcuts(it)
@@ -28,6 +30,8 @@ class FavouriteMainTabViewModel @Inject constructor(
     }
 
     fun changeFavouriteNumber(from: Int, to: Int) {
+        Timber.i("changeFavouriteNumber from %d to %d", from, to)
+
         viewModelScope.launch(Dispatchers.IO) {
             repository.changeFavouriteNumber(from, to)
         }

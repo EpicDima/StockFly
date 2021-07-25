@@ -11,6 +11,7 @@ import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
 import com.epicdima.stockfly.shortcut.ShortcutConfigurator
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,11 +27,14 @@ class CompanyViewModel @Inject constructor(
     val company: LiveData<Company> = _company
 
     init {
+        Timber.v("init with ticker '%s'", ticker)
+
         startTimeoutJob()
         startJob(Dispatchers.Main) {
             repository.getCompanyWithRefresh(ticker, viewModelScope).observeForever {
                 if (stopTimeoutJob()) {
                     _company.postValue(it)
+                    Timber.i("loaded company %s", it)
                 }
             }
         }
@@ -43,14 +47,17 @@ class CompanyViewModel @Inject constructor(
     }
 
     fun changeFavourite() = viewModelScope.launch(Dispatchers.IO) {
+        Timber.i("changeFavourite %s", company)
         repository.changeFavourite(company.value!!)
     }
 
     override fun onTimeout() {
+        Timber.i("onTimeout")
         setError()
     }
 
     override fun onError(e: Throwable) {
+        Timber.w(e, "onError")
         stopTimeoutJob()
         setError()
     }

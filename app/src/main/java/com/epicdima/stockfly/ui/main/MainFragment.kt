@@ -16,6 +16,7 @@ import com.epicdima.stockfly.other.set
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.all.AllMainTabFragment
 import com.epicdima.stockfly.ui.main.favourite.FavouriteMainTabFragment
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -26,6 +27,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         @JvmStatic
         fun newInstance(): MainFragment {
+            Timber.i("newInstance")
             return MainFragment()
         }
     }
@@ -36,6 +38,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
+
         titles = resources.getStringArray(R.array.main_tabs)
         _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
             viewPager.adapter = MainFragmentAdapter(titles.size, this@MainFragment)
@@ -73,6 +77,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
 
         override fun createFragment(position: Int): Fragment {
+            Timber.i("createFragment with position %d", position)
+
             return when (position) {
                 ALL_TAB_NUMBER -> AllMainTabFragment.newInstance(position)
                 FAVOURITE_TAB_NUMBER -> FavouriteMainTabFragment.newInstance(position)

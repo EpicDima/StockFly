@@ -12,6 +12,7 @@ import coil.request.ImageRequest
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.ui.MainActivity
+import timber.log.Timber
 
 class ShortcutConfigurator(
     private val context: Context
@@ -19,11 +20,12 @@ class ShortcutConfigurator(
     private val maxFavouriteShortcutsNumber = ShortcutManagerCompat
         .getMaxShortcutCountPerActivity(context) - 1
 
-    private val defaultCompanyShortcutIntent = Intent(context, MainActivity::class.java).apply {
-        action = Intent.ACTION_VIEW
-    }
+    private val defaultCompanyShortcutIntent = Intent(context, MainActivity::class.java)
+        .setAction(Intent.ACTION_VIEW)
 
     suspend fun updateShortcuts(list: List<Company>) {
+        Timber.i("updateShortcuts %s", list)
+
         ShortcutManagerCompat.removeAllDynamicShortcuts(context)
         ShortcutManagerCompat.addDynamicShortcuts(
             context,

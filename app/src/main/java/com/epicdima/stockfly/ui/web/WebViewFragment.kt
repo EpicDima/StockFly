@@ -12,6 +12,7 @@ import android.webkit.*
 import androidx.fragment.app.Fragment
 import com.epicdima.stockfly.databinding.FragmentWebviewBinding
 import com.epicdima.stockfly.other.setArgument
+import timber.log.Timber
 
 class WebViewFragment : Fragment() {
 
@@ -20,6 +21,7 @@ class WebViewFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(url: String): WebViewFragment {
+            Timber.i("newInstance with url %s", url)
             return WebViewFragment().setArgument(URL_KEY, url)
         }
     }
@@ -30,6 +32,8 @@ class WebViewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.v("onCreateView")
+
         val binding = FragmentWebviewBinding.inflate(inflater, container, false).apply {
             loading = true
             error = false
@@ -45,6 +49,8 @@ class WebViewFragment : Fragment() {
     }
 
     private fun createWebViewClient(binding: FragmentWebviewBinding): WebViewClient {
+        Timber.v("createWebViewClient")
+
         return object : WebViewClient() {
             override fun onPageCommitVisible(view: WebView?, url: String?) {
                 binding.loading = false

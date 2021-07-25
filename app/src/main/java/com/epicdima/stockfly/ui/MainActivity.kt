@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.databinding.ActivityMainBinding
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.v("onCreate")
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onDestroy() {
         router = null
+        Timber.v("onDestroy")
         super.onDestroy()
     }
 
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun openFragmentByIntent(intent: Intent?) {
+        Timber.i(intent.toString())
+
         when (intent?.action) {
             Intent.ACTION_SEARCH -> openSearchFragment()
             Intent.ACTION_VIEW -> intent.dataString?.let { openCompanyFragment(it) }

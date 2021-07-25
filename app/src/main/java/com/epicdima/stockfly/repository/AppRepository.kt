@@ -21,6 +21,7 @@ import com.epicdima.stockfly.model.*
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.other.getSearched
 import com.epicdima.stockfly.other.setSearched
+import timber.log.Timber
 import java.util.*
 
 private const val EMPTY_JSON_STRING = "[]"
@@ -46,6 +47,7 @@ class AppRepository(
         get() = getSearched(stringListAdapter)
 
     init {
+        Timber.i("init")
         observeCompanies()
         observeFavourites()
     }
@@ -75,6 +77,7 @@ class AppRepository(
             val quote = apiService.getQuote(ticker).toModel()
             apiService.getCompany(ticker).toModel().copy(quote = quote)
         } catch (e: Exception) {
+            Timber.w(e)
             null
         }
     }
@@ -240,20 +243,14 @@ class AppRepository(
         coroutineScope.launch(Dispatchers.IO) {
             kotlin.runCatching { getFromDatabase() }
                 .onSuccess { databaseData -> liveData.postValue(databaseData) }
-                .onFailure { Log.w(this@AppRepository::class.simpleName, "getFromDatabase", it) }
+                .onFailure { Timber.w(it, "getFromDatabase") }
             kotlin.runCatching { getFromApi() }
                 .onSuccess { apiData ->
                     kotlin.runCatching { refreshDatabaseAndGetNew(apiData) }
                         .onSuccess { databaseData -> liveData.postValue(databaseData) }
-                        .onFailure {
-                            Log.w(
-                                this@AppRepository::class.simpleName,
-                                "refreshDbAndGetNew",
-                                it
-                            )
-                        }
+                        .onFailure { Timber.w(it, "refreshDbAndGetNew") }
                 }
-                .onFailure { Log.w(this@AppRepository::class.simpleName, "getFromApi", it) }
+                .onFailure { Timber.w(it, "getFromApi") }
         }
         return liveData
     }

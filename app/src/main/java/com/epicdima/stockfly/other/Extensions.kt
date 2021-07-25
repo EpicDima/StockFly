@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
 import com.epicdima.stockfly.model.Company
+import timber.log.Timber
 import java.text.DateFormat
 import java.text.ParseException
 import java.util.*
@@ -53,6 +54,7 @@ fun CoroutineScope.timeout(onTimeout: () -> Unit): Job {
                 awaitCancellation()
             }
         } catch (e: TimeoutCancellationException) {
+            Timber.w(e)
             onTimeout()
         }
     }

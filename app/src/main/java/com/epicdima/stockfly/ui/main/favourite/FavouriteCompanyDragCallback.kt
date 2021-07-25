@@ -2,6 +2,7 @@ package com.epicdima.stockfly.ui.main.favourite
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 
 
 class FavouriteCompanyDragCallback(
@@ -17,6 +18,7 @@ class FavouriteCompanyDragCallback(
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
+        Timber.v("onMove")
         onMoveListener(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
         return true
     }

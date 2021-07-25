@@ -5,12 +5,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.main.MainTabFragment
+import timber.log.Timber
 
 @AndroidEntryPoint
 class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
     companion object {
         @JvmStatic
         fun newInstance(tabNumber: Int): FavouriteMainTabFragment {
+            Timber.i("newInstance with tabNumber %d", tabNumber)
             return FavouriteMainTabFragment().setArgument(TAB_NUMBER_KEY, tabNumber)
         }
     }

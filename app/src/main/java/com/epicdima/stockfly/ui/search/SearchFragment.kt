@@ -15,16 +15,19 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -89,7 +92,9 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
             setHasFixedSize(true)
         }
         viewModel.result.observe(viewLifecycleOwner) {
-            resultAdapter.submitCompanyList(it)
+            lifecycleScope.launch(Dispatchers.Default) {
+                resultAdapter.submitCompanyList(it)
+            }
         }
     }
 

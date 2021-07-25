@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
@@ -21,6 +20,7 @@ import com.epicdima.stockfly.ui.company.chart.ChartFragment
 import com.epicdima.stockfly.ui.company.news.NewsFragment
 import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment
 import com.epicdima.stockfly.ui.company.summary.SummaryFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint

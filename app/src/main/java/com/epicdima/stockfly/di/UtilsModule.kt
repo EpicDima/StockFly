@@ -1,13 +1,13 @@
 package com.epicdima.stockfly.di
 
 import android.content.SharedPreferences
+import com.epicdima.stockfly.other.Formatter
+import com.epicdima.stockfly.other.Refresher
+import com.epicdima.stockfly.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.Refresher
-import com.epicdima.stockfly.repository.Repository
 import javax.inject.Singleton
 
 @Module

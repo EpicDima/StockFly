@@ -1,11 +1,11 @@
 package com.epicdima.stockfly.di
 
 import android.content.Context
+import com.epicdima.stockfly.shortcut.ShortcutConfigurator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.epicdima.stockfly.shortcut.ShortcutConfigurator
 import javax.inject.Singleton
 
 @Module

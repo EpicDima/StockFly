@@ -40,6 +40,8 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
 
     override fun newImageLoader(): ImageLoader {
         val builder = ImageLoader.Builder(applicationContext)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
 
         if (BuildConfig.DEBUG) {

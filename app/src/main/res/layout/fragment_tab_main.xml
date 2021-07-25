@@ -1,37 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <data>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        style="@style/VerticalList" />
 
-        <import type="android.view.View" />
-
-        <variable
-            name="empty"
-            type="Boolean" />
-    </data>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/empty_textview"
+        style="@style/WarningTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/centerwidget_margin_top"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        tools:visibility="gone" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            style="@style/VerticalList"
-            android:visibility="@{empty ? View.GONE : View.VISIBLE}" />
-
-        <TextView
-            android:id="@+id/empty_textview"
-            style="@style/WarningTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/centerwidget_margin_top"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:visibility="@{empty ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone" />
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

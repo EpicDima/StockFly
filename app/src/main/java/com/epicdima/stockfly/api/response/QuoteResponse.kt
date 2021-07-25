@@ -1,8 +1,8 @@
 package com.epicdima.stockfly.api.response
 
+import com.epicdima.stockfly.model.Quote
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.epicdima.stockfly.model.Quote
 
 @JsonClass(generateAdapter = true)
 data class QuoteDto(

@@ -1,11 +1,10 @@
 package com.epicdima.stockfly.other
 
 import android.content.SharedPreferences
-import android.util.Log
+import com.epicdima.stockfly.repository.Repository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.epicdima.stockfly.repository.Repository
 import timber.log.Timber
 
 private const val REFRESH_INTERVAL = 28800 * 1000L // 8 часов (3 раза в сутки)

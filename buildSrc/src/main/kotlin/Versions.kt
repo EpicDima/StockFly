@@ -27,7 +27,7 @@ object Versions {
 
     const val retrofit = "2.9.0"
 
-    const val coil = "1.2.0"
+    const val coil = "1.3.0"
 
     const val timber = "4.7.1"
 

@@ -1,8 +1,8 @@
 package com.epicdima.stockfly.api
 
+import com.epicdima.stockfly.api.response.*
 import retrofit2.http.GET
 import retrofit2.http.Query
-import com.epicdima.stockfly.api.response.*
 
 interface ApplicationApiService : ApiService {
 

@@ -1,9 +1,13 @@
 package com.epicdima.stockfly.ui.main.all
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.main.MainTabFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -20,8 +24,11 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
 
     override fun setupList() {
         viewModel.companies.observe(viewLifecycleOwner) {
-            adapter.submitCompanyList(it)
-            binding.empty = it.isEmpty()
+            lifecycleScope.launch(Dispatchers.Default) {
+                adapter.submitCompanyList(it)
+            }
+            binding.recyclerView.isVisible = it.isNotEmpty()
+            binding.emptyTextview.isVisible = it.isEmpty()
         }
     }
 }

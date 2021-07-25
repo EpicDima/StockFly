@@ -1,16 +1,16 @@
 package com.epicdima.stockfly.di
 
 import android.app.Application
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import com.epicdima.stockfly.db.Database
 import com.epicdima.stockfly.db.buildDatabase
 import com.epicdima.stockfly.db.dao.CompanyDao
 import com.epicdima.stockfly.db.dao.NewsItemDao
 import com.epicdima.stockfly.db.dao.RecommendationDao
 import com.epicdima.stockfly.db.dao.StockCandlesDao
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module

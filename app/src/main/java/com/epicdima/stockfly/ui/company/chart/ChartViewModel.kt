@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.map
-import dagger.hilt.android.lifecycle.HiltViewModel
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.model.StockCandles
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -3,13 +3,13 @@ package com.epicdima.stockfly.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.epicdima.stockfly.BuildConfig
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 

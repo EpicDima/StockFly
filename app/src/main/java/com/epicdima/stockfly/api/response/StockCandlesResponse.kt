@@ -1,8 +1,8 @@
 package com.epicdima.stockfly.api.response
 
+import com.epicdima.stockfly.model.StockCandles
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.epicdima.stockfly.model.StockCandles
 
 @JsonClass(generateAdapter = true)
 data class StockCandlesDto(

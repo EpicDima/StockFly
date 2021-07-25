@@ -1,10 +1,10 @@
 package com.epicdima.stockfly.base
 
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import timber.log.Timber
 
-abstract class BaseFragment<VDB : ViewDataBinding> : Fragment() {
+abstract class BaseFragment<VDB : ViewBinding> : Fragment() {
 
     protected var _binding: VDB? = null
     protected val binding

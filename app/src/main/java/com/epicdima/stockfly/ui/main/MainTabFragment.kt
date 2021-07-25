@@ -14,6 +14,7 @@ import timber.log.Timber
 
 abstract class MainTabFragment<VM : ViewModel> :
     BaseViewModelFragment<VM, FragmentTabMainBinding>() {
+
     companion object {
         const val TAB_NUMBER_KEY = "main_tab_number"
     }

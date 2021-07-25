@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseFragment
 import com.epicdima.stockfly.databinding.FragmentMainBinding
@@ -16,6 +15,7 @@ import com.epicdima.stockfly.other.set
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.all.AllMainTabFragment
 import com.epicdima.stockfly.ui.main.favourite.FavouriteMainTabFragment
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint

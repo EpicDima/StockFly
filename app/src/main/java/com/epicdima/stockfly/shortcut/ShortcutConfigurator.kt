@@ -7,10 +7,9 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import coil.imageLoader
-import coil.request.ImageRequest
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.model.Company
+import com.epicdima.stockfly.other.executeImageRequest
 import com.epicdima.stockfly.ui.MainActivity
 import timber.log.Timber
 
@@ -49,13 +48,7 @@ class ShortcutConfigurator(
     }
 
     private suspend fun createCompanyIcon(company: Company): IconCompat {
-        val bitmap = context.imageLoader
-            .execute(
-                ImageRequest.Builder(context)
-                    .memoryCacheKey(company.logoUrl)
-                    .data(company.logoUrl)
-                    .build()
-            )
+        val bitmap = context.executeImageRequest(company.logoUrl)
             .drawable
             ?.toBitmap()
 

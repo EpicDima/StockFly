@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentChartBinding
@@ -15,6 +14,7 @@ import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.other.color
 import com.epicdima.stockfly.other.drawable
 import com.epicdima.stockfly.other.setArgument
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint

@@ -1,9 +1,9 @@
 package com.epicdima.stockfly.base
 
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
 
-abstract class BaseViewModelFragment<VM : ViewModel, VDB : ViewDataBinding> : BaseFragment<VDB>() {
+abstract class BaseViewModelFragment<VM : ViewModel, VDB : ViewBinding> : BaseFragment<VDB>() {
 
     protected open val _viewModel: VM? = null
     protected val viewModel: VM

@@ -1,10 +1,14 @@
 package com.epicdima.stockfly.ui.main.favourite
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.main.MainTabFragment
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -21,8 +25,11 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
 
     override fun setupList() {
         viewModel.companies.observe(viewLifecycleOwner) {
-            adapter.submitCompanyList(it)
-            binding.empty = it.isEmpty()
+            lifecycleScope.launch(Dispatchers.Default) {
+                adapter.submitCompanyList(it)
+            }
+            binding.recyclerView.isVisible = it.isNotEmpty()
+            binding.emptyTextview.isVisible = it.isEmpty()
         }
         ItemTouchHelper(FavouriteCompanyDragCallback { from, to ->
             viewModel.changeFavouriteNumber(from, to)

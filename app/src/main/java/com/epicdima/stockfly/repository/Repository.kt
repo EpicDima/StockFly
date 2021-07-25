@@ -1,13 +1,13 @@
 package com.epicdima.stockfly.repository
 
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.model.NewsItem
 import com.epicdima.stockfly.model.Recommendation
 import com.epicdima.stockfly.model.StockCandles
 import com.epicdima.stockfly.other.StockCandleParam
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 
 interface Repository {
     val companies: LiveData<List<Company>>

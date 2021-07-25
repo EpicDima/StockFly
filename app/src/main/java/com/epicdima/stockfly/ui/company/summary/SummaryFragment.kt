@@ -8,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.MainRouter
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -53,8 +53,10 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
             val url = binding.weburlValue.text.toString()
 
             if (url.startsWith("https://")) {
-                    Timber.i("open safe url '%s'", url)
-                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(url)
+                Timber.i("open safe url '%s'", url)
+                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(
+                    url
+                )
             } else {
                 Timber.i("open unsafe url '%s'", url)
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))

@@ -1,14 +1,8 @@
 package com.epicdima.stockfly.repository
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.squareup.moshi.JsonAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import com.epicdima.stockfly.api.ApiService
 import com.epicdima.stockfly.api.response.toModel
 import com.epicdima.stockfly.db.dao.CompanyDao
@@ -21,6 +15,11 @@ import com.epicdima.stockfly.model.*
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.other.getSearched
 import com.epicdima.stockfly.other.setSearched
+import com.squareup.moshi.JsonAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 

@@ -3,12 +3,12 @@ package com.epicdima.stockfly.ui.main.favourite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
 import com.epicdima.stockfly.shortcut.ShortcutConfigurator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 

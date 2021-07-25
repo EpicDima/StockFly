@@ -38,17 +38,19 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/menu_button_size"
                     android:layout_margin="16dp"
@@ -71,8 +73,7 @@
                         android:id="@+id/search_edit_text"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/menu_button_size"
-                        android:layout_marginStart="@dimen/menu_button_size"
-                        android:layout_marginEnd="@dimen/menu_button_size"
+                        android:layout_weight="1"
                         android:background="@null"
                         android:fontFamily="@font/montserrat_semibold"
                         android:imeOptions="actionSearch"
@@ -105,10 +106,8 @@
                         app:layout_constraintStart_toEndOf="@+id/search_edit_text"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+                </LinearLayout>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
@@ -117,69 +116,45 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:id="@+id/popular_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/popular_title"
+                style="@style/SearchTitle"
                 android:layout_marginTop="6dp"
-                android:orientation="vertical"
-                android:visibility="@{showPopular ? View.VISIBLE : View.GONE}"
-                tools:visibility="gone">
+                android:text="@string/popular_title"
+                android:visibility="@{showPopular ? View.VISIBLE : View.GONE}" />
 
-                <TextView
-                    android:id="@+id/popular_title"
-                    style="@style/SearchTitle"
-                    android:text="@string/popular_title" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_recycler_view"
+                style="@style/HorizontalList"
+                android:layout_marginTop="8dp"
+                android:visibility="@{showPopular ? View.VISIBLE : View.GONE}" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/popular_recycler_view"
-                    style="@style/HorizontalList"
-                    android:layout_marginTop="8dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/searched_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/searched_title"
+                style="@style/SearchTitle"
                 android:layout_marginTop="24dp"
-                android:orientation="vertical"
-                android:visibility="@{showSearched ? View.VISIBLE : View.GONE}"
-                tools:visibility="gone">
+                android:text="@string/searched_title"
+                android:visibility="@{showSearched ? View.VISIBLE : View.GONE}" />
 
-                <TextView
-                    android:id="@+id/searched_title"
-                    style="@style/SearchTitle"
-                    android:text="@string/searched_title" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searched_recycler_view"
+                style="@style/HorizontalList"
+                android:layout_marginTop="8dp"
+                android:visibility="@{showSearched ? View.VISIBLE : View.GONE}" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/searched_recycler_view"
-                    style="@style/HorizontalList"
-                    android:layout_marginTop="8dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/result_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/result_title"
+                style="@style/SearchTitle"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical"
+                android:text="@string/search_result_title"
+                android:visibility="@{showResult ? View.VISIBLE : View.GONE}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/result_recycler_view"
+                style="@style/VerticalList"
+                android:layout_marginTop="4dp"
                 android:visibility="@{showResult ? View.VISIBLE : View.GONE}"
-                tools:visibility="visible">
-
-                <TextView
-                    android:id="@+id/result_title"
-                    style="@style/SearchTitle"
-                    android:text="@string/search_result_title" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/result_recycler_view"
-                    style="@style/VerticalList"
-                    android:layout_marginTop="4dp"
-                    tools:visibility="visible" />
-
-            </LinearLayout>
+                tools:visibility="visible" />
 
         </LinearLayout>
 
@@ -191,34 +166,36 @@
             <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/progress_bar"
                 style="@style/ProgressBar"
-                android:layout_marginTop="@dimen/centerwidget_margin_top"
                 android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3"
                 tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/error_textview"
                 style="@style/ErrorTextView"
-                android:layout_marginTop="@dimen/centerwidget_margin_top"
                 android:visibility="@{error ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3"
                 tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/empty_textview"
                 style="@style/WarningTextView"
-                android:layout_marginTop="@dimen/centerwidget_margin_top"
                 android:text="@string/no_results"
                 android:visibility="@{emptyResult ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

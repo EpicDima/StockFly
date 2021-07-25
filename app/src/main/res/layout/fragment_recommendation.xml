@@ -33,22 +33,24 @@
             <androidx.core.widget.ContentLoadingProgressBar
                 android:id="@+id/progress_bar"
                 style="@style/ProgressBar"
-                android:layout_marginTop="@dimen/centerwidget_margin_top"
                 android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
 
             <TextView
                 android:id="@+id/error_textview"
                 style="@style/ErrorTextView"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/centerwidget_margin_top"
                 android:gravity="center"
                 android:visibility="@{error ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
 
             <com.epicdima.stockfly.ui.company.recomendation.RecommendationView
                 android:id="@+id/recommendation_view"
@@ -87,7 +89,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                android:visibility="@{loading || error || empty  ? View.INVISIBLE : View.VISIBLE}"
+                android:visibility="@{loading || error || empty ? View.INVISIBLE : View.VISIBLE}"
                 app:haloColor="@color/dark_translucent"
                 app:haloRadius="14dp"
                 app:labelBehavior="gone"
@@ -105,6 +107,5 @@
                 app:trackHeight="6dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 </layout>

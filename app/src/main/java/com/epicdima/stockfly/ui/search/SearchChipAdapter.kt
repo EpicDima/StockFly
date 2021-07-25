@@ -31,8 +31,7 @@ class SearchChipAdapter(
                 root.setOnClickListener {
                     clickListener.onClick(request)
                 }
-                this.request = request
-                executePendingBindings()
+                this.requestTextview.text = request
             }
         }
     }

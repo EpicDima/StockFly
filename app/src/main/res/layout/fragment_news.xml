@@ -20,7 +20,7 @@
             type="Boolean" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -28,41 +28,50 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             style="@style/VerticalList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="@{(loading || error || empty) ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/empty_textview"
             style="@style/WarningTextView"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/centerwidget_margin_top"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:text="@string/no_news"
-            android:visibility="@{(empty &amp;&amp; !loading &amp;&amp; !error) ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{(empty &amp;&amp; !loading &amp;&amp; !error) ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
             style="@style/ProgressBar"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/centerwidget_margin_top"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/error_textview"
             style="@style/ErrorTextView"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/centerwidget_margin_top"
-            android:gravity="center"
+            android:layout_width="wrap_content"
             android:visibility="@{error ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
             tools:visibility="gone" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

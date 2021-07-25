@@ -58,108 +58,85 @@
                 app:layout_constraintTop_toBottomOf="@+id/current"
                 tools:text="+$0.12 (1,15%)" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/chart_layout"
-                android:layout_width="match_parent"
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/ProgressBar"
+                android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="@id/chart"
+                app:layout_constraintEnd_toEndOf="@id/chart"
+                app:layout_constraintStart_toStartOf="@id/chart"
+                app:layout_constraintTop_toTopOf="@id/chart" />
+
+            <com.epicdima.stockfly.ui.company.chart.ChartView
+                android:id="@+id/chart"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/warnings_layout_height"
+                android:visibility="@{loading ? View.INVISIBLE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/change">
+                app:layout_constraintTop_toBottomOf="@+id/change" />
 
-                <androidx.core.widget.ContentLoadingProgressBar
-                    android:id="@+id/progress_bar"
-                    style="@style/ProgressBar"
-                    android:visibility="@{loading ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.epicdima.stockfly.ui.company.chart.ChartView
-                    android:id="@+id/chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{loading ? View.INVISIBLE : View.VISIBLE}" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/datetime_buttons_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/date_buttons_height"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chart_layout">
+                app:layout_constraintTop_toBottomOf="@+id/chart">
 
                 <TextView
                     android:id="@+id/day_button"
                     style="@style/DateTimeButton"
+                    android:layout_marginStart="@dimen/date_button_side_margin"
                     android:layout_marginEnd="@dimen/date_button_side_margin"
-                    android:text="@string/d_day"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/week_button"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/d_day" />
 
                 <TextView
                     android:id="@+id/week_button"
                     style="@style/DateTimeButton"
                     android:layout_marginStart="@dimen/date_button_side_margin"
                     android:layout_marginEnd="@dimen/date_button_side_margin"
-                    android:text="@string/w_week"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/month_button"
-                    app:layout_constraintStart_toEndOf="@+id/day_button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/w_week" />
 
                 <TextView
                     android:id="@+id/month_button"
                     style="@style/DateTimeButton"
                     android:layout_marginStart="@dimen/date_button_side_margin"
                     android:layout_marginEnd="@dimen/date_button_side_margin"
-                    android:text="@string/m_month"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/six_months_button"
-                    app:layout_constraintStart_toEndOf="@+id/week_button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/m_month" />
 
                 <TextView
                     android:id="@+id/six_months_button"
                     style="@style/DateTimeButton"
                     android:layout_marginStart="@dimen/date_button_side_margin"
                     android:layout_marginEnd="@dimen/date_button_side_margin"
-                    android:text="@string/six_m_six_months"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/year_button"
-                    app:layout_constraintStart_toEndOf="@+id/month_button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/six_m_six_months" />
 
                 <TextView
                     android:id="@+id/year_button"
                     style="@style/DateTimeButton"
                     android:layout_marginStart="@dimen/date_button_side_margin"
                     android:layout_marginEnd="@dimen/date_button_side_margin"
-                    android:text="@string/one_y_one_year"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/all_time_button"
-                    app:layout_constraintStart_toEndOf="@+id/six_months_button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="1"
+                    android:text="@string/one_y_one_year" />
 
                 <TextView
                     android:id="@+id/all_time_button"
                     style="@style/DateTimeButton"
                     android:layout_marginStart="@dimen/date_button_side_margin"
+                    android:layout_marginEnd="@dimen/date_button_side_margin"
+                    android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="@string/all_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/year_button"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:text="@string/all_time" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/buy_button"
@@ -177,7 +154,5 @@
                 tools:text="Buy for $132.04" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </layout>

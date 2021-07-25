@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.epicdima.stockfly.databinding.FragmentWebviewBinding
 import com.epicdima.stockfly.other.setArgument
@@ -35,9 +36,10 @@ class WebViewFragment : Fragment() {
         Timber.v("onCreateView")
 
         val binding = FragmentWebviewBinding.inflate(inflater, container, false).apply {
-            loading = true
-            error = false
+            progressBar.isVisible = true
+            errorTextview.isVisible = false
         }
+
         binding.webview.apply {
             webViewClient = createWebViewClient(binding)
             settings.javaScriptEnabled = true
@@ -45,6 +47,7 @@ class WebViewFragment : Fragment() {
             checkNightMode()
             loadUrl(requireArguments().getString(URL_KEY)!!)
         }
+
         return binding.root
     }
 
@@ -53,7 +56,8 @@ class WebViewFragment : Fragment() {
 
         return object : WebViewClient() {
             override fun onPageCommitVisible(view: WebView?, url: String?) {
-                binding.loading = false
+                binding.progressBar.isVisible = false
+                binding.webview.isVisible = true
             }
 
             override fun onReceivedError(
@@ -62,7 +66,8 @@ class WebViewFragment : Fragment() {
                 error: WebResourceError
             ) {
                 if (request.isForMainFrame) {
-                    binding.error = true
+                    binding.errorTextview.isVisible = true
+                    binding.webview.isVisible = false
                 }
             }
         }

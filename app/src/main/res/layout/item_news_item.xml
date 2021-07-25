@@ -128,6 +128,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/summary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 </layout>

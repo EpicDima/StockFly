@@ -5,5 +5,4 @@
         <item name="android:colorBackground">@color/white</item>
         <item name="tabBackground">@color/white</item>
     </style>
-
 </resources>

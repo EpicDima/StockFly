@@ -1,6 +1,7 @@
 package com.epicdima.stockfly.ui.company
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.adapter.FragmentViewHolder
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
@@ -29,6 +31,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
     companion object {
         const val TICKER_KEY = "ticker"
+        private const val PAGE_KEY = "page"
 
         private const val CHART_TAB_NUMBER = 0
         private const val SUMMARY_TAB_NUMBER = 1
@@ -126,6 +129,16 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         binding.favouriteButton.setOnClickListener {
             viewModel.changeFavourite()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.viewPager.setCurrentItem(arguments?.getInt(PAGE_KEY) ?: 0, false)
+    }
+
+    override fun onPause() {
+        arguments?.putInt(PAGE_KEY, binding.viewPager.currentItem)
+        super.onPause()
     }
 
 

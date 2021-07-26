@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
 import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -58,14 +59,24 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
     ): View {
         Timber.v("onCreateView")
 
-        _binding = FragmentSearchBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            loading = viewModel.loading
-            error = viewModel.error
-            showPopular = viewModel.showPopular
-            showSearched = viewModel.showSearched
-            showResult = viewModel.showResult
-            emptyResult = viewModel.emptyResult
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.isVisible = it
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTextview.isVisible = it
+        }
+        viewModel.showPopular.observe(viewLifecycleOwner) {
+            binding.popularTitle.isVisible = it
+            binding.popularRecyclerView.isVisible = it
+        }
+        viewModel.showSearched.observe(viewLifecycleOwner) {
+            binding.searchedTitle.isVisible = it
+            binding.searchedRecyclerView.isVisible = it
+        }
+        viewModel.showResult.observe(viewLifecycleOwner) {
+            binding.resultTitle.isVisible = it
+            binding.resultRecyclerView.isVisible = it
         }
         setupSearchField()
         setupButtons()

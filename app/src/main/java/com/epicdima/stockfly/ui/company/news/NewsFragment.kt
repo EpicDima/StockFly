@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.base.BaseViewModelFragment
@@ -32,10 +33,14 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
-        _binding = FragmentNewsBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            loading = viewModel.loading
-            error = viewModel.error
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.isVisible = it
+            checkVisibility()
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTextview.isVisible = it
+            checkVisibility()
         }
         setupList()
         return binding.root
@@ -52,8 +57,15 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
             itemAnimator = null
         }
         viewModel.news.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            binding.empty = it.isEmpty()
+            adapter.submitNewsList(it)
+            checkVisibility()
         }
+    }
+
+    private fun checkVisibility() {
+        binding.recyclerView.isVisible =
+            !(viewModel.loading.value == true || viewModel.error.value == true || viewModel.news.value?.isEmpty() == true)
+        binding.emptyTextview.isVisible =
+            viewModel.news.value?.isEmpty() == true && viewModel.loading.value != true && viewModel.error.value != true
     }
 }

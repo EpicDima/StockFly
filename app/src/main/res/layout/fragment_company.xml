@@ -1,150 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <import type="android.view.View" />
-
-        <import type="com.epicdima.stockfly.model.Company" />
-
-        <variable
-            name="company"
-            type="androidx.lifecycle.LiveData&lt;Company>" />
-
-        <variable
-            name="error"
-            type="androidx.lifecycle.LiveData&lt;Boolean>" />
-    </data>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            app:elevation="0dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/menu_button_size"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp">
-
-                <FrameLayout
-                    android:id="@+id/back_button"
-                    android:layout_width="@dimen/menu_button_size"
-                    android:layout_height="@dimen/menu_button_size"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start|center_vertical"
-                        android:layout_marginStart="2dp"
-                        android:src="@drawable/ic_back"
-                        tools:ignore="ContentDescription" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/ticker"
-                    style="@style/Ticker"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:text="@{company.ticker}"
-                    app:layout_constraintEnd_toStartOf="@+id/favourite_button"
-                    app:layout_constraintStart_toEndOf="@+id/back_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="AAPL" />
-
-                <TextView
-                    android:id="@+id/name"
-                    style="@style/CompanyName"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:text="@{company.name}"
-                    app:layout_constraintEnd_toStartOf="@+id/favourite_button"
-                    app:layout_constraintStart_toEndOf="@+id/back_button"
-                    app:layout_constraintTop_toBottomOf="@+id/ticker"
-                    tools:text="MMMA" />
-
-                <FrameLayout
-                    android:id="@+id/favourite_button"
-                    android:layout_width="@dimen/menu_button_size"
-                    android:layout_height="@dimen/menu_button_size"
-                    android:visibility="@{company != null ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/favourite_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="2dp"
-                        android:src="@{company.favourite ? @drawable/ic_star_selected : @drawable/ic_star}"
-                        tools:ignore="ContentDescription" />
-
-                </FrameLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                style="@style/TabLayout"
-                android:paddingStart="@dimen/company_tablayout_side_padding"
-                android:paddingEnd="@dimen/company_tablayout_side_padding"
-                android:visibility="@{(company == null || error) ? View.GONE : View.VISIBLE}" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:elevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/menu_button_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp">
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:id="@+id/progress_bar"
-                style="@style/ProgressBar"
-                android:visibility="@{(company != null || error) ? View.GONE : View.VISIBLE}"
+            <FrameLayout
+                android:id="@+id/back_button"
+                android:layout_width="@dimen/menu_button_size"
+                android:layout_height="@dimen/menu_button_size"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.3"
-                tools:visibility="gone" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="2dp"
+                    android:src="@drawable/ic_back"
+                    tools:ignore="ContentDescription" />
+
+            </FrameLayout>
 
             <TextView
-                style="@style/ErrorTextView"
-                android:visibility="@{error ? View.VISIBLE : View.GONE}"
+                android:id="@+id/ticker"
+                style="@style/Ticker"
+                android:layout_width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/favourite_button"
+                app:layout_constraintStart_toEndOf="@+id/back_button"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="AAPL" />
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/CompanyName"
+                android:layout_width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/favourite_button"
+                app:layout_constraintStart_toEndOf="@+id/back_button"
+                app:layout_constraintTop_toBottomOf="@+id/ticker"
+                tools:text="MMMA" />
+
+            <FrameLayout
+                android:id="@+id/favourite_button"
+                android:layout_width="@dimen/menu_button_size"
+                android:layout_height="@dimen/menu_button_size"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.3"
-                tools:visibility="gone" />
+                app:layout_constraintTop_toTopOf="parent">
 
+                <ImageView
+                    android:id="@+id/favourite_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="2dp"
+                    tools:ignore="ContentDescription" />
+
+            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
-            style="@style/ViewPager"
-            android:visibility="@{(company == null || error) ? View.INVISIBLE : View.VISIBLE}" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            style="@style/TabLayout"
+            android:paddingStart="@dimen/company_tablayout_side_padding"
+            android:paddingEnd="@dimen/company_tablayout_side_padding"
+            android:visibility="gone" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</layout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/ProgressBar"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/error_textview"
+            style="@style/ErrorTextView"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+            tools:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        style="@style/ViewPager"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

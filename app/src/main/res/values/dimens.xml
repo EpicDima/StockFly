@@ -46,6 +46,7 @@
     <dimen name="rounded_border_radius">40dp</dimen>
 
     <dimen name="date_button_side_margin">4dp</dimen>
+    <dimen name="date_button_screen_side_margin">8dp</dimen>
     <dimen name="date_buttons_height">48dp</dimen>
 
     <dimen name="search_chip_border_radius">20dp</dimen>

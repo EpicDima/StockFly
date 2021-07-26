@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -53,14 +54,34 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         Timber.v("onCreateView")
         titles = resources.getStringArray(R.array.company_tabs)
         _binding = FragmentCompanyBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            error = viewModel.error
-            company = viewModel.company
             viewPager.isUserInputEnabled = false
         }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTextview.isVisible = it
+            binding.favouriteButton.visibility =
+                if (viewModel.company.value != null && it != true) View.VISIBLE else View.INVISIBLE
+            binding.tabLayout.isVisible = (viewModel.company.value != null && it != true)
+            binding.viewPager.isVisible = (viewModel.company.value != null && it != true)
+            binding.progressBar.isVisible = (viewModel.company.value == null && it != true)
+        }
+        viewModel.company.observe(viewLifecycleOwner) {
+            setCompany(it)
+        }
+
         setSingleEventForTabAdapterCreation()
         setupClickListeners()
         return binding.root
+    }
+
+    private fun setCompany(company: Company?) {
+        binding.ticker.text = company?.ticker ?: ""
+        binding.name.text = company?.name ?: ""
+        binding.favouriteButton.visibility =
+            if (company != null && viewModel.error.value != true) View.VISIBLE else View.INVISIBLE
+        binding.favouriteIcon.setImageResource(if (company?.favourite == true) R.drawable.ic_star_selected else R.drawable.ic_star)
+        binding.tabLayout.isVisible = (company != null && viewModel.error.value != true)
+        binding.viewPager.isVisible = (company != null && viewModel.error.value != true)
+        binding.progressBar.isVisible = (company == null && viewModel.error.value != true)
     }
 
     private fun setSingleEventForTabAdapterCreation() {
@@ -74,7 +95,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
                 )
             setupTabs()
             viewModel.company.removeObserver(createAdapterObserver)
-            binding.company = viewModel.company
+            setCompany(viewModel.company.value)
         }
         viewModel.company.observe(viewLifecycleOwner, createAdapterObserver)
     }

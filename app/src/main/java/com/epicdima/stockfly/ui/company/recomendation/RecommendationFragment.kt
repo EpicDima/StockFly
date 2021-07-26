@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.epicdima.stockfly.base.BaseViewModelFragment
@@ -46,11 +47,14 @@ class RecommendationFragment :
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
-        _binding = FragmentRecommendationBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            loading = viewModel.loading
-            error = viewModel.error
-            empty = true
+        _binding = FragmentRecommendationBinding.inflate(inflater, container, false)
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.progressBar.isVisible = it
+            checkVisibility()
+        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTextview.isVisible = it
+            checkVisibility()
         }
         setupSlider()
         setupObservers()
@@ -71,8 +75,19 @@ class RecommendationFragment :
                 beginDate.text = it.first
                 endDate.text = it.second
                 recommendationView.updateData(viewModel.recommendations, viewModel.brandNewData)
-                binding.empty = viewModel.recommendations.isEmpty()
+                checkVisibility()
             }
         }
+    }
+
+    private fun checkVisibility() {
+        binding.recommendationView.isVisible =
+            viewModel.loading.value != true && viewModel.error.value != true
+        binding.periodSlider.isVisible =
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
+        binding.beginDate.isVisible =
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
+        binding.endDate.isVisible =
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
     }
 }

@@ -11,7 +11,6 @@
         <intent
             android:action="android.intent.action.SEARCH"
             android:targetClass="com.epicdima.stockfly.ui.MainActivity"
-            android:targetPackage="com.epicdima.stockfly">
-        </intent>
+            android:targetPackage="com.epicdima.stockfly"></intent>
     </shortcut>
 </shortcuts>

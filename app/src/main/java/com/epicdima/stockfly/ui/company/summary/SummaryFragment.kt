@@ -10,7 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
+import com.epicdima.stockfly.other.bindImageWithGoneOnError
+import com.epicdima.stockfly.other.ipoLocalDateString
 import com.epicdima.stockfly.other.setArgument
+import com.epicdima.stockfly.other.toLocalString
 import com.epicdima.stockfly.ui.MainRouter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -35,28 +38,39 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
     ): View {
         Timber.v("onCreateView")
         _binding = FragmentSummaryBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            company = viewModel.company
             phoneValue.paintFlags = phoneValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             weburlValue.paintFlags = weburlValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
+
+        viewModel.company.observe(viewLifecycleOwner) {
+            bindImageWithGoneOnError(binding.imageView, it.logoUrl)
+            binding.fullname.text = it.name
+            binding.phoneValue.text = it.phone
+            binding.weburlValue.text = it.webUrl
+            binding.countryValue.text = it.countryName
+            binding.currencyValue.text = it.currentString
+            binding.soValue.text = it.shareOutstanding.toLocalString()
+            binding.mcValue.text = it.marketCapitalization.toLocalString()
+            binding.exchangeValue.text = it.exchange
+            binding.ipoValue.text = it?.ipoLocalDateString() ?: ""
+        }
+
         setClickListeners()
         return binding.root
     }
 
     private fun setClickListeners() {
-        binding.phoneField.setOnClickListener {
+        binding.phoneValue.setOnClickListener {
             Timber.i("open phone number '%s'", binding.phoneValue.text)
             startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${binding.phoneValue.text}")))
         }
-        binding.weburlField.setOnClickListener {
+        binding.weburlValue.setOnClickListener {
             val url = binding.weburlValue.text.toString()
 
             if (url.startsWith("https://")) {
                 Timber.i("open safe url '%s'", url)
-                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(
-                    url
-                )
+                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener)
+                    .openWebViewFragment(url)
             } else {
                 Timber.i("open unsafe url '%s'", url)
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))

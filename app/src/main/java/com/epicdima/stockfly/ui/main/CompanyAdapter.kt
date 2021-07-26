@@ -6,7 +6,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import coil.load
 import coil.request.Disposable
 import com.epicdima.stockfly.R
@@ -19,10 +18,15 @@ import timber.log.Timber
 
 class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
-) : ListAdapter<CompanyItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
     fun submitCompanyList(list: List<Company>) {
-        super.submitList(list.mapIndexed { index, company -> CompanyItem(company, index) })
+        super.submitList(list.mapIndexed { index, company ->
+            CompanyViewHolderItem(
+                index,
+                company
+            )
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
@@ -58,7 +62,7 @@ class CompanyAdapter(
 
         private var logoDisposable: Disposable? = null
 
-        fun bind(companyItem: CompanyItem, clickListener: OnCompanyClickListener) {
+        fun bind(companyItem: CompanyViewHolderItem, clickListener: OnCompanyClickListener) {
             binding.apply {
                 root.setCardBackgroundColor(getColor(companyItem.rootCardBackgroundColor))
                 ticker.text = companyItem.ticker
@@ -74,10 +78,10 @@ class CompanyAdapter(
             }
         }
 
-        private fun ViewBinding.setLogo(logo: ImageView, companyItem: CompanyItem) {
+        private fun setLogo(logo: ImageView, companyItem: CompanyViewHolderItem) {
             logo.apply {
                 setImageDrawable(null)
-                setBackgroundColor(getColor(companyItem.logoBackgroundColor))
+                setBackgroundColor(binding.getColor(companyItem.logoBackgroundColor))
                 if (companyItem.logoUrl.isNotBlank()) {
                     logoDisposable = load(createUri(companyItem.logoUrl)) {
                         target {
@@ -89,7 +93,7 @@ class CompanyAdapter(
             }
         }
 
-        fun bind(companyItem: CompanyItem, payload: CompanyItemPayload) {
+        fun bind(companyItem: CompanyViewHolderItem, payload: CompanyItemPayload) {
             Timber.v("bind %s", payload)
             binding.apply {
                 if (payload.name) {
@@ -122,9 +126,9 @@ class CompanyAdapter(
 }
 
 
-class CompanyItem(
-    company: Company,
-    val position: Int
+class CompanyViewHolderItem(
+    val position: Int,
+    company: Company
 ) {
     val logoUrl = company.logoUrl
     val ticker = company.ticker
@@ -163,13 +167,19 @@ class CompanyItem(
 }
 
 
-private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyItem>() {
+private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem>() {
 
-    override fun areItemsTheSame(oldItem: CompanyItem, newItem: CompanyItem): Boolean {
+    override fun areItemsTheSame(
+        oldItem: CompanyViewHolderItem,
+        newItem: CompanyViewHolderItem
+    ): Boolean {
         return oldItem.position == newItem.position
     }
 
-    override fun areContentsTheSame(oldItem: CompanyItem, newItem: CompanyItem): Boolean {
+    override fun areContentsTheSame(
+        oldItem: CompanyViewHolderItem,
+        newItem: CompanyViewHolderItem
+    ): Boolean {
         return oldItem.logoUrl == newItem.logoUrl
                 && oldItem.ticker == newItem.ticker
                 && oldItem.favourite == newItem.favourite
@@ -179,7 +189,10 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyItem>() {
                 && oldItem.changeTextColor == newItem.changeTextColor
     }
 
-    override fun getChangePayload(oldItem: CompanyItem, newItem: CompanyItem): Any? {
+    override fun getChangePayload(
+        oldItem: CompanyViewHolderItem,
+        newItem: CompanyViewHolderItem
+    ): Any? {
         if (oldItem.ticker != newItem.ticker) {
             return super.getChangePayload(oldItem, newItem)
         }

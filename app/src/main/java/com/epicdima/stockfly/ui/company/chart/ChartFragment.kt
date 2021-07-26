@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentChartBinding
-import com.epicdima.stockfly.other.StockCandleParam
-import com.epicdima.stockfly.other.color
-import com.epicdima.stockfly.other.drawable
-import com.epicdima.stockfly.other.setArgument
+import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -36,11 +34,31 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
-        _binding = FragmentChartBinding.inflate(inflater, container, false).apply {
-            lifecycleOwner = viewLifecycleOwner
-            loading = viewModel.loading
-            company = viewModel.company
+        _binding = FragmentChartBinding.inflate(inflater, container, false)
+
+        viewModel.company.observe(viewLifecycleOwner) {
+            binding.current.text = it.currentString
+            binding.change.text =
+                if (it != null) it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")") else ""
+            binding.change.setTextColor(
+                binding.getColor(
+                    when {
+                        it.changeString.startsWith("+") -> R.color.green
+                        it.changeString.startsWith("-") -> R.color.red
+                        else -> R.color.black
+                    }
+                )
+            )
+            binding.buyButton.text =
+                if (it != null) getString(R.string.buy_stock, it.currentString) else ""
+            binding.buyButton.visibility = if (it?.quote != null) View.VISIBLE else View.INVISIBLE
         }
+
+        viewModel.loading.observe(viewLifecycleOwner) {
+            binding.chart.visibility = if (it) View.INVISIBLE else View.VISIBLE
+            binding.progressBar.isVisible = it
+        }
+
         setupDateButtons()
         setupBuyButton()
         setupObservers()

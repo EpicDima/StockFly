@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epicdima.stockfly.base.BaseDiffUtilCallback
 import com.epicdima.stockfly.databinding.ItemSearchChipBinding
 
-
 class SearchChipAdapter(
     private val clickListener: OnSearchChipClickListener
 ) : ListAdapter<String, SearchChipAdapter.SearchChipViewHolder>(DIFF_CALLBACK) {

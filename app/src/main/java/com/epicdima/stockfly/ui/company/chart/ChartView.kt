@@ -394,9 +394,13 @@ class ChartView @JvmOverloads constructor(
             if (length > 0 && (lengthAnimator == null || lengthAnimator?.isRunning != true)) {
                 val newSelectedIndex = event.x.fromRealX()
                 if (selectedIndex != newSelectedIndex) {
-                    selectedIndex = newSelectedIndex
-                    invalidate()
-                    return performClick()
+                    if (newSelectedIndex < 0 || newSelectedIndex >= length) {
+                        selectedIndex = NO_POSITION
+                    } else {
+                        selectedIndex = newSelectedIndex
+                        invalidate()
+                        return performClick()
+                    }
                 }
             }
         } else if (event.action == MotionEvent.ACTION_UP) {

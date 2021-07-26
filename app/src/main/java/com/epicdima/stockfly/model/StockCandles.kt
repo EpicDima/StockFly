@@ -8,6 +8,7 @@ data class StockCandles(
     val price: DoubleArray = doubleArrayOf(),
     val timestamp: LongArray = longArrayOf()
 ) {
+
     fun getItem(index: Int): StockCandleItem {
         return StockCandleItem(price[index], timestamp[index])
     }

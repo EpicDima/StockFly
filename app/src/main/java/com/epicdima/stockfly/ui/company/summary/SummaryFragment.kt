@@ -10,10 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
-import com.epicdima.stockfly.other.ipoLocalDateString
-import com.epicdima.stockfly.other.loadImageWithGoneOnError
-import com.epicdima.stockfly.other.setArgument
-import com.epicdima.stockfly.other.toLocalString
+import com.epicdima.stockfly.other.*
 import com.epicdima.stockfly.ui.MainRouter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -69,19 +66,19 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
 
     private fun setClickListeners() {
         binding.phoneValue.setOnClickListener {
-            Timber.i("open phone number '%s'", binding.phoneValue.text)
-            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${binding.phoneValue.text}")))
+            val phoneNumber = binding.phoneValue.text.toString()
+            if (phoneNumber.isNotEmpty()) {
+                Timber.i("open phone number '%s'", phoneNumber)
+                startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}")))
+            }
         }
         binding.weburlValue.setOnClickListener {
             val url = binding.weburlValue.text.toString()
-
-            if (url.startsWith("https://")) {
-                Timber.i("open safe url '%s'", url)
-                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener)
-                    .openWebViewFragment(url)
-            } else {
-                Timber.i("open unsafe url '%s'", url)
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            if (url.isNotEmpty()) {
+                Timber.i("open url '%s'", url)
+                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(
+                    createUri(url).toString()
+                )
             }
         }
     }

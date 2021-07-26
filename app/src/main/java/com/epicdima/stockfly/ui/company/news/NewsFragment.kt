@@ -16,6 +16,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
+
     companion object {
         const val TICKER_KEY = "ticker_news"
 
@@ -34,6 +35,12 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
     ): View {
         Timber.v("onCreateView")
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressBar.isVisible = it
             checkVisibility()
@@ -43,7 +50,6 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
             checkVisibility()
         }
         setupList()
-        return binding.root
     }
 
     private fun setupList() {
@@ -55,6 +61,7 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
             this.adapter = adapter
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
+            setHasFixedSize(true)
         }
         viewModel.news.observe(viewLifecycleOwner) {
             adapter.submitNewsList(it)

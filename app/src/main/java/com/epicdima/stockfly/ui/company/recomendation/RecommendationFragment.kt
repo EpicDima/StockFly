@@ -48,6 +48,12 @@ class RecommendationFragment :
     ): View {
         Timber.v("onCreateView")
         _binding = FragmentRecommendationBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressBar.isVisible = it
             checkVisibility()
@@ -58,7 +64,6 @@ class RecommendationFragment :
         }
         setupSlider()
         setupObservers()
-        return binding.root
     }
 
     private fun setupSlider() {

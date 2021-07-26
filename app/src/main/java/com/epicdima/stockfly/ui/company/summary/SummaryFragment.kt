@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
-import com.epicdima.stockfly.other.bindImageWithGoneOnError
 import com.epicdima.stockfly.other.ipoLocalDateString
+import com.epicdima.stockfly.other.loadImageWithGoneOnError
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.other.toLocalString
 import com.epicdima.stockfly.ui.MainRouter
@@ -20,6 +20,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
+
     companion object {
         const val TICKER_KEY = "ticker_summary"
 
@@ -37,13 +38,21 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
-        _binding = FragmentSummaryBinding.inflate(inflater, container, false).apply {
+        _binding = FragmentSummaryBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.apply {
             phoneValue.paintFlags = phoneValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             weburlValue.paintFlags = weburlValue.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
 
         viewModel.company.observe(viewLifecycleOwner) {
-            bindImageWithGoneOnError(binding.imageView, it.logoUrl)
+            loadImageWithGoneOnError(binding.imageView, it.logoUrl)
             binding.fullname.text = it.name
             binding.phoneValue.text = it.phone
             binding.weburlValue.text = it.webUrl
@@ -56,7 +65,6 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
         }
 
         setClickListeners()
-        return binding.root
     }
 
     private fun setClickListeners() {

@@ -26,6 +26,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
+
     companion object {
         const val TICKER_KEY = "ticker"
 
@@ -52,10 +53,15 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
+        _binding = FragmentCompanyBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
         titles = resources.getStringArray(R.array.company_tabs)
-        _binding = FragmentCompanyBinding.inflate(inflater, container, false).apply {
-            viewPager.isUserInputEnabled = false
-        }
+        binding.viewPager.isUserInputEnabled = false
         viewModel.error.observe(viewLifecycleOwner) {
             binding.errorTextview.isVisible = it
             binding.favouriteButton.visibility =
@@ -70,7 +76,6 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
         setSingleEventForTabAdapterCreation()
         setupClickListeners()
-        return binding.root
     }
 
     private fun setCompany(company: Company?) {

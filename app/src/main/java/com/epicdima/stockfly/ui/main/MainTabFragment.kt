@@ -29,8 +29,14 @@ abstract class MainTabFragment<VM : ViewModel> :
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
+        _binding = FragmentTabMainBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        _binding = FragmentTabMainBinding.inflate(inflater, container, false).apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
             recyclerView.apply {
                 adapter = this@MainTabFragment.adapter
                 layoutManager = LinearLayoutManager(context)
@@ -41,7 +47,6 @@ abstract class MainTabFragment<VM : ViewModel> :
                 resources.getStringArray(R.array.main_tabs_empty_list)[getTabNumber()]
         }
         setupList()
-        return binding.root
     }
 
     private fun getTabNumber(): Int {

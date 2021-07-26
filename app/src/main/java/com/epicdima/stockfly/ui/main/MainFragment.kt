@@ -20,6 +20,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
+
     companion object {
 
         const val ALL_TAB_NUMBER = 0
@@ -39,9 +40,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
         titles = resources.getStringArray(R.array.main_tabs)
-        _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
+        binding.apply {
             viewPager.adapter = MainFragmentAdapter(titles.size, this@MainFragment)
             viewPager.isUserInputEnabled = false
             searchLayout.setOnClickListener {
@@ -49,7 +56,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             }
         }
         setupTabs()
-        return binding.root
     }
 
     private fun setupTabs() {

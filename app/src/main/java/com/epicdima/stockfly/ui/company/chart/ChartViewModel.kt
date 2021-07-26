@@ -121,9 +121,14 @@ class ChartViewModel @Inject constructor(
     }
 
     fun dayChart() = updateChart(StockCandleParam.DAY)
+
     fun weekChart() = updateChart(StockCandleParam.WEEK)
+
     fun monthChart() = updateChart(StockCandleParam.MONTH)
+
     fun sixMonthsChart() = updateChart(StockCandleParam.SIX_MONTHS)
+
     fun yearChart() = updateChart(StockCandleParam.YEAR)
+
     fun allTimeChart() = updateChart(StockCandleParam.ALL_TIME)
 }

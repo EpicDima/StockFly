@@ -13,7 +13,9 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
+
     companion object {
+
         @JvmStatic
         fun newInstance(tabNumber: Int): FavouriteMainTabFragment {
             Timber.i("newInstance with tabNumber %d", tabNumber)

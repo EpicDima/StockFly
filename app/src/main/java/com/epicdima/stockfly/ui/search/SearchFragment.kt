@@ -33,6 +33,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
+
     companion object {
         @JvmStatic
         fun newInstance(): SearchFragment {
@@ -58,8 +59,13 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
-
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
         viewModel.loading.observe(viewLifecycleOwner) {
             binding.progressBar.isVisible = it
         }
@@ -83,7 +89,6 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         binding.popularRecyclerView.setupSearchChipList(viewModel.popular)
         binding.searchedRecyclerView.setupSearchChipList(viewModel.searched)
         setupResultList()
-        return binding.root
     }
 
     override fun onStart() {
@@ -164,6 +169,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         this.adapter = adapter
         layoutManager = StaggeredGridLayoutManager(2, HORIZONTAL)
         itemAnimator = null
+        setHasFixedSize(true)
         listLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             scrollToPosition(0)

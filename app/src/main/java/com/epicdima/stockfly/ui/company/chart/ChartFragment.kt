@@ -17,6 +17,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding>() {
+
     companion object {
         const val TICKER_KEY = "ticker_chart"
 
@@ -35,6 +36,12 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
     ): View {
         Timber.v("onCreateView")
         _binding = FragmentChartBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel.company.observe(viewLifecycleOwner) {
             binding.current.text = it.currentString
@@ -62,7 +69,6 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
         setupDateButtons()
         setupBuyButton()
         setupObservers()
-        return binding.root
     }
 
     private fun setupDateButtons() {

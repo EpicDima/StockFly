@@ -10,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import com.epicdima.stockfly.base.BaseFragment
 import com.epicdima.stockfly.databinding.FragmentWebviewBinding
 import com.epicdima.stockfly.other.setArgument
 import timber.log.Timber
 
-class WebViewFragment : Fragment() {
+class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
 
     companion object {
         private const val URL_KEY = "url"
@@ -27,28 +27,33 @@ class WebViewFragment : Fragment() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         Timber.v("onCreateView")
+        _binding = FragmentWebviewBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val binding = FragmentWebviewBinding.inflate(inflater, container, false).apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Timber.v("onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
             progressBar.isVisible = true
             errorTextview.isVisible = false
-        }
 
-        binding.webview.apply {
-            webViewClient = createWebViewClient(binding)
-            settings.javaScriptEnabled = true
-            setBackHandler()
-            checkNightMode()
-            loadUrl(requireArguments().getString(URL_KEY)!!)
-        }
+            webview.apply {
+                webViewClient = createWebViewClient(binding)
 
-        return binding.root
+                @SuppressLint("SetJavaScriptEnabled")
+                settings.javaScriptEnabled = true
+                setBackHandler()
+                checkNightMode()
+                loadUrl(requireArguments().getString(URL_KEY)!!)
+            }
+        }
     }
 
     private fun createWebViewClient(binding: FragmentWebviewBinding): WebViewClient {

@@ -41,4 +41,5 @@ class SearchChipAdapter(
     }
 }
 
+
 private val DIFF_CALLBACK = BaseDiffUtilCallback<String>()

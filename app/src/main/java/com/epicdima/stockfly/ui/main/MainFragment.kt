@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
@@ -22,9 +23,6 @@ import timber.log.Timber
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     companion object {
-
-        const val ALL_TAB_NUMBER = 0
-        const val FAVOURITE_TAB_NUMBER = 1
 
         @JvmStatic
         fun newInstance(): MainFragment {
@@ -47,9 +45,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        titles = resources.getStringArray(R.array.main_tabs)
+        titles = MainTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.apply {
-            viewPager.adapter = MainFragmentAdapter(titles.size, this@MainFragment)
+            viewPager.adapter = MainFragmentAdapter(this@MainFragment)
             viewPager.isUserInputEnabled = false
             searchLayout.setOnClickListener {
                 (requireActivity() as MainRouter.SearchFragmentOpener).openSearchFragment()
@@ -73,21 +71,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
 
+    enum class MainTab(
+        @StringRes
+        val titleId: Int,
+    ) {
+        ALL(R.string.stocks),
+        FAVOURITE(R.string.favourite)
+    }
+
+
     private class MainFragmentAdapter(
-        private val tabsCount: Int,
         fragment: Fragment
     ) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int {
-            return tabsCount
+            return MainTab.values().size
         }
 
         override fun createFragment(position: Int): Fragment {
             Timber.i("createFragment with position %d", position)
-
             return when (position) {
-                ALL_TAB_NUMBER -> AllMainTabFragment.newInstance(position)
-                FAVOURITE_TAB_NUMBER -> FavouriteMainTabFragment.newInstance(position)
+                MainTab.ALL.ordinal -> AllMainTabFragment.newInstance()
+                MainTab.FAVOURITE.ordinal -> FavouriteMainTabFragment.newInstance()
                 else -> throw RuntimeException("Unknown main tab fragment on position '$position'")
             }
         }

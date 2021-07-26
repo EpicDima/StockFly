@@ -1,16 +1,15 @@
 package com.epicdima.stockfly.ui.company
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.adapter.FragmentViewHolder
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
@@ -32,11 +31,6 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     companion object {
         const val TICKER_KEY = "ticker"
         private const val PAGE_KEY = "page"
-
-        private const val CHART_TAB_NUMBER = 0
-        private const val SUMMARY_TAB_NUMBER = 1
-        private const val NEWS_TAB_NUMBER = 2
-        private const val RECOMMENDATION_TAB_NUMBER = 3
 
         @JvmStatic
         fun newInstance(ticker: String): CompanyFragment {
@@ -63,7 +57,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        titles = resources.getStringArray(R.array.company_tabs)
+        titles = CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.viewPager.isUserInputEnabled = false
         viewModel.error.observe(viewLifecycleOwner) {
             binding.errorTextview.isVisible = it
@@ -98,7 +92,6 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
             binding.viewPager.adapter =
                 CompanyFragmentAdapter(
                     requireArguments().getString(TICKER_KEY)!!,
-                    titles.size,
                     this@CompanyFragment
                 )
             setupTabs()
@@ -142,23 +135,33 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     }
 
 
+    private enum class CompanyTab(
+        @StringRes
+        val titleId: Int
+    ) {
+        CHART(R.string.chart),
+        SUMMARY(R.string.summary),
+        NEWS(R.string.news),
+        RECOMMENDATION(R.string.recommendations)
+    }
+
+
     private class CompanyFragmentAdapter(
         private val ticker: String,
-        private val tabsCount: Int,
         fragment: Fragment
     ) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int {
-            return tabsCount
+            return CompanyTab.values().size
         }
 
         override fun createFragment(position: Int): Fragment {
             Timber.i("createFragment with position %d", position)
             return when (position) {
-                CHART_TAB_NUMBER -> ChartFragment.newInstance(ticker)
-                SUMMARY_TAB_NUMBER -> SummaryFragment.newInstance(ticker)
-                NEWS_TAB_NUMBER -> NewsFragment.newInstance(ticker)
-                RECOMMENDATION_TAB_NUMBER -> RecommendationFragment.newInstance(ticker)
+                CompanyTab.CHART.ordinal -> ChartFragment.newInstance(ticker)
+                CompanyTab.SUMMARY.ordinal -> SummaryFragment.newInstance(ticker)
+                CompanyTab.NEWS.ordinal -> NewsFragment.newInstance(ticker)
+                CompanyTab.RECOMMENDATION.ordinal -> RecommendationFragment.newInstance(ticker)
                 else -> throw RuntimeException("Unknown company tab fragment on position '$position'")
             }
         }

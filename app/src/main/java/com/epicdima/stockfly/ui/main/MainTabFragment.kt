@@ -43,8 +43,6 @@ abstract class MainTabFragment<VM : ViewModel> :
                 itemAnimator = null
                 setHasFixedSize(true)
             }
-            emptyTextview.text =
-                resources.getStringArray(R.array.main_tabs_empty_list)[getTabNumber()]
         }
         setupList()
     }

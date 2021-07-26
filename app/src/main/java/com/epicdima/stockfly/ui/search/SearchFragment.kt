@@ -91,10 +91,14 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         setupResultList()
     }
 
-    override fun onStart() {
-        Timber.v("onStart")
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         showKeyboard()
+    }
+
+    override fun onPause() {
+        hideKeyboard()
+        super.onPause()
     }
 
     private fun setupResultList() {
@@ -142,7 +146,6 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
             binding.searchEditText.text.clear()
         }
         binding.back.setOnClickListener {
-            hideKeyboard()
             requireActivity().onBackPressed()
         }
     }

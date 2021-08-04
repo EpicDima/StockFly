@@ -12,6 +12,7 @@
         <item name="android:clipToPadding">false</item>
         <item name="android:layout_gravity">start</item>
         <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabBackground">@null</item>
         <item name="tabMode">scrollable</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabRippleColor">@null</item>

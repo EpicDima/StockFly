@@ -27,6 +27,16 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["-Adagger.formatGeneratedSource"] = "disabled"
+                arguments["-Adagger.gradle.incremental"] = "enabled"
+            }
+        }
+
+        kapt {
+            useBuildCache = true
+            arguments {
+                arg("dagger.formatGeneratedSource", "disabled")
+                arg("dagger.gradle.incremental", "enabled")
             }
         }
     }

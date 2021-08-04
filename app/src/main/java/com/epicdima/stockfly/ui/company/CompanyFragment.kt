@@ -58,7 +58,14 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         titles = CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
-        binding.viewPager.isUserInputEnabled = false
+        binding.viewPager.apply {
+            isUserInputEnabled = false
+            offscreenPageLimit = 1
+            adapter = CompanyFragmentAdapter(
+                requireArguments().getString(TICKER_KEY)!!,
+                this@CompanyFragment
+            )
+        }
         viewModel.error.observe(viewLifecycleOwner) {
             binding.errorTextview.isVisible = it
             binding.favouriteButton.visibility =
@@ -73,6 +80,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
         setSingleEventForTabAdapterCreation()
         setupClickListeners()
+        setupTabs()
     }
 
     private fun setCompany(company: Company?) {
@@ -89,12 +97,6 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     private fun setSingleEventForTabAdapterCreation() {
         Timber.v("setSingleEventForTabAdapterCreation")
         createAdapterObserver = Observer<Company> {
-            binding.viewPager.adapter =
-                CompanyFragmentAdapter(
-                    requireArguments().getString(TICKER_KEY)!!,
-                    this@CompanyFragment
-                )
-            setupTabs()
             viewModel.company.removeObserver(createAdapterObserver)
             setCompany(viewModel.company.value)
         }

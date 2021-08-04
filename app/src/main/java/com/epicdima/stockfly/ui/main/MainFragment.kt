@@ -47,8 +47,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         super.onViewCreated(view, savedInstanceState)
         titles = MainTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.apply {
-            viewPager.adapter = MainFragmentAdapter(this@MainFragment)
-            viewPager.isUserInputEnabled = false
+            viewPager.also {
+                it.adapter = MainFragmentAdapter(this@MainFragment)
+                it.isUserInputEnabled = false
+                it.offscreenPageLimit =
+                    MainTab.values().size  // для загрузки списка избранных без ожидания
+            }
             searchLayout.setOnClickListener {
                 (requireActivity() as MainRouter.SearchFragmentOpener).openSearchFragment()
             }

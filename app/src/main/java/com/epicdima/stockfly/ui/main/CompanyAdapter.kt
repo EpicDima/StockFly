@@ -1,31 +1,58 @@
 package com.epicdima.stockfly.ui.main
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
+import coil.imageLoader
 import coil.load
 import coil.request.Disposable
+import coil.request.ImageRequest
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.databinding.ItemCompanyBinding
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.createUri
 import com.epicdima.stockfly.other.getColor
-import com.epicdima.stockfly.other.getDrawable
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
 ) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
-    fun submitCompanyList(list: List<Company>) {
+    companion object {
+        private var commonRecycledViewPool: WeakReference<RecyclerView.RecycledViewPool> =
+            WeakReference(null)
+    }
+
+    val recycledViewPool: RecyclerView.RecycledViewPool
+        get() {
+            val tempRecycledViewPool = commonRecycledViewPool.get()
+            if (tempRecycledViewPool == null) {
+                commonRecycledViewPool = WeakReference(RecyclerView.RecycledViewPool().apply {
+                    setMaxRecycledViews(0, 10)
+                })
+            }
+            return commonRecycledViewPool.get()!!
+        }
+
+    fun submitCompanyList(list: List<Company>, context: Context) {
         super.submitList(list.mapIndexed { index, company ->
             CompanyViewHolderItem(
                 index,
                 company
-            )
+            ).apply {
+                rootCardBackgroundColor = getColor(context, rootCardBackgroundColorId)
+                favouriteIcon = getDrawable(context, favouriteIconId)
+                changeTextColor = getColor(context, changeTextColorId)
+            }
         })
     }
 
@@ -63,14 +90,15 @@ class CompanyAdapter(
         private var logoDisposable: Disposable? = null
 
         fun bind(companyItem: CompanyViewHolderItem, clickListener: OnCompanyClickListener) {
+            Timber.v("bind %s", companyItem)
             binding.apply {
-                root.setCardBackgroundColor(getColor(companyItem.rootCardBackgroundColor))
+                root.setCardBackgroundColor(companyItem.rootCardBackgroundColor)
                 ticker.text = companyItem.ticker
-                favouriteIcon.setImageDrawable(getDrawable(companyItem.favouriteIcon))
+                favouriteIcon.setImageDrawable(companyItem.favouriteIcon)
                 name.text = companyItem.name
                 current.text = companyItem.currentString
                 change.text = companyItem.changeString
-                change.setTextColor(getColor(companyItem.changeTextColor))
+                change.setTextColor(companyItem.changeTextColor)
                 setLogo(logo, companyItem)
                 root.setOnClickListener {
                     clickListener.onClick(companyItem.ticker)
@@ -85,6 +113,7 @@ class CompanyAdapter(
                 if (companyItem.logoUrl.isNotBlank()) {
                     logoDisposable = load(createUri(companyItem.logoUrl)) {
                         target {
+                            Timber.d("bind logo image for %s", companyItem.ticker)
                             background = null
                             setImageDrawable(it)
                         }
@@ -94,13 +123,13 @@ class CompanyAdapter(
         }
 
         fun bind(companyItem: CompanyViewHolderItem, payload: CompanyItemPayload) {
-            Timber.v("bind %s", payload)
+            Timber.v("bind %s with payload %s", companyItem, payload)
             binding.apply {
                 if (payload.name) {
                     name.text = companyItem.name
                 }
                 if (payload.favouriteIcon) {
-                    favouriteIcon.setImageDrawable(getDrawable(companyItem.favouriteIcon))
+                    favouriteIcon.setImageDrawable(companyItem.favouriteIcon)
                 }
                 if (payload.currentString) {
                     current.text = companyItem.currentString
@@ -109,13 +138,14 @@ class CompanyAdapter(
                     change.text = companyItem.changeString
                 }
                 if (payload.changeTextColor) {
-                    change.setTextColor(getColor(companyItem.changeTextColor))
+                    change.setTextColor(companyItem.changeTextColor)
                 }
             }
         }
 
         fun unbind() {
             logoDisposable?.dispose()
+            binding.logo.clear()
         }
     }
 
@@ -136,11 +166,12 @@ class CompanyViewHolderItem(
     val name = company.name
     val currentString = company.currentString
 
-    val rootCardBackgroundColor = if (position % 2 == 0) {
+    val rootCardBackgroundColorId = if (position % 2 == 0) {
         R.color.light
     } else {
         R.color.white
     }
+    var rootCardBackgroundColor = 0
 
     val logoBackgroundColor = if (position % 2 == 0) {
         R.color.white
@@ -148,22 +179,24 @@ class CompanyViewHolderItem(
         R.color.light
     }
 
-    val favouriteIcon = if (favourite) {
+    val favouriteIconId = if (favourite) {
         R.drawable.ic_star_solid_selected
     } else {
         R.drawable.ic_star_solid
     }
+    var favouriteIcon: Drawable? = null
 
     val changeString = company.changeString +
             (if (company.changePercentString.isEmpty()) "" else " (") +
             company.changePercentString +
             if (company.changePercentString.isEmpty()) "" else ")"
 
-    val changeTextColor = when {
+    val changeTextColorId = when {
         company.changeString.startsWith("+") -> R.color.green
         company.changeString.startsWith("-") -> R.color.red
         else -> R.color.black
     }
+    var changeTextColor: Int = 0
 }
 
 
@@ -186,7 +219,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem
                 && oldItem.name == newItem.name
                 && oldItem.currentString == newItem.currentString
                 && oldItem.changeString == newItem.changeString
-                && oldItem.changeTextColor == newItem.changeTextColor
+                && oldItem.changeTextColorId == newItem.changeTextColorId
     }
 
     override fun getChangePayload(
@@ -199,10 +232,10 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem
 
         val payload = CompanyItemPayload(
             oldItem.name != newItem.name,
-            oldItem.favouriteIcon != newItem.favouriteIcon,
+            oldItem.favouriteIconId != newItem.favouriteIconId,
             oldItem.currentString != newItem.currentString,
             oldItem.changeString != newItem.changeString,
-            oldItem.changeTextColor != newItem.changeTextColor,
+            oldItem.changeTextColorId != newItem.changeTextColorId,
         )
 
         if (payload != DEFAULT_COMPANY_ITEM_PAYLOAD) {

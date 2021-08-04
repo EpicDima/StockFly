@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.ui.MainRouter
@@ -15,13 +14,11 @@ import timber.log.Timber
 abstract class MainTabFragment<VM : ViewModel> :
     BaseViewModelFragment<VM, FragmentTabMainBinding>() {
 
-    companion object {
-        const val TAB_NUMBER_KEY = "main_tab_number"
-    }
-
-    protected val adapter = CompanyAdapter { ticker ->
-        (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
-            .openCompanyFragment(ticker)
+    protected val companyAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        CompanyAdapter { ticker ->
+            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+                .openCompanyFragment(ticker)
+        }
     }
 
     override fun onCreateView(
@@ -38,17 +35,14 @@ abstract class MainTabFragment<VM : ViewModel> :
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             recyclerView.apply {
-                adapter = this@MainTabFragment.adapter
+                adapter = companyAdapter
+                setRecycledViewPool(companyAdapter.recycledViewPool)
                 layoutManager = LinearLayoutManager(context)
                 itemAnimator = null
                 setHasFixedSize(true)
             }
         }
         setupList()
-    }
-
-    private fun getTabNumber(): Int {
-        return requireArguments().getInt(TAB_NUMBER_KEY)
     }
 
     protected abstract fun setupList()

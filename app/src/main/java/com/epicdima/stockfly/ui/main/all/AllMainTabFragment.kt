@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +34,7 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
     override fun setupList() {
         viewModel.companies.observe(viewLifecycleOwner) {
             lifecycleScope.launch(Dispatchers.Default) {
-                adapter.submitCompanyList(it)
+                companyAdapter.submitCompanyList(it, requireContext())
             }
             binding.apply {
                 recyclerView.isVisible = it.isNotEmpty()

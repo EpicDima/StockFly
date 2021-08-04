@@ -107,13 +107,14 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         }
         binding.resultRecyclerView.apply {
             adapter = resultAdapter
+            setRecycledViewPool(resultAdapter.recycledViewPool)
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
             setHasFixedSize(true)
         }
         viewModel.result.observe(viewLifecycleOwner) {
             lifecycleScope.launch(Dispatchers.Default) {
-                resultAdapter.submitCompanyList(it)
+                resultAdapter.submitCompanyList(it, requireContext())
             }
         }
     }

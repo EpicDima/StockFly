@@ -12,26 +12,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/ProgressBar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+        <include
+            android:id="@+id/progress_bar_widget"
+            layout="@layout/screen_progress_bar_widget" />
 
-        <TextView
-            android:id="@+id/error_textview"
-            style="@style/ErrorTextView"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+        <include
+            android:id="@+id/error_widget"
+            layout="@layout/screen_error_widget" />
 
         <com.epicdima.stockfly.ui.company.recomendation.RecommendationView
             android:id="@+id/recommendation_view"

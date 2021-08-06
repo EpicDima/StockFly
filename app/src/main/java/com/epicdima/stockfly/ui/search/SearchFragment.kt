@@ -67,10 +67,10 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         viewModel.loading.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
+            binding.progressBarWidget.root.isVisible = it
         }
         viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorTextview.isVisible = it
+            binding.errorWidget.root.isVisible = it
         }
         viewModel.emptyResult.observe(viewLifecycleOwner) {
             binding.emptyTextview.isVisible = it

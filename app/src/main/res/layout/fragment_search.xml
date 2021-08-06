@@ -132,27 +132,13 @@
         android:layout_height="match_parent"
         tools:visibility="visible">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/ProgressBar"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
-            tools:visibility="gone" />
+        <include
+            android:id="@+id/progress_bar_widget"
+            layout="@layout/screen_progress_bar_widget" />
 
-        <TextView
-            android:id="@+id/error_textview"
-            style="@style/ErrorTextView"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
-            tools:visibility="gone" />
+        <include
+            android:id="@+id/error_widget"
+            layout="@layout/screen_error_widget" />
 
         <TextView
             android:id="@+id/empty_textview"
@@ -163,7 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintVertical_bias="0.4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

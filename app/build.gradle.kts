@@ -26,6 +26,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
+                arguments["room.incremental"] = "true"
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }

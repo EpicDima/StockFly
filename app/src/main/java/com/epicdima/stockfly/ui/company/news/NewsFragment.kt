@@ -42,11 +42,11 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         viewModel.loading.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = it
+            binding.progressBarWidget.root.isVisible = it
             checkVisibility()
         }
         viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorTextview.isVisible = it
+            binding.errorWidget.root.isVisible = it
             checkVisibility()
         }
         setupList()

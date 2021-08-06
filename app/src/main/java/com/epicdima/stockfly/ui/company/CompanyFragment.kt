@@ -70,12 +70,12 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
             )
         }
         viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorTextview.isVisible = it
+            binding.errorWidget.root.isVisible = it
             binding.favouriteButton.visibility =
                 if (viewModel.company.value != null && it != true) View.VISIBLE else View.INVISIBLE
             binding.tabLayout.isVisible = (viewModel.company.value != null && it != true)
             binding.viewPager.isVisible = (viewModel.company.value != null && it != true)
-            binding.progressBar.isVisible = (viewModel.company.value == null && it != true)
+            binding.progressBarWidget.root.isVisible = (viewModel.company.value == null && it != true)
         }
         viewModel.company.observe(viewLifecycleOwner) {
             setCompany(it)
@@ -94,7 +94,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         binding.favouriteIcon.setImageResource(if (company?.favourite == true) R.drawable.ic_star_selected else R.drawable.ic_star)
         binding.tabLayout.isVisible = (company != null && viewModel.error.value != true)
         binding.viewPager.isVisible = (company != null && viewModel.error.value != true)
-        binding.progressBar.isVisible = (company == null && viewModel.error.value != true)
+        binding.progressBarWidget.root.isVisible = (company == null && viewModel.error.value != true)
     }
 
     private fun setSingleEventForTabAdapterCreation() {

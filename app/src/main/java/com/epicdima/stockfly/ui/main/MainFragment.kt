@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseFragment
@@ -66,14 +64,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private fun setupTabs() {
         binding.apply {
-            tabLayoutMediator = tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
-                it.set(
-                    resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
-                    R.color.black
-                )
-            }, onUnselect = {
-                it.set(resources.getDimensionInSp(R.dimen.main_tab_textsize), R.color.dark)
-            })
+            tabLayoutMediator =
+                tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
+                    it.set(
+                        resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
+                        R.color.black
+                    )
+                }, onUnselect = {
+                    it.set(resources.getDimensionInSp(R.dimen.main_tab_textsize), R.color.dark)
+                })
             tabLayout.getTabAt(0)?.select()
         }
     }

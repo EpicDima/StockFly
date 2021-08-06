@@ -41,8 +41,8 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            progressBar.isVisible = true
-            errorTextview.isVisible = false
+            progressBarWidget.root.isVisible = true
+            errorWidget.root.isVisible = false
 
             webview.apply {
                 webViewClient = createWebViewClient(binding)
@@ -61,7 +61,7 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
 
         return object : WebViewClient() {
             override fun onPageCommitVisible(view: WebView?, url: String?) {
-                binding.progressBar.isVisible = false
+                binding.progressBarWidget.root.isVisible = false
                 binding.webview.isVisible = true
             }
 
@@ -71,7 +71,7 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
                 error: WebResourceError
             ) {
                 if (request.isForMainFrame) {
-                    binding.errorTextview.isVisible = true
+                    binding.errorWidget.root.isVisible = true
                     binding.webview.isVisible = false
                 }
             }

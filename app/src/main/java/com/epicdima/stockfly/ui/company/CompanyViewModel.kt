@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.company
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
@@ -26,23 +23,34 @@ class CompanyViewModel @Inject constructor(
     private val _company = MutableLiveData<Company>()
     val company: LiveData<Company> = _company
 
+    private lateinit var companyLiveData: LiveData<Company>
+    private lateinit var companyObserver: Observer<Company>
+    private val favouritesLiveData: LiveData<List<Company>>
+    private val favouritesObserver: Observer<List<Company>>
+
     init {
         Timber.v("init with ticker '%s'", ticker)
 
         startTimeoutJob()
         startJob(Dispatchers.Main) {
-            repository.getCompanyWithRefresh(ticker, viewModelScope).observeForever {
+            companyObserver = Observer {
                 if (stopTimeoutJob()) {
                     _company.postValue(it)
                     Timber.i("loaded company %s", it)
                 }
             }
+            companyLiveData = repository.getCompanyWithRefresh(ticker, viewModelScope).apply {
+                observeForever(companyObserver)
+            }
         }
 
-        repository.favourites.observeForever {
+        favouritesObserver = Observer {
             viewModelScope.launch {
                 shortcutConfigurator.updateShortcuts(it)
             }
+        }
+        favouritesLiveData = repository.favourites.apply {
+            observeForever(favouritesObserver)
         }
     }
 
@@ -60,5 +68,11 @@ class CompanyViewModel @Inject constructor(
         Timber.w(e, "onError")
         stopTimeoutJob()
         setError()
+    }
+
+    override fun onCleared() {
+        companyLiveData.removeObserver(companyObserver)
+        favouritesLiveData.removeObserver(favouritesObserver)
+        super.onCleared()
     }
 }

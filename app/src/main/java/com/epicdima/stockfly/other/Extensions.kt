@@ -126,7 +126,7 @@ fun TabLayout.customize(
     titles: Array<String>,
     onSelect: (TabLayout.Tab) -> Unit,
     onUnselect: (TabLayout.Tab) -> Unit
-) {
+): TabLayoutMediator {
     addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab) {
             onSelect(tab)
@@ -138,9 +138,11 @@ fun TabLayout.customize(
 
         override fun onTabReselected(tab: TabLayout.Tab) {}
     })
-    TabLayoutMediator(this, viewPager) { tab, position ->
+    return TabLayoutMediator(this, viewPager) { tab, position ->
         tab.customView = View.inflate(context, customLayout, null)
         tab.text = titles[position]
         viewPager.currentItem = tab.position
-    }.attach()
+    }.apply {
+        attach()
+    }
 }

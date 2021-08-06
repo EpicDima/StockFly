@@ -22,6 +22,7 @@ import com.epicdima.stockfly.ui.company.chart.ChartFragment
 import com.epicdima.stockfly.ui.company.news.NewsFragment
 import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment
 import com.epicdima.stockfly.ui.company.summary.SummaryFragment
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -44,6 +45,8 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     private lateinit var titles: Array<String>
 
     private lateinit var createAdapterObserver: Observer<Company>
+
+    private var tabLayoutMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,7 +108,7 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
 
     private fun setupTabs() {
         binding.apply {
-            tabLayout.customize(viewPager, R.layout.company_tab_item_layout, titles, onSelect = {
+            tabLayoutMediator = tabLayout.customize(viewPager, R.layout.company_tab_item_layout, titles, onSelect = {
                 it.set(
                     resources.getDimensionInSp(R.dimen.company_tab_selected_textsize),
                     R.color.black
@@ -134,6 +137,13 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     override fun onPause() {
         arguments?.putInt(PAGE_KEY, binding.viewPager.currentItem)
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        binding.viewPager.adapter = null
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        super.onDestroyView()
     }
 
 

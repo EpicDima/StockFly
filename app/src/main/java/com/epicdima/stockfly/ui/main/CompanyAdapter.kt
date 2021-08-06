@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.clear
-import coil.imageLoader
 import coil.load
 import coil.request.Disposable
-import coil.request.ImageRequest
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.databinding.ItemCompanyBinding
 import com.epicdima.stockfly.model.Company
@@ -49,9 +47,10 @@ class CompanyAdapter(
                 index,
                 company
             ).apply {
-                rootCardBackgroundColor = getColor(context, rootCardBackgroundColorId)
-                favouriteIcon = getDrawable(context, favouriteIconId)
-                changeTextColor = getColor(context, changeTextColorId)
+                rootCardBackgroundColor =
+                    getColor(context.applicationContext, rootCardBackgroundColorId)
+                favouriteIcon = getDrawable(context.applicationContext, favouriteIconId)
+                changeTextColor = getColor(context.applicationContext, changeTextColorId)
             }
         })
     }

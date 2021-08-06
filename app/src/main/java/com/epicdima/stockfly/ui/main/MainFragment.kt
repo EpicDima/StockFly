@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseFragment
@@ -16,6 +18,7 @@ import com.epicdima.stockfly.other.set
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.all.AllMainTabFragment
 import com.epicdima.stockfly.ui.main.favourite.FavouriteMainTabFragment
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -32,6 +35,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private lateinit var titles: Array<String>
+
+    private var tabLayoutMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +66,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private fun setupTabs() {
         binding.apply {
-            tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
+            tabLayoutMediator = tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
                 it.set(
                     resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
                     R.color.black
@@ -71,6 +76,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             })
             tabLayout.getTabAt(0)?.select()
         }
+    }
+
+    override fun onDestroyView() {
+        binding.viewPager.adapter = null
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        super.onDestroyView()
     }
 
 

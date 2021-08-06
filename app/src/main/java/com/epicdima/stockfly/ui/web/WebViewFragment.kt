@@ -101,4 +101,13 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        binding.webview.apply {
+            setOnKeyListener(null)
+            removeAllViews()
+            destroy()
+        }
+        super.onDestroyView()
+    }
 }

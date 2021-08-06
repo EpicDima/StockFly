@@ -46,4 +46,9 @@ abstract class MainTabFragment<VM : ViewModel> :
     }
 
     protected abstract fun setupList()
+
+    override fun onDestroyView() {
+        binding.recyclerView.adapter = null
+        super.onDestroyView()
+    }
 }

@@ -139,13 +139,14 @@
             android:id="@+id/buy_button"
             style="@style/BuyButton"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="52dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/day_button"
+            app:layout_constraintTop_toBottomOf="@+id/day_button"
+            app:layout_constraintVertical_bias="1.0"
             tools:text="Buy for $132.04" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

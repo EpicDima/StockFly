@@ -94,7 +94,7 @@ class CompanyAdapter(
             binding.apply {
                 root.setCardBackgroundColor(companyItem.rootCardBackgroundColor)
                 ticker.text = companyItem.ticker
-                favouriteIcon.setImageDrawable(companyItem.favouriteIcon)
+                ticker.setCompoundDrawablesWithIntrinsicBounds(null, null, companyItem.favouriteIcon, null)
                 name.text = companyItem.name
                 current.text = companyItem.currentString
                 change.text = companyItem.changeString
@@ -129,7 +129,7 @@ class CompanyAdapter(
                     name.text = companyItem.name
                 }
                 if (payload.favouriteIcon) {
-                    favouriteIcon.setImageDrawable(companyItem.favouriteIcon)
+                    ticker.setCompoundDrawablesWithIntrinsicBounds(null, null, companyItem.favouriteIcon, null)
                 }
                 if (payload.currentString) {
                     current.text = companyItem.currentString

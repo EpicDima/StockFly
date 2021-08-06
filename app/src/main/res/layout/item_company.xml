@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
+    android:layout_marginStart="16dp"
     android:layout_marginTop="4dp"
-    android:layout_marginEnd="20dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginBottom="4dp"
     app:cardCornerRadius="@dimen/company_border_radius"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:contentPadding="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/logo_round_layout"
             android:layout_width="@dimen/company_logo_size"
             android:layout_height="@dimen/company_logo_size"
-            android:layout_margin="8dp"
+            android:layout_marginEnd="8dp"
             app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="@dimen/image_corner_radius"
             app:cardElevation="0dp"
@@ -40,21 +41,11 @@
             style="@style/Ticker"
             android:layout_width="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            app:drawableEndCompat="@drawable/ic_star_solid_selected"
             app:layout_constraintStart_toEndOf="@+id/logo_round_layout"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/favourite_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:contentDescription="@string/favourite_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/ticker"
-            app:layout_constraintEnd_toStartOf="@+id/current"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/ticker"
-            app:layout_constraintTop_toTopOf="@+id/ticker" />
 
         <TextView
             android:id="@+id/name"
@@ -62,7 +53,7 @@
             android:layout_width="0dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/change"
             app:layout_constraintStart_toEndOf="@+id/logo_round_layout"
@@ -73,12 +64,13 @@
             style="@style/SingleLineTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="17dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="9dp"
             android:fontFamily="@font/montserrat_bold"
             android:gravity="end"
             android:textSize="@dimen/company_current_textsize"
+            app:layout_constraintBaseline_toBaselineOf="@id/ticker"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/ticker"
@@ -90,9 +82,9 @@
             style="@style/SingleLineTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginEnd="4dp"
             android:textSize="@dimen/company_change_textsize"
+            app:layout_constraintBaseline_toBaselineOf="@id/name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current" />

@@ -19,27 +19,20 @@ import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.createUri
 import com.epicdima.stockfly.other.getColor
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
 class CompanyAdapter(
     private val clickListener: OnCompanyClickListener
 ) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private var commonRecycledViewPool: WeakReference<RecyclerView.RecycledViewPool> =
-            WeakReference(null)
+        private val commonRecycledViewPool by lazy {
+            RecyclerView.RecycledViewPool().apply {
+                setMaxRecycledViews(0, 10)
+            }
+        }
     }
 
-    val recycledViewPool: RecyclerView.RecycledViewPool
-        get() {
-            val tempRecycledViewPool = commonRecycledViewPool.get()
-            if (tempRecycledViewPool == null) {
-                commonRecycledViewPool = WeakReference(RecyclerView.RecycledViewPool().apply {
-                    setMaxRecycledViews(0, 10)
-                })
-            }
-            return commonRecycledViewPool.get()!!
-        }
+    val recycledViewPool: RecyclerView.RecycledViewPool = commonRecycledViewPool
 
     fun submitCompanyList(list: List<Company>, context: Context) {
         super.submitList(list.mapIndexed { index, company ->
@@ -93,7 +86,12 @@ class CompanyAdapter(
             binding.apply {
                 root.setCardBackgroundColor(companyItem.rootCardBackgroundColor)
                 ticker.text = companyItem.ticker
-                ticker.setCompoundDrawablesWithIntrinsicBounds(null, null, companyItem.favouriteIcon, null)
+                ticker.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    companyItem.favouriteIcon,
+                    null
+                )
                 name.text = companyItem.name
                 current.text = companyItem.currentString
                 change.text = companyItem.changeString
@@ -128,7 +126,12 @@ class CompanyAdapter(
                     name.text = companyItem.name
                 }
                 if (payload.favouriteIcon) {
-                    ticker.setCompoundDrawablesWithIntrinsicBounds(null, null, companyItem.favouriteIcon, null)
+                    ticker.setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        null,
+                        companyItem.favouriteIcon,
+                        null
+                    )
                 }
                 if (payload.currentString) {
                     current.text = companyItem.currentString

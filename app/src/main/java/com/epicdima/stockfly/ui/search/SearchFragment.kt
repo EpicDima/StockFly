@@ -72,6 +72,9 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         viewModel.error.observe(viewLifecycleOwner) {
             binding.errorTextview.isVisible = it
         }
+        viewModel.emptyResult.observe(viewLifecycleOwner) {
+            binding.emptyTextview.isVisible = it
+        }
         viewModel.showPopular.observe(viewLifecycleOwner) {
             binding.popularTitle.isVisible = it
             binding.popularRecyclerView.isVisible = it

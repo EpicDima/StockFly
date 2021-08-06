@@ -97,7 +97,9 @@ class SearchViewModel @Inject constructor(
         _result.postValue(list)
         if (list.isNotEmpty()) {
             _showResult.postValue(true)
+            _emptyResult.postValue(false)
         } else {
+            _showResult.postValue(false)
             _emptyResult.postValue(true)
         }
     }

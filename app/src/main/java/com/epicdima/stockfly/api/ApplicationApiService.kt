@@ -9,13 +9,11 @@ interface ApplicationApiService : ApiService {
     @GET("search")
     override suspend fun search(
         @Query("q") query: String,
-        @Query("token") token: String
     ): SearchResponse
 
     @GET("stock/profile2")
     override suspend fun getCompany(
         @Query("symbol") ticker: String,
-        @Query("token") token: String
     ): CompanyDto
 
     @GET("company-news")
@@ -23,13 +21,11 @@ interface ApplicationApiService : ApiService {
         @Query("symbol") ticker: String,
         @Query("from") from: String,
         @Query("to") to: String,
-        @Query("token") token: String
     ): List<NewsItemDto>
 
     @GET("quote")
     override suspend fun getQuote(
         @Query("symbol") ticker: String,
-        @Query("token") token: String
     ): QuoteDto
 
     @GET("stock/candle")
@@ -38,12 +34,10 @@ interface ApplicationApiService : ApiService {
         @Query("resolution") resolution: String,
         @Query("from") from: Long,
         @Query("to") to: Long,
-        @Query("token") token: String
     ): StockCandlesDto
 
     @GET("stock/recommendation")
     override suspend fun getCompanyRecommendations(
         @Query("symbol") ticker: String,
-        @Query("token") token: String
     ): List<RecommendationDto>
 }

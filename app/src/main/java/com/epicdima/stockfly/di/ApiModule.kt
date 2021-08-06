@@ -4,7 +4,6 @@ import android.app.Application
 import com.epicdima.stockfly.BuildConfig
 import com.epicdima.stockfly.api.ApiService
 import com.epicdima.stockfly.api.ApplicationApiService
-import com.epicdima.stockfly.api.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,13 +19,27 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
-    private const val CACHE_SIZE: Long = 20 * 1024 * 1024 // 20 MB
-
     @Singleton
     @Provides
     fun provideOkHttpClient(application: Application): OkHttpClient {
         val builder = OkHttpClient.Builder()
-            .cache(Cache(application.cacheDir, CACHE_SIZE))
+            .cache(Cache(application.cacheDir, 20L * 1024 * 1024)) // 20 MB
+            .addInterceptor { chain ->
+                chain.proceed(
+                    chain
+                        .request()
+                        .newBuilder()
+                        .url(
+                            chain
+                                .request()
+                                .url
+                                .newBuilder()
+                                .addQueryParameter("token", BuildConfig.API_KEY)
+                                .build()
+                        )
+                        .build()
+                )
+            }
 
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(
@@ -42,7 +55,7 @@ object ApiModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://finnhub.io/api/v1/")
             .validateEagerly(true)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create().asLenient())

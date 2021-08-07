@@ -1,11 +1,15 @@
 package com.epicdima.stockfly.ui.company.recomendation
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Recommendation
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,8 +51,8 @@ class RecommendationViewModel @Inject constructor(
     val brandNewData: Boolean
         get() = _brandNewData
 
-    private val _periodRange = MutableLiveData<Pair<String, String>>()
-    val periodRange: LiveData<Pair<String, String>> = _periodRange
+    private val _periodRange = MutableStateFlow<Pair<String, String>?>(null)
+    val periodRange: StateFlow<Pair<String, String>?> = _periodRange.asStateFlow()
 
     private val _recommendations = mutableListOf<Recommendation>()
     val recommendations: List<Recommendation>
@@ -64,29 +68,27 @@ class RecommendationViewModel @Inject constructor(
         startTimeoutJob()
         startJob(Dispatchers.Main) {
             repository.getCompanyRecommendationsWithRefresh(ticker)
-                .asLiveData(viewModelScope.coroutineContext).observeForever {
-                if (stopTimeoutJob()) {
-                    Timber.i("loaded recommendations %s", it)
-                    _recommendations.addAll(it)
-                    _length = it.size
-                    _beginIndex = maxOf(0, it.lastIndex - DEFAULT_RANGE)
-                    _endIndex = it.lastIndex
-                    updatePeriodRange()
-                    _brandNewData = false
-                    stopLoading()
+                .collect {
+                    if (stopTimeoutJob()) {
+                        Timber.i("loaded recommendations %s", it)
+                        _recommendations.addAll(it)
+                        _length = it.size
+                        _beginIndex = maxOf(0, it.lastIndex - DEFAULT_RANGE)
+                        _endIndex = it.lastIndex
+                        updatePeriodRange()
+                        _brandNewData = false
+                        stopLoading()
+                    }
                 }
-            }
         }
     }
 
     private fun updatePeriodRange() {
         if (_recommendations.isNotEmpty()) {
             _brandNewData = true
-            _periodRange.postValue(
-                Pair(
-                    _recommendations[beginIndex].periodFormatted,
-                    _recommendations[endIndex].periodFormatted
-                )
+            _periodRange.value = Pair(
+                _recommendations[beginIndex].periodFormatted,
+                _recommendations[endIndex].periodFormatted
             )
         }
     }

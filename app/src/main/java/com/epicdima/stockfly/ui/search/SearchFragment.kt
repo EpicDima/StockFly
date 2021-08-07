@@ -15,8 +15,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -27,7 +29,10 @@ import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -66,27 +71,49 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loading.observe(viewLifecycleOwner) {
-            binding.progressBarWidget.root.isVisible = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.loading.collect {
+                        binding.progressBarWidget.root.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.error.collect {
+                        binding.errorWidget.root.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.emptyResult.collect {
+                        binding.emptyTextview.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.showPopular.collect {
+                        binding.popularTitle.isVisible = it
+                        binding.popularRecyclerView.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.showSearched.collect {
+                        binding.searchedTitle.isVisible = it
+                        binding.searchedRecyclerView.isVisible = it
+                    }
+                }
+
+                launch {
+                    viewModel.showResult.collect {
+                        binding.resultTitle.isVisible = it
+                        binding.resultRecyclerView.isVisible = it
+                    }
+                }
+            }
         }
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorWidget.root.isVisible = it
-        }
-        viewModel.emptyResult.observe(viewLifecycleOwner) {
-            binding.emptyTextview.isVisible = it
-        }
-        viewModel.showPopular.observe(viewLifecycleOwner) {
-            binding.popularTitle.isVisible = it
-            binding.popularRecyclerView.isVisible = it
-        }
-        viewModel.showSearched.observe(viewLifecycleOwner) {
-            binding.searchedTitle.isVisible = it
-            binding.searchedRecyclerView.isVisible = it
-        }
-        viewModel.showResult.observe(viewLifecycleOwner) {
-            binding.resultTitle.isVisible = it
-            binding.resultRecyclerView.isVisible = it
-        }
+
         setupSearchField()
         setupButtons()
         binding.popularRecyclerView.setupSearchChipList(viewModel.popular)
@@ -115,11 +142,10 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
             itemAnimator = null
             setHasFixedSize(true)
         }
-        viewModel.result.observe(viewLifecycleOwner) {
-            lifecycleScope.launch(Dispatchers.Default) {
-                resultAdapter.submitCompanyList(it, requireContext())
-            }
-        }
+        viewModel.result
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { resultAdapter.submitCompanyList(it, requireContext()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupSearchField() {
@@ -171,15 +197,18 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         }
     }
 
-    private fun RecyclerView.setupSearchChipList(listLiveData: LiveData<List<String>>) {
+    private fun RecyclerView.setupSearchChipList(listFlow: StateFlow<List<String>>) {
         val adapter = SearchChipAdapter(onChipClick)
         this.adapter = adapter
         layoutManager = StaggeredGridLayoutManager(2, HORIZONTAL)
         itemAnimator = null
         setHasFixedSize(true)
-        listLiveData.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            scrollToPosition(0)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            listFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
+                adapter.submitList(it)
+                scrollToPosition(0)
+            }
         }
     }
 

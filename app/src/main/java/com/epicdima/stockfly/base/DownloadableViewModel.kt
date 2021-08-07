@@ -1,11 +1,12 @@
 package com.epicdima.stockfly.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.other.timeout
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -15,11 +16,11 @@ abstract class DownloadableViewModel : ViewModel() {
     private val timeoutOccurred = AtomicBoolean(false)
     private val jobIsDone = AtomicBoolean(false)
 
-    private val _error = MutableLiveData(false)
-    val error: LiveData<Boolean> = _error
+    private val _error = MutableStateFlow(false)
+    val error: StateFlow<Boolean> = _error.asStateFlow()
 
-    private val _loading = MutableLiveData(false)
-    val loading: LiveData<Boolean> = _loading
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
     private var job: Job? = null
     private var timeoutJob: Job? = null
@@ -28,19 +29,19 @@ abstract class DownloadableViewModel : ViewModel() {
     protected abstract fun onError(e: Throwable)
 
     protected open fun setError() {
-        _error.postValue(true)
+        _error.value = true
     }
 
     protected open fun resetError() {
-        _error.postValue(false)
+        _error.value = false
     }
 
     protected open fun startLoading() {
-        _loading.postValue(true)
+        _loading.value = true
     }
 
     protected open fun stopLoading() {
-        _loading.postValue(false)
+        _loading.value = false
     }
 
     protected open fun jobDone() {

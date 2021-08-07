@@ -1,11 +1,15 @@
 package com.epicdima.stockfly.ui.company.news
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.NewsItem
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,8 +21,8 @@ class NewsViewModel @Inject constructor(
 
     private val ticker = state.get<String>(NewsFragment.TICKER_KEY)!!
 
-    private val _news = MutableLiveData<List<NewsItem>>()
-    val news: LiveData<List<NewsItem>> = _news
+    private val _news = MutableStateFlow<List<NewsItem>>(emptyList())
+    val news: StateFlow<List<NewsItem>> = _news.asStateFlow()
 
     init {
         Timber.v("init with ticker '%s'", ticker)
@@ -26,11 +30,11 @@ class NewsViewModel @Inject constructor(
         startLoading()
         startTimeoutJob()
         startJob(Dispatchers.Main) {
-            repository.getCompanyNewsWithRefresh(ticker).asLiveData(viewModelScope.coroutineContext)
-                .observeForever {
+            repository.getCompanyNewsWithRefresh(ticker)
+                .collect {
                     Timber.i("loaded news %s", it)
                     if (stopTimeoutJob()) {
-                        _news.postValue(it)
+                        _news.value = it
                         stopLoading()
                     }
                 }

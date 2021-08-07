@@ -7,6 +7,7 @@ import com.epicdima.stockfly.model.StockCandles
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -18,22 +19,19 @@ class ChartViewModel @Inject constructor(
 
     private val ticker = state.get<String>(ChartFragment.TICKER_KEY)!!
 
-    private var _stockCandleParam = MutableLiveData<StockCandleParam?>()
-    val stockCandleParam: LiveData<StockCandleParam>
-        get() = _stockCandleParam.map { it!! }
+    private var _stockCandleParam = MutableStateFlow<StockCandleParam?>(null)
+    val stockCandleParam: Flow<StockCandleParam> = _stockCandleParam.filterNotNull()
 
     private var _previousStockCandleParam: StockCandleParam? = null
     val previousStockCandleParam: StockCandleParam?
         get() = _previousStockCandleParam
 
-    val company: LiveData<Company> =
-        repository.getCompany(ticker).asLiveData(viewModelScope.coroutineContext).map {
-            updateChart()
-            it
-        }
+    val company: StateFlow<Company?> = repository.getCompany(ticker)
+        .onEach { updateChart() }
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-    private val _stockCandles = MutableLiveData<StockCandles?>()
-    val stockCandles: LiveData<StockCandles?> = _stockCandles
+    private val _stockCandles = MutableStateFlow<StockCandles?>(null)
+    val stockCandles: StateFlow<StockCandles?> = _stockCandles.asStateFlow()
 
     private var _brandNewData = false
     val brandNewData: Boolean
@@ -47,7 +45,7 @@ class ChartViewModel @Inject constructor(
             beforeUpdate(newStockCandleParam)
             if (cache.containsKey(newStockCandleParam)) {
                 _brandNewData = true
-                _stockCandles.postValue(cache[newStockCandleParam])
+                _stockCandles.value = cache[newStockCandleParam]
                 stopLoading()
             } else {
                 beforeUpdateStart()
@@ -60,7 +58,7 @@ class ChartViewModel @Inject constructor(
 
     private fun beforeUpdate(newStockCandleParam: StockCandleParam) {
         _previousStockCandleParam = _stockCandleParam.value
-        _stockCandleParam.postValue(newStockCandleParam)
+        _stockCandleParam.value = newStockCandleParam
         stopJob()
     }
 
@@ -99,13 +97,13 @@ class ChartViewModel @Inject constructor(
         } else {
             cache.remove(newStockCandleParam)
         }
-        _stockCandles.postValue(stockCandlesNew)
+        _stockCandles.value = stockCandlesNew
         stopLoading()
     }
 
     override fun onTimeout() {
         Timber.i("onTimeout")
-        _stockCandles.postValue(null)
+        _stockCandles.value = null
         stopLoading()
     }
 
@@ -113,7 +111,7 @@ class ChartViewModel @Inject constructor(
         Timber.w(e, "onError")
         stopTimeoutJob()
         if (stopJob()) {
-            _stockCandles.postValue(null)
+            _stockCandles.value = null
         }
         stopLoading()
     }

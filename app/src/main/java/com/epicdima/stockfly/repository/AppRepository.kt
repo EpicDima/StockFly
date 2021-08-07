@@ -33,7 +33,6 @@ class AppRepository(
 ) : Repository {
 
     override val companies: Flow<List<Company>> = flow {
-        emit(emptyList())
         companyDao
             .selectAll()
             .flowOn(Dispatchers.IO)
@@ -45,7 +44,6 @@ class AppRepository(
     }
 
     override val favourites: Flow<List<Company>> = flow {
-        emit(emptyList())
         companyDao
             .selectFavourites()
             .flowOn(Dispatchers.IO)

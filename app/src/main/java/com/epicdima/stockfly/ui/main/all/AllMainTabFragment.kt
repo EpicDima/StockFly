@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -32,14 +35,17 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
     }
 
     override fun setupList() {
-        viewModel.companies.observe(viewLifecycleOwner) {
-            lifecycleScope.launch(Dispatchers.Default) {
-                companyAdapter.submitCompanyList(it, requireContext())
+        viewModel.companies
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
+                    companyAdapter.submitCompanyList(it, requireContext())
+                }
+                binding.apply {
+                    recyclerView.isVisible = it.isNotEmpty()
+                    emptyTextview.isVisible = it.isEmpty()
+                }
             }
-            binding.apply {
-                recyclerView.isVisible = it.isNotEmpty()
-                emptyTextview.isVisible = it.isEmpty()
-            }
-        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

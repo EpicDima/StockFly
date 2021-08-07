@@ -102,9 +102,9 @@ dependencies {
     Dependencies.lifecycle.apply {
         implementation(common)
         implementation(extensions)
+        implementation(runtimeKtx)
         implementation(viewModelKtx)
         implementation(viewModelSavedstate)
-        implementation(livedataKtx)
         implementation(archExt)
     }
 

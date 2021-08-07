@@ -8,11 +8,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentChartBinding
 import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -43,28 +48,37 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.company.observe(viewLifecycleOwner) {
-            binding.current.text = it.currentString
-            binding.change.text =
-                if (it != null) it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")") else ""
-            binding.change.setTextColor(
-                binding.getColor(
-                    when {
-                        it.changeString.startsWith("+") -> R.color.green
-                        it.changeString.startsWith("-") -> R.color.red
-                        else -> R.color.black
-                    }
-                )
-            )
-            binding.buyButton.text =
-                if (it != null) getString(R.string.buy_stock, it.currentString) else ""
-            binding.buyButton.visibility = if (it?.quote != null) View.VISIBLE else View.INVISIBLE
-        }
+        viewModel.loading
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                binding.chart.visibility = if (it) View.INVISIBLE else View.VISIBLE
+                binding.progressBar.isVisible = it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.loading.observe(viewLifecycleOwner) {
-            binding.chart.visibility = if (it) View.INVISIBLE else View.VISIBLE
-            binding.progressBar.isVisible = it
-        }
+        viewModel.company
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .filterNotNull()
+            .onEach {
+                binding.apply {
+                    current.text = it.currentString
+                    val changeText = it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")")
+                    change.text = changeText
+                    change.setTextColor(
+                        getColor(
+                            when {
+                                it.changeString.startsWith("+") -> R.color.green
+                                it.changeString.startsWith("-") -> R.color.red
+                                else -> R.color.black
+                            }
+                        )
+                    )
+                    buyButton.text =
+                        getString(R.string.buy_stock, it.currentString)
+                    buyButton.visibility = if (it.quote != null) View.VISIBLE else View.INVISIBLE
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         setupDateButtons()
         setupBuyButton()
@@ -95,14 +109,21 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
     }
 
     private fun setupObservers() {
-        viewModel.stockCandles.observe(viewLifecycleOwner) {
-            binding.chart.updateData(it, viewModel.brandNewData, viewModel.brandNewData)
-        }
-        viewModel.stockCandleParam.observe(viewLifecycleOwner) {
-            unselectButtonByParam(viewModel.previousStockCandleParam)
-            selectButtonByParam(it)
-            binding.chart.updateFormat(it.format)
-        }
+        viewModel.stockCandles
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                binding.chart.updateData(it, viewModel.brandNewData, viewModel.brandNewData)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.stockCandleParam
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                unselectButtonByParam(viewModel.previousStockCandleParam)
+                selectButtonByParam(it)
+                binding.chart.updateFormat(it.format)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun unselectButtonByParam(stockCandleParam: StockCandleParam?) {

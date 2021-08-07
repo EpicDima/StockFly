@@ -13,7 +13,7 @@ object Versions {
 
     const val material = "1.4.0"
 
-    const val lifecycle = "2.3.1"
+    const val lifecycle = "2.4.0-alpha03" // для использования repeatOnLifecycle
     const val lifecycleExt = "2.2.0"
     const val archLfecycleExt = "1.1.1"
 

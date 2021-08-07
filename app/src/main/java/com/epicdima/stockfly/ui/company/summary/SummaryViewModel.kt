@@ -1,11 +1,14 @@
 package com.epicdima.stockfly.ui.company.summary
 
-import androidx.lifecycle.*
-import com.epicdima.stockfly.base.DownloadableViewModel
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -13,37 +16,21 @@ import javax.inject.Inject
 class SummaryViewModel @Inject constructor(
     private val repository: Repository,
     state: SavedStateHandle
-) : DownloadableViewModel() {
+) : ViewModel() {
 
     private val ticker = state.get<String>(SummaryFragment.TICKER_KEY)!!
 
-    private val _company = MutableLiveData<Company>()
-    val company: LiveData<Company> = _company
+    private val _company = MutableStateFlow<Company?>(null)
+    val company: StateFlow<Company?> = _company.asStateFlow()
 
     init {
         Timber.v("init with ticker '%s'", ticker)
 
-        startJob(Dispatchers.Main) {
-            startTimeoutJob()
-            repository.getCompany(ticker).asLiveData(viewModelScope.coroutineContext)
-                .observeForever {
-                    if (stopTimeoutJob()) {
-                        Timber.i("loaded company %s", it)
-                        _company.postValue(it)
-                        stopLoading()
-                    }
-                }
+        viewModelScope.launch(Dispatchers.Main) {
+            repository.getCompany(ticker).collect {
+                Timber.i("loaded company %s", it)
+                _company.value = it
+            }
         }
-    }
-
-    override fun onTimeout() {
-        Timber.i("onTimeout")
-        setError()
-    }
-
-    override fun onError(e: Throwable) {
-        Timber.w(e, "onError")
-        stopTimeoutJob()
-        setError()
     }
 }

@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.base.BaseViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentRecommendationBinding
 import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -29,18 +33,6 @@ class RecommendationFragment :
 
     override val _viewModel: RecommendationViewModel by viewModels()
 
-    private val initialObserver: Observer<Pair<String, String>> by lazy {
-        Observer<Pair<String, String>> {
-            binding.periodSlider.apply {
-                stepSize = 1.0f
-                valueFrom = 0.0f
-                valueTo = (viewModel.length - 1).toFloat()
-                values = listOf(viewModel.beginIndex.toFloat(), viewModel.endIndex.toFloat())
-            }
-            viewModel.periodRange.removeObserver(initialObserver)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,14 +46,20 @@ class RecommendationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loading.observe(viewLifecycleOwner) {
-            binding.progressBarWidget.root.isVisible = it
-            checkVisibility()
-        }
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorWidget.root.isVisible = it
-            checkVisibility()
-        }
+        viewModel.loading
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                binding.progressBarWidget.root.isVisible = it
+                checkVisibility()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.error
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                binding.errorWidget.root.isVisible = it
+                checkVisibility()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         setupSlider()
         setupObservers()
     }
@@ -74,15 +72,25 @@ class RecommendationFragment :
     }
 
     private fun setupObservers() {
-        viewModel.periodRange.observe(viewLifecycleOwner, initialObserver)
-        viewModel.periodRange.observe(viewLifecycleOwner) {
-            binding.apply {
-                beginDate.text = it.first
-                endDate.text = it.second
-                recommendationView.updateData(viewModel.recommendations, viewModel.brandNewData)
-                checkVisibility()
+        viewModel.periodRange
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .filterNotNull()
+            .onEach {
+                binding.apply {
+                    periodSlider.apply {
+                        stepSize = 1.0f
+                        valueFrom = 0.0f
+                        valueTo = (viewModel.length - 1).toFloat()
+                        values =
+                            listOf(viewModel.beginIndex.toFloat(), viewModel.endIndex.toFloat())
+                    }
+                    beginDate.text = it.first
+                    endDate.text = it.second
+                    recommendationView.updateData(viewModel.recommendations, viewModel.brandNewData)
+                    checkVisibility()
+                }
             }
-        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun checkVisibility() {

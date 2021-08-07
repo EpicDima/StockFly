@@ -8,7 +8,8 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.BaseViewModelFragment
@@ -24,6 +25,8 @@ import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment
 import com.epicdima.stockfly.ui.company.summary.SummaryFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -43,8 +46,6 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
     override val _viewModel: CompanyViewModel by viewModels()
 
     private lateinit var titles: Array<String>
-
-    private lateinit var createAdapterObserver: Observer<Company>
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
@@ -69,19 +70,24 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
                 this@CompanyFragment
             )
         }
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorWidget.root.isVisible = it
-            binding.favouriteButton.visibility =
-                if (viewModel.company.value != null && it != true) View.VISIBLE else View.INVISIBLE
-            binding.tabLayout.isVisible = (viewModel.company.value != null && it != true)
-            binding.viewPager.isVisible = (viewModel.company.value != null && it != true)
-            binding.progressBarWidget.root.isVisible = (viewModel.company.value == null && it != true)
-        }
-        viewModel.company.observe(viewLifecycleOwner) {
-            setCompany(it)
-        }
+        viewModel.error
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                binding.errorWidget.root.isVisible = it
+                binding.favouriteButton.visibility =
+                    if (viewModel.company.value != null && !it) View.VISIBLE else View.INVISIBLE
+                binding.tabLayout.isVisible = (viewModel.company.value != null && !it)
+                binding.viewPager.isVisible = (viewModel.company.value != null && !it)
+                binding.progressBarWidget.root.isVisible =
+                    (viewModel.company.value == null && !it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        setSingleEventForTabAdapterCreation()
+        viewModel.company
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { setCompany(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
         setupClickListeners()
         setupTabs()
     }
@@ -90,32 +96,29 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         binding.ticker.text = company?.ticker ?: ""
         binding.name.text = company?.name ?: ""
         binding.favouriteButton.visibility =
-            if (company != null && viewModel.error.value != true) View.VISIBLE else View.INVISIBLE
+            if (company != null && !viewModel.error.value) View.VISIBLE else View.INVISIBLE
         binding.favouriteIcon.setImageResource(if (company?.favourite == true) R.drawable.ic_star_selected else R.drawable.ic_star)
-        binding.tabLayout.isVisible = (company != null && viewModel.error.value != true)
-        binding.viewPager.isVisible = (company != null && viewModel.error.value != true)
-        binding.progressBarWidget.root.isVisible = (company == null && viewModel.error.value != true)
-    }
-
-    private fun setSingleEventForTabAdapterCreation() {
-        Timber.v("setSingleEventForTabAdapterCreation")
-        createAdapterObserver = Observer<Company> {
-            viewModel.company.removeObserver(createAdapterObserver)
-            setCompany(viewModel.company.value)
-        }
-        viewModel.company.observe(viewLifecycleOwner, createAdapterObserver)
+        binding.tabLayout.isVisible = (company != null && !viewModel.error.value)
+        binding.viewPager.isVisible = (company != null && !viewModel.error.value)
+        binding.progressBarWidget.root.isVisible =
+            (company == null && !viewModel.error.value)
     }
 
     private fun setupTabs() {
         binding.apply {
-            tabLayoutMediator = tabLayout.customize(viewPager, R.layout.company_tab_item_layout, titles, onSelect = {
-                it.set(
-                    resources.getDimensionInSp(R.dimen.company_tab_selected_textsize),
-                    R.color.black
-                )
-            }, onUnselect = {
-                it.set(resources.getDimensionInSp(R.dimen.company_tab_textsize), R.color.dark)
-            })
+            tabLayoutMediator = tabLayout.customize(
+                viewPager,
+                R.layout.company_tab_item_layout,
+                titles,
+                onSelect = {
+                    it.set(
+                        resources.getDimensionInSp(R.dimen.company_tab_selected_textsize),
+                        R.color.black
+                    )
+                },
+                onUnselect = {
+                    it.set(resources.getDimensionInSp(R.dimen.company_tab_textsize), R.color.dark)
+                })
             tabLayout.getTabAt(0)?.select()
         }
     }

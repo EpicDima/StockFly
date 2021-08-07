@@ -14,11 +14,9 @@ import timber.log.Timber
 abstract class MainTabFragment<VM : ViewModel> :
     BaseViewModelFragment<VM, FragmentTabMainBinding>() {
 
-    protected val companyAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        CompanyAdapter { ticker ->
-            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
-                .openCompanyFragment(ticker)
-        }
+    protected val companyAdapter = CompanyAdapter { ticker ->
+        (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+            .openCompanyFragment(ticker)
     }
 
     override fun onCreateView(

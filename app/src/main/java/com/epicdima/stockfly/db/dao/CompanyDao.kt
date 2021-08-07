@@ -8,7 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface CompanyDao {
 
     @Query("SELECT * FROM companies WHERE ticker = :ticker")
-    suspend fun select(ticker: String): CompanyEntity?
+    suspend fun selectAsModel(ticker: String): CompanyEntity?
+
+    @Query("SELECT * FROM companies WHERE ticker = :ticker")
+    fun select(ticker: String): Flow<CompanyEntity?>
 
     @Query("SELECT * FROM companies")
     suspend fun selectAllAsList(): List<CompanyEntity>
@@ -37,7 +40,7 @@ interface CompanyDao {
     @Transaction
     suspend fun upsertAndSelect(company: CompanyEntity): CompanyEntity {
         if (insert(company) == -1L) {
-            val existing = select(company.ticker)!!
+            val existing = selectAsModel(company.ticker)!!
             update(
                 company.copy(
                     favourite = existing.favourite,
@@ -45,6 +48,6 @@ interface CompanyDao {
                 )
             )
         }
-        return select(company.ticker)!!
+        return selectAsModel(company.ticker)!!
     }
 }

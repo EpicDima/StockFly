@@ -57,10 +57,6 @@ class AppRepository(
     override val searchedRequests: List<String>
         get() = getSearched(stringListAdapter)
 
-    init {
-        Timber.i("init")
-    }
-
     private fun getSearched(adapter: JsonAdapter<List<String>>): List<String> {
         return adapter.fromJson(preferences.getSearched() ?: EMPTY_JSON_STRING)!!
     }
@@ -78,7 +74,7 @@ class AppRepository(
     override suspend fun search(query: String): List<Company> {
         return apiService.search(query).result
             .filter { !isWrongTicker(it.ticker) }
-            .map { companyDao.select(it.ticker)?.toModel() ?: it.toModel() }
+            .map { companyDao.selectAsModel(it.ticker)?.toModel() ?: it.toModel() }
     }
 
     private fun isWrongTicker(ticker: String): Boolean {
@@ -115,7 +111,7 @@ class AppRepository(
     override suspend fun refreshCompanies() {
         val list = companyDao.selectAllAsList()
         companyDao.update(list.mapNotNull {
-            val existing = companyDao.select(it.ticker)!!
+            val existing = companyDao.selectAsModel(it.ticker)!!
             getCompanyWithQuote(it.ticker)?.toEntity()?.copy(
                 favourite = existing.favourite,
                 favouriteNumber = existing.favouriteNumber
@@ -124,7 +120,7 @@ class AppRepository(
     }
 
     override suspend fun changeFavourite(company: Company) {
-        val fromDb = companyDao.select(company.ticker)!!.toModel()
+        val fromDb = companyDao.selectAsModel(company.ticker)!!.toModel()
         companyDao.update(fromDb.copy(favourite = !fromDb.favourite).toEntity())
         val list = companyDao
             .selectFavouritesAsList()
@@ -147,11 +143,12 @@ class AppRepository(
     }
 
     override fun getCompany(ticker: String): Flow<Company> {
-        return flow {
-            companyDao.select(ticker)?.let {
-                emit(it.toModel())
-            }
-        }.flowOn(Dispatchers.IO)
+        return companyDao.select(ticker)
+            .flowOn(Dispatchers.IO)
+            .filterNotNull()
+            .map { it.toModel() }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
     }
 
     override fun getCompanyWithRefresh(
@@ -159,7 +156,7 @@ class AppRepository(
     ): Flow<Company> {
         return getDataWithRefresh(
             getFromDatabase = {
-                companyDao.select(ticker)!!.toModel()
+                companyDao.selectAsModel(ticker)!!.toModel()
             },
             getFromApi = {
                 getCompanyWithQuote(ticker)!!

@@ -11,26 +11,48 @@ import com.epicdima.stockfly.R
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.executeImageRequest
 import com.epicdima.stockfly.ui.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.coroutines.EmptyCoroutineContext
 
 class ShortcutConfigurator(
     private val context: Context
 ) {
+    private val companiesShortcutsQueueMutableFlow = MutableStateFlow<List<Company>>(emptyList())
+
+    init {
+        CoroutineScope(EmptyCoroutineContext).launch {
+            companiesShortcutsQueueMutableFlow
+                .debounce(2500)
+                .map { list -> list.take(maxFavouriteShortcutsNumber - 1) }
+                .distinctUntilChanged()
+                .map { list -> list.map { createShortcut(it) } }
+                .flowOn(Dispatchers.Default)
+                .collect { list ->
+                    Timber.v("real updateShortcuts")
+                    ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+                    ShortcutManagerCompat.addDynamicShortcuts(context, list)
+                }
+        }
+    }
+
     private val maxFavouriteShortcutsNumber = ShortcutManagerCompat
         .getMaxShortcutCountPerActivity(context) - 1
 
     private val defaultCompanyShortcutIntent = Intent(context, MainActivity::class.java)
         .setAction(Intent.ACTION_VIEW)
 
-    suspend fun updateShortcuts(list: List<Company>) {
-        Timber.i("updateShortcuts %s", list)
+    private val defaultCompanyShortcutIcon = IconCompat.createWithResource(
+        context,
+        R.mipmap.ic_launcher_round
+    )
 
-        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-        ShortcutManagerCompat.addDynamicShortcuts(
-            context,
-            list.take(maxFavouriteShortcutsNumber - 1)
-                .map { createShortcut(it) }
-        )
+    fun updateShortcuts(list: List<Company>) {
+        Timber.i("updateShortcuts")
+        companiesShortcutsQueueMutableFlow.value = list
     }
 
     private suspend fun createShortcut(company: Company): ShortcutInfoCompat {
@@ -48,17 +70,10 @@ class ShortcutConfigurator(
     }
 
     private suspend fun createCompanyIcon(company: Company): IconCompat {
-        val bitmap = context.executeImageRequest(company.logoUrl)
+        return context.executeImageRequest(company.logoUrl)
             .drawable
             ?.toBitmap()
-
-        return if (bitmap != null) {
-            IconCompat.createWithBitmap(bitmap)
-        } else {
-            IconCompat.createWithResource(
-                context,
-                R.mipmap.ic_launcher_round
-            )
-        }
+            ?.let { IconCompat.createWithBitmap(it) }
+            ?: defaultCompanyShortcutIcon
     }
 }

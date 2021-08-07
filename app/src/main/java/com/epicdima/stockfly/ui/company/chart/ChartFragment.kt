@@ -73,8 +73,7 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
                             }
                         )
                     )
-                    buyButton.text =
-                        getString(R.string.buy_stock, it.currentString)
+                    buyButton.text = getString(R.string.buy_stock, it.currentString)
                     buyButton.visibility = if (it.quote != null) View.VISIBLE else View.INVISIBLE
                 }
             }

@@ -77,12 +77,14 @@ class RecommendationFragment :
             .filterNotNull()
             .onEach {
                 binding.apply {
-                    periodSlider.apply {
-                        stepSize = 1.0f
-                        valueFrom = 0.0f
-                        valueTo = (viewModel.length - 1).toFloat()
-                        values =
-                            listOf(viewModel.beginIndex.toFloat(), viewModel.endIndex.toFloat())
+                    if (viewModel.length > 0) {
+                        periodSlider.apply {
+                            stepSize = 1.0f
+                            valueFrom = 0.0f
+                            valueTo = (viewModel.length - 1).toFloat()
+                            values =
+                                listOf(viewModel.beginIndex.toFloat(), viewModel.endIndex.toFloat())
+                        }
                     }
                     beginDate.text = it.first
                     endDate.text = it.second
@@ -97,10 +99,10 @@ class RecommendationFragment :
         binding.recommendationView.isVisible =
             viewModel.loading.value != true && viewModel.error.value != true
         binding.periodSlider.isVisible =
-            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value || viewModel.error.value)
         binding.beginDate.isVisible =
-            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value || viewModel.error.value)
         binding.endDate.isVisible =
-            !(viewModel.recommendations.isEmpty() || viewModel.loading.value == true || viewModel.error.value == true)
+            !(viewModel.recommendations.isEmpty() || viewModel.loading.value || viewModel.error.value)
     }
 }

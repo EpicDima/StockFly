@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -39,7 +40,7 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
 
     override fun setupList() {
         viewModel.companies
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
                     companyAdapter.submitCompanyList(it, requireContext())

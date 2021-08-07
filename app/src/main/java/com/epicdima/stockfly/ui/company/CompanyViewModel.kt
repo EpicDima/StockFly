@@ -32,10 +32,15 @@ class CompanyViewModel @Inject constructor(
                 .collect {
                     if (stopTimeoutJob()) {
                         _company.value = it
-                        Timber.i("loaded company %s", it)
                         stopLoading()
                     }
                 }
+        }
+        viewModelScope.launch {
+            repository.getCompany(ticker).collect {
+                _company.value = it
+                Timber.i("loaded company %s", it)
+            }
         }
     }
 

@@ -7,10 +7,7 @@ import com.epicdima.stockfly.repository.Repository
 import com.epicdima.stockfly.shortcut.ShortcutConfigurator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,11 +19,8 @@ class FavouriteMainTabViewModel @Inject constructor(
 ) : ViewModel() {
 
     val companies: StateFlow<List<Company>> = repository.favourites
-        .onEach {
-            viewModelScope.launch(Dispatchers.Default) {
-                shortcutConfigurator.updateShortcuts(it)
-            }
-        }
+        .distinctUntilChanged()
+        .onEach { shortcutConfigurator.updateShortcuts(it) }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun changeFavouriteNumber(from: Int, to: Int) {

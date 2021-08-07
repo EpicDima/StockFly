@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.main.favourite
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
 import com.epicdima.stockfly.shortcut.ShortcutConfigurator
@@ -19,7 +16,8 @@ class FavouriteMainTabViewModel @Inject constructor(
     private val shortcutConfigurator: ShortcutConfigurator,
 ) : ViewModel() {
 
-    val companies: LiveData<List<Company>> = repository.favourites
+    val companies: LiveData<List<Company>> =
+        repository.favourites.asLiveData(viewModelScope.coroutineContext)
 
     private val favouritesLiveData: LiveData<List<Company>>
     private val favouritesObserver: Observer<List<Company>>
@@ -31,9 +29,10 @@ class FavouriteMainTabViewModel @Inject constructor(
                 shortcutConfigurator.updateShortcuts(it)
             }
         }
-        favouritesLiveData = repository.favourites.apply {
-            observeForever(favouritesObserver)
-        }
+        favouritesLiveData =
+            repository.favourites.asLiveData(viewModelScope.coroutineContext).apply {
+                observeForever(favouritesObserver)
+            }
     }
 
     fun changeFavouriteNumber(from: Int, to: Int) {

@@ -39,9 +39,11 @@ class CompanyViewModel @Inject constructor(
                     Timber.i("loaded company %s", it)
                 }
             }
-            companyLiveData = repository.getCompanyWithRefresh(ticker, viewModelScope).apply {
-                observeForever(companyObserver)
-            }
+            companyLiveData =
+                repository.getCompanyWithRefresh(ticker).asLiveData(viewModelScope.coroutineContext)
+                    .apply {
+                        observeForever(companyObserver)
+                    }
         }
 
         favouritesObserver = Observer {
@@ -49,9 +51,10 @@ class CompanyViewModel @Inject constructor(
                 shortcutConfigurator.updateShortcuts(it)
             }
         }
-        favouritesLiveData = repository.favourites.apply {
-            observeForever(favouritesObserver)
-        }
+        favouritesLiveData =
+            repository.favourites.asLiveData(viewModelScope.coroutineContext).apply {
+                observeForever(favouritesObserver)
+            }
     }
 
     fun changeFavourite() = viewModelScope.launch(Dispatchers.IO) {

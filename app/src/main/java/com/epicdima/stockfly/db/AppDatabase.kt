@@ -15,8 +15,6 @@ import com.epicdima.stockfly.db.entity.RecommendationEntity
 import com.epicdima.stockfly.db.entity.StockCandleItemEntity
 import com.epicdima.stockfly.db.other.StockCandleParamConverter
 
-private const val DATABASE_NAME = "stockfly.db"
-
 @Database(
     version = 9,
     entities = [
@@ -28,19 +26,21 @@ private const val DATABASE_NAME = "stockfly.db"
 )
 @TypeConverters(StockCandleParamConverter::class)
 abstract class AppDatabase : RoomDatabase(), com.epicdima.stockfly.db.Database {
+
     abstract override fun companyDao(): CompanyDao
+
     abstract override fun newsItemDao(): NewsItemDao
+
     abstract override fun recommendationDao(): RecommendationDao
+
     abstract override fun stockCandlesDao(): StockCandlesDao
 }
 
+
 fun buildDatabase(context: Context): AppDatabase {
-    // Так как используется Hilt (Dagger), следовательно не будет создаваться больше одного
-    // экземпляра базы данных, то есть нет смысла делать синглтон внутри этого класса,
-    // как например это делается во многих туториалах
     return Room.databaseBuilder(
         context.applicationContext,
-        AppDatabase::class.java, DATABASE_NAME
+        AppDatabase::class.java, "stockfly.db"
     )
         .fallbackToDestructiveMigration()
         .build()

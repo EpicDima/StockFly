@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.company.chart
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.model.StockCandles
@@ -29,10 +26,11 @@ class ChartViewModel @Inject constructor(
     val previousStockCandleParam: StockCandleParam?
         get() = _previousStockCandleParam
 
-    val company: LiveData<Company> = repository.getCompany(ticker).map {
-        updateChart()
-        it
-    }
+    val company: LiveData<Company> =
+        repository.getCompany(ticker).asLiveData(viewModelScope.coroutineContext).map {
+            updateChart()
+            it
+        }
 
     private val _stockCandles = MutableLiveData<StockCandles?>()
     val stockCandles: LiveData<StockCandles?> = _stockCandles

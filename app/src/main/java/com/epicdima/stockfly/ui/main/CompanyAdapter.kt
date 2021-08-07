@@ -17,7 +17,6 @@ import com.epicdima.stockfly.R
 import com.epicdima.stockfly.databinding.ItemCompanyBinding
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.createUri
-import com.epicdima.stockfly.other.getColor
 import timber.log.Timber
 
 class CompanyAdapter(
@@ -42,6 +41,7 @@ class CompanyAdapter(
             ).apply {
                 rootCardBackgroundColor =
                     getColor(context.applicationContext, rootCardBackgroundColorId)
+                logoBackgroundColor = getColor(context.applicationContext, logoBackgroundColorId)
                 favouriteIcon = getDrawable(context.applicationContext, favouriteIconId)
                 changeTextColor = getColor(context.applicationContext, changeTextColorId)
             }
@@ -106,7 +106,7 @@ class CompanyAdapter(
         private fun setLogo(logo: ImageView, companyItem: CompanyViewHolderItem) {
             logo.apply {
                 setImageDrawable(null)
-                setBackgroundColor(binding.getColor(companyItem.logoBackgroundColor))
+                setBackgroundColor(companyItem.logoBackgroundColor)
                 if (companyItem.logoUrl.isNotBlank()) {
                     logoDisposable = load(createUri(companyItem.logoUrl)) {
                         target {
@@ -175,11 +175,12 @@ class CompanyViewHolderItem(
     }
     var rootCardBackgroundColor = 0
 
-    val logoBackgroundColor = if (position % 2 == 0) {
+    val logoBackgroundColorId = if (position % 2 == 0) {
         R.color.white
     } else {
         R.color.light
     }
+    var logoBackgroundColor: Int = 0
 
     val favouriteIconId = if (favourite) {
         R.drawable.ic_star_solid_selected

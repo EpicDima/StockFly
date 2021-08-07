@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.company.recomendation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Recommendation
 import com.epicdima.stockfly.repository.Repository
@@ -66,7 +63,8 @@ class RecommendationViewModel @Inject constructor(
         startLoading()
         startTimeoutJob()
         startJob(Dispatchers.Main) {
-            repository.getCompanyRecommendationsWithRefresh(ticker, viewModelScope).observeForever {
+            repository.getCompanyRecommendationsWithRefresh(ticker)
+                .asLiveData(viewModelScope.coroutineContext).observeForever {
                 if (stopTimeoutJob()) {
                     Timber.i("loaded recommendations %s", it)
                     _recommendations.addAll(it)

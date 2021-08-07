@@ -3,6 +3,7 @@ package com.epicdima.stockfly.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.epicdima.stockfly.db.entity.CompanyEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CompanyDao {
@@ -14,13 +15,13 @@ interface CompanyDao {
     suspend fun selectAllAsList(): List<CompanyEntity>
 
     @Query("SELECT * FROM companies")
-    fun selectAll(): LiveData<List<CompanyEntity>>
+    fun selectAll(): Flow<List<CompanyEntity>>
 
     @Query("SELECT * FROM companies WHERE favourite = 1 ORDER BY favouriteNumber")
     suspend fun selectFavouritesAsList(): List<CompanyEntity>
 
     @Query("SELECT * FROM companies WHERE favourite = 1 ORDER BY favouriteNumber")
-    fun selectFavourites(): LiveData<List<CompanyEntity>>
+    fun selectFavourites(): Flow<List<CompanyEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(company: CompanyEntity): Long

@@ -1,8 +1,6 @@
 package com.epicdima.stockfly.repository
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.epicdima.stockfly.api.ApiService
 import com.epicdima.stockfly.api.response.toModel
 import com.epicdima.stockfly.db.dao.CompanyDao
@@ -16,10 +14,8 @@ import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.other.getSearched
 import com.epicdima.stockfly.other.setSearched
 import com.squareup.moshi.JsonAdapter
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.*
 
@@ -36,35 +32,35 @@ class AppRepository(
     private val stringListAdapter: JsonAdapter<List<String>>,
 ) : Repository {
 
-    private val _companies = MutableLiveData<List<Company>>()
-    override val companies: LiveData<List<Company>> = _companies
+    override val companies: Flow<List<Company>> = flow {
+        emit(emptyList())
+        companyDao
+            .selectAll()
+            .flowOn(Dispatchers.IO)
+            .map { list ->
+                list.map { it.toModel() }
+            }
+            .flowOn(Dispatchers.Default)
+            .collect { emit(it) }
+    }
 
-    private val _favourites = MutableLiveData<List<Company>>()
-    override val favourites: LiveData<List<Company>> = _favourites
+    override val favourites: Flow<List<Company>> = flow {
+        emit(emptyList())
+        companyDao
+            .selectFavourites()
+            .flowOn(Dispatchers.IO)
+            .map { list ->
+                list.map { it.toModel() }
+            }
+            .flowOn(Dispatchers.Default)
+            .collect { emit(it) }
+    }
 
     override val searchedRequests: List<String>
         get() = getSearched(stringListAdapter)
 
     init {
         Timber.i("init")
-        observeCompanies()
-        observeFavourites()
-    }
-
-    private fun observeCompanies() {
-        companyDao.selectAll().observeForever { list ->
-            GlobalScope.launch(Dispatchers.IO) {
-                _companies.postValue(list.map { it.toModel() })
-            }
-        }
-    }
-
-    private fun observeFavourites() {
-        companyDao.selectFavourites().observeForever { list ->
-            GlobalScope.launch(Dispatchers.IO) {
-                _favourites.postValue(list.map { it.toModel() })
-            }
-        }
     }
 
     private fun getSearched(adapter: JsonAdapter<List<String>>): List<String> {
@@ -152,21 +148,18 @@ class AppRepository(
         companyDao.update(list.mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) })
     }
 
-    override fun getCompany(ticker: String, coroutineScope: CoroutineScope): LiveData<Company> {
-        val company = MutableLiveData<Company>()
-        coroutineScope.launch(Dispatchers.IO) {
+    override fun getCompany(ticker: String): Flow<Company> {
+        return flow {
             companyDao.select(ticker)?.let {
-                company.postValue(it.toModel())
+                emit(it.toModel())
             }
-        }
-        return company
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getCompanyWithRefresh(
         ticker: String,
-        coroutineScope: CoroutineScope
-    ): LiveData<Company> {
-        return getDataWithRefresh(coroutineScope,
+    ): Flow<Company> {
+        return getDataWithRefresh(
             getFromDatabase = {
                 companyDao.select(ticker)!!.toModel()
             },
@@ -197,10 +190,9 @@ class AppRepository(
     }
 
     override fun getCompanyNewsWithRefresh(
-        ticker: String,
-        coroutineScope: CoroutineScope
-    ): LiveData<List<NewsItem>> {
-        return getDataWithRefresh(coroutineScope,
+        ticker: String
+    ): Flow<List<NewsItem>> {
+        return getDataWithRefresh(
             getFromDatabase = {
                 newsItemDao.select(ticker).map { it.toModel() }
             },
@@ -215,10 +207,9 @@ class AppRepository(
     }
 
     override fun getCompanyRecommendationsWithRefresh(
-        ticker: String,
-        coroutineScope: CoroutineScope
-    ): LiveData<List<Recommendation>> {
-        return getDataWithRefresh(coroutineScope,
+        ticker: String
+    ): Flow<List<Recommendation>> {
+        return getDataWithRefresh(
             getFromDatabase = {
                 recommendationDao.select(ticker).map { it.toModel() }
             },
@@ -233,24 +224,21 @@ class AppRepository(
     }
 
     private fun <T> getDataWithRefresh(
-        coroutineScope: CoroutineScope,
         getFromDatabase: suspend () -> T,
         getFromApi: suspend () -> T,
         refreshDatabaseAndGetNew: suspend (value: T) -> T
-    ): LiveData<T> {
-        val liveData = MutableLiveData<T>()
-        coroutineScope.launch(Dispatchers.IO) {
-            kotlin.runCatching { getFromDatabase() }
-                .onSuccess { databaseData -> liveData.postValue(databaseData) }
+    ): Flow<T> {
+        return flow {
+            runCatching { getFromDatabase() }
+                .onSuccess { databaseData -> emit(databaseData) }
                 .onFailure { Timber.w(it, "getFromDatabase") }
-            kotlin.runCatching { getFromApi() }
+            runCatching { getFromApi() }
                 .onSuccess { apiData ->
-                    kotlin.runCatching { refreshDatabaseAndGetNew(apiData) }
-                        .onSuccess { databaseData -> liveData.postValue(databaseData) }
+                    runCatching { refreshDatabaseAndGetNew(apiData) }
+                        .onSuccess { databaseData -> emit(databaseData) }
                         .onFailure { Timber.w(it, "refreshDbAndGetNew") }
                 }
                 .onFailure { Timber.w(it, "getFromApi") }
-        }
-        return liveData
+        }.flowOn(Dispatchers.IO)
     }
 }

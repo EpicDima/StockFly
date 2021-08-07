@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.company.summary
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.repository.Repository
@@ -28,13 +25,14 @@ class SummaryViewModel @Inject constructor(
 
         startJob(Dispatchers.Main) {
             startTimeoutJob()
-            repository.getCompany(ticker, viewModelScope).observeForever {
-                if (stopTimeoutJob()) {
-                    Timber.i("loaded company %s", it)
-                    _company.postValue(it)
-                    stopLoading()
+            repository.getCompany(ticker).asLiveData(viewModelScope.coroutineContext)
+                .observeForever {
+                    if (stopTimeoutJob()) {
+                        Timber.i("loaded company %s", it)
+                        _company.postValue(it)
+                        stopLoading()
+                    }
                 }
-            }
         }
     }
 

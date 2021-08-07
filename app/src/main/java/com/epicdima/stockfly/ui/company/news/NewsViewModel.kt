@@ -1,9 +1,6 @@
 package com.epicdima.stockfly.ui.company.news
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.NewsItem
 import com.epicdima.stockfly.repository.Repository
@@ -29,13 +26,14 @@ class NewsViewModel @Inject constructor(
         startLoading()
         startTimeoutJob()
         startJob(Dispatchers.Main) {
-            repository.getCompanyNewsWithRefresh(ticker, viewModelScope).observeForever {
-                Timber.i("loaded news %s", it)
-                if (stopTimeoutJob()) {
-                    _news.postValue(it)
-                    stopLoading()
+            repository.getCompanyNewsWithRefresh(ticker).asLiveData(viewModelScope.coroutineContext)
+                .observeForever {
+                    Timber.i("loaded news %s", it)
+                    if (stopTimeoutJob()) {
+                        _news.postValue(it)
+                        stopLoading()
+                    }
                 }
-            }
         }
     }
 

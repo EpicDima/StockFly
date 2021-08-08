@@ -28,7 +28,7 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
         }
     }
 
-    override val _viewModel: AllMainTabViewModel by viewModels()
+    override val viewModel: AllMainTabViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

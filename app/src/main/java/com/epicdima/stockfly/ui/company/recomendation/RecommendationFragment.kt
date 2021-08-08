@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentRecommendationBinding
 import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +19,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class RecommendationFragment :
-    BaseViewModelFragment<RecommendationViewModel, FragmentRecommendationBinding>() {
+    ViewModelFragment<RecommendationViewModel, FragmentRecommendationBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker_recommendations"
@@ -31,16 +31,13 @@ class RecommendationFragment :
         }
     }
 
-    override val _viewModel: RecommendationViewModel by viewModels()
+    override val viewModel: RecommendationViewModel by viewModels()
 
-    override fun onCreateView(
+    override fun inflateBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentRecommendationBinding.inflate(inflater, container, false)
-        return binding.root
+        container: ViewGroup?
+    ): FragmentRecommendationBinding {
+        return FragmentRecommendationBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

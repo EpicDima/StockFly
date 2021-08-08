@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
+class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
 
     companion object {
         @JvmStatic
@@ -47,7 +47,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         }
     }
 
-    override val _viewModel: SearchViewModel by viewModels()
+    override val viewModel: SearchViewModel by viewModels()
 
     private val onChipClick: (String) -> Unit = {
         Timber.i("onChipClick %s", it)
@@ -59,13 +59,11 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel, FragmentSearchBind
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

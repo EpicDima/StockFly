@@ -2,9 +2,9 @@ package com.epicdima.stockfly.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.epicdima.stockfly.base.BaseDiffUtilCallback
 import com.epicdima.stockfly.databinding.ItemSearchChipBinding
 
 class SearchChipAdapter(
@@ -42,4 +42,13 @@ class SearchChipAdapter(
 }
 
 
-private val DIFF_CALLBACK = BaseDiffUtilCallback<String>()
+private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<String>() {
+
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
+    }
+}

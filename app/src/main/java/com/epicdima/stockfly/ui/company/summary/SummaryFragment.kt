@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.flowWithLifecycle
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.*
 import com.epicdima.stockfly.ui.MainRouter
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
+class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker_summary"
@@ -32,15 +32,13 @@ class SummaryFragment : BaseViewModelFragment<SummaryViewModel, FragmentSummaryB
         }
     }
 
-    override val _viewModel: SummaryViewModel by viewModels()
+    override val viewModel: SummaryViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentSummaryBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSummaryBinding {
+        return FragmentSummaryBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

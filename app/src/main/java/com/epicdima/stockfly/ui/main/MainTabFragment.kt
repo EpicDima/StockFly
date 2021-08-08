@@ -6,26 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.ui.MainRouter
 import timber.log.Timber
 
 abstract class MainTabFragment<VM : ViewModel> :
-    BaseViewModelFragment<VM, FragmentTabMainBinding>() {
+    ViewModelFragment<VM, FragmentTabMainBinding>() {
 
     protected val companyAdapter = CompanyAdapter { ticker ->
         (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
             .openCompanyFragment(ticker)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentTabMainBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentTabMainBinding {
+        return FragmentTabMainBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

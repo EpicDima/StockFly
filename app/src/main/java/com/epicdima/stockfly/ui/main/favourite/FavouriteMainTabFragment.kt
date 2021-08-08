@@ -31,7 +31,7 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
         }
     }
 
-    override val _viewModel: FavouriteMainTabViewModel by viewModels()
+    override val viewModel: FavouriteMainTabViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.MainRouter
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
+class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker_news"
@@ -31,15 +31,13 @@ class NewsFragment : BaseViewModelFragment<NewsViewModel, FragmentNewsBinding>()
         }
     }
 
-    override val _viewModel: NewsViewModel by viewModels()
+    override val viewModel: NewsViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentNewsBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentNewsBinding {
+        return FragmentNewsBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

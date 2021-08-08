@@ -10,12 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.core.view.isVisible
-import com.epicdima.stockfly.base.BaseFragment
+import com.epicdima.stockfly.base.ViewBindingFragment
 import com.epicdima.stockfly.databinding.FragmentWebviewBinding
 import com.epicdima.stockfly.other.setArgument
 import timber.log.Timber
 
-class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
+class WebViewFragment : ViewBindingFragment<FragmentWebviewBinding>() {
 
     companion object {
         private const val URL_KEY = "url"
@@ -27,14 +27,11 @@ class WebViewFragment : BaseFragment<FragmentWebviewBinding>() {
         }
     }
 
-    override fun onCreateView(
+    override fun inflateBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentWebviewBinding.inflate(inflater, container, false)
-        return binding.root
+        container: ViewGroup?
+    ): FragmentWebviewBinding {
+        return FragmentWebviewBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

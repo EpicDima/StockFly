@@ -8,7 +8,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.BaseFragment
+import com.epicdima.stockfly.base.ViewBindingFragment
 import com.epicdima.stockfly.databinding.FragmentMainBinding
 import com.epicdima.stockfly.other.customize
 import com.epicdima.stockfly.other.getDimensionInSp
@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainFragment : BaseFragment<FragmentMainBinding>() {
+class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
 
     companion object {
 
@@ -36,13 +36,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentMainBinding {
+        return FragmentMainBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

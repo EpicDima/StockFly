@@ -12,7 +12,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.customize
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
+class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker"
@@ -43,19 +43,17 @@ class CompanyFragment : BaseViewModelFragment<CompanyViewModel, FragmentCompanyB
         }
     }
 
-    override val _viewModel: CompanyViewModel by viewModels()
+    override val viewModel: CompanyViewModel by viewModels()
 
     private lateinit var titles: Array<String>
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentCompanyBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentCompanyBinding {
+        return FragmentCompanyBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

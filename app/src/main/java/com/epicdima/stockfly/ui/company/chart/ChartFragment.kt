@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.BaseViewModelFragment
+import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentChartBinding
 import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding>() {
+class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker_chart"
@@ -33,15 +33,13 @@ class ChartFragment : BaseViewModelFragment<ChartViewModel, FragmentChartBinding
         }
     }
 
-    override val _viewModel: ChartViewModel by viewModels()
+    override val viewModel: ChartViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Timber.v("onCreateView")
-        _binding = FragmentChartBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentChartBinding {
+        return FragmentChartBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

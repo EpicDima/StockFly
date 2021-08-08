@@ -39,11 +39,10 @@ class CompanyAdapter(
                 index,
                 company
             ).apply {
-                rootCardBackgroundColor =
-                    getColor(context.applicationContext, rootCardBackgroundColorId)
-                logoBackgroundColor = getColor(context.applicationContext, logoBackgroundColorId)
-                favouriteIcon = getDrawable(context.applicationContext, favouriteIconId)
-                changeTextColor = getColor(context.applicationContext, changeTextColorId)
+                rootCardBackgroundColor = getColor(context, rootCardBackgroundColorId)
+                logoBackgroundColor = getColor(context, logoBackgroundColorId)
+                favouriteIcon = getDrawable(context, favouriteIconId)
+                changeTextColor = getColor(context, changeTextColorId)
             }
         })
     }

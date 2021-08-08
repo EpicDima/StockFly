@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.util.Log.VERBOSE
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import coil.request.CachePolicy
 import coil.util.DebugLogger
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.Refresher

@@ -2,7 +2,8 @@ package com.epicdima.stockfly.other
 
 import android.content.SharedPreferences
 import com.epicdima.stockfly.repository.Repository
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -30,7 +31,7 @@ class Refresher(
     }
 
     private fun repeatOnError(function: suspend () -> Unit) {
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             while (true) {
                 try {
                     function()

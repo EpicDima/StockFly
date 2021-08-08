@@ -67,11 +67,11 @@ android {
     flavorDimensions("search")
     productFlavors {
         create("detailed") {
-            dimension("search")
+            dimension = "search"
             buildConfigField("boolean", "DETAILED_SEARCH", "true")
         }
         create("undetailed") {
-            dimension("search")
+            dimension = "search"
             buildConfigField("boolean", "DETAILED_SEARCH", "false")
         }
     }

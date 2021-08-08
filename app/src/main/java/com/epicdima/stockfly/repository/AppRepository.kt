@@ -16,6 +16,7 @@ import com.epicdima.stockfly.other.setSearched
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
@@ -109,14 +110,16 @@ class AppRepository(
     }
 
     override suspend fun refreshCompanies() {
-        val list = companyDao.selectAllAsList()
-        companyDao.update(list.mapNotNull {
-            val existing = companyDao.selectAsModel(it.ticker)!!
-            getCompanyWithQuote(it.ticker)?.toEntity()?.copy(
-                favourite = existing.favourite,
-                favouriteNumber = existing.favouriteNumber
-            )
-        })
+        withContext(Dispatchers.IO) {
+            val list = companyDao.selectAllAsList()
+            companyDao.update(list.mapNotNull {
+                val existing = companyDao.selectAsModel(it.ticker)!!
+                getCompanyWithQuote(it.ticker)?.toEntity()?.copy(
+                    favourite = existing.favourite,
+                    favouriteNumber = existing.favouriteNumber
+                )
+            })
+        }
     }
 
     override suspend fun changeFavourite(company: Company) {

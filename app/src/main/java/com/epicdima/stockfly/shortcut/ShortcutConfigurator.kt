@@ -14,9 +14,7 @@ import com.epicdima.stockfly.ui.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.coroutines.EmptyCoroutineContext
 
 class ShortcutConfigurator(
     private val context: Context
@@ -24,19 +22,18 @@ class ShortcutConfigurator(
     private val companiesShortcutsQueueMutableFlow = MutableStateFlow<List<Company>>(emptyList())
 
     init {
-        CoroutineScope(EmptyCoroutineContext).launch {
-            companiesShortcutsQueueMutableFlow
-                .debounce(2500)
-                .map { list -> list.take(maxFavouriteShortcutsNumber - 1) }
-                .distinctUntilChanged()
-                .map { list -> list.map { createShortcut(it) } }
-                .flowOn(Dispatchers.Default)
-                .collect { list ->
-                    Timber.v("real updateShortcuts")
-                    ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-                    ShortcutManagerCompat.addDynamicShortcuts(context, list)
-                }
-        }
+        companiesShortcutsQueueMutableFlow
+            .debounce(2500)
+            .map { list -> list.take(maxFavouriteShortcutsNumber - 1) }
+            .distinctUntilChanged()
+            .map { list -> list.map { createShortcut(it) } }
+            .flowOn(Dispatchers.Default)
+            .onEach { list ->
+                Timber.v("real updateShortcuts")
+                ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+                ShortcutManagerCompat.addDynamicShortcuts(context, list)
+            }
+            .launchIn(CoroutineScope(Dispatchers.Default))
     }
 
     private val maxFavouriteShortcutsNumber = ShortcutManagerCompat

@@ -1,15 +1,16 @@
 package com.epicdima.stockfly.ui.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
 import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import android.widget.EditText
 import android.widget.Toast
@@ -28,6 +29,7 @@ import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -37,7 +39,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>() {
+class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>(),
+    ViewTreeObserver.OnGlobalLayoutListener, AppBarLayout.OnOffsetChangedListener {
 
     companion object {
         @JvmStatic
@@ -48,6 +51,10 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     override val viewModel: SearchViewModel by viewModels()
+
+    private var searchQueryText: String = ""
+    private var isKeyboardShowing = false
+    private var isAppBarExpanded = true
 
     private val onChipClick: (String) -> Unit = {
         Timber.i("onChipClick %s", it)
@@ -119,14 +126,31 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         setupResultList()
     }
 
+    override fun onGlobalLayout() {
+        if (isVisible) {
+            val rect = Rect()
+            binding.root.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = binding.root.rootView.height
+            isKeyboardShowing = (screenHeight - rect.bottom) > (screenHeight * 0.15)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(this)
+        binding.appbar.addOnOffsetChangedListener(this)
         showKeyboard()
     }
 
     override fun onPause() {
-        hideKeyboard()
         super.onPause()
+        hideKeyboard()
+        binding.appbar.removeOnOffsetChangedListener(this)
+        binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+    }
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+        isAppBarExpanded = verticalOffset == 0
     }
 
     private fun setupResultList() {
@@ -172,6 +196,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         binding.close.setOnClickListener {
             viewModel.reset()
             binding.searchEditText.text.clear()
+            showKeyboard()
         }
         binding.back.setOnClickListener {
             requireActivity().onBackPressed()
@@ -179,19 +204,23 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     private fun showKeyboard() {
-        if (binding.searchEditText.requestFocus()) {
+        Timber.v("showKeyboard %s %s", isAppBarExpanded, isKeyboardShowing)
+        if (isAppBarExpanded && !isKeyboardShowing && binding.searchEditText.requestFocus()) {
             Timber.v("showKeyboard with request focus")
             (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-                .toggleSoftInput(SHOW_FORCED, HIDE_NOT_ALWAYS)
+                .toggleSoftInput(SHOW_FORCED, 0)
         }
     }
 
     private fun hideKeyboard() {
         Timber.v("hideKeyboard")
-        binding.searchEditText.apply {
-            clearFocus()
-            (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(windowToken, 0)
+        if (isKeyboardShowing) {
+            binding.searchEditText.apply {
+                clearFocus()
+                (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(windowToken, 0)
+            }
+            isKeyboardShowing = false
         }
     }
 
@@ -211,13 +240,21 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-        this.addTextChangedListener(object : TextWatcher {
+        addTextChangedListener(object : TextWatcher {
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
-                afterTextChanged.invoke(editable.toString())
+                val newText = text.toString()
+                if (searchQueryText != newText) {
+                    searchQueryText = newText
+                    afterTextChanged.invoke(editable.toString())
+                    if (!isAppBarExpanded) {
+                        binding.appbar.setExpanded(true, true)
+                    }
+                }
             }
         })
     }

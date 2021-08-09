@@ -3,7 +3,6 @@
     <string name="app_name">StockFly</string>
     <string name="error_receiving_data">Ошибка получения данных</string>
     <string name="company_logo">Логотип компании</string>
-    <string name="favourite_icon">Иконка, показывающая избранную компании</string>
     <string name="search_hint">Найти компанию или тикер</string>
     <string name="search_icon">Иконка поиска</string>
     <string name="back_icon">Иконка возвращения назад</string>
@@ -35,11 +34,11 @@
     <string name="favourite">Избранное</string>
     <string name="stocks_empty_list">Вы ничего не искали и не просматривали</string>
     <string name="favourite_empty_list">Вы ничего не отметили как избранное</string>
-    <string name="d_day" translatable="false">Д</string>
-    <string name="w_week" translatable="false">Н</string>
-    <string name="m_month" translatable="false">М</string>
-    <string name="six_m_six_months" translatable="false">6М</string>
-    <string name="one_y_one_year" translatable="false">1Г</string>
+    <string name="d_day">Д</string>
+    <string name="w_week">Н</string>
+    <string name="m_month">М</string>
+    <string name="six_m_six_months">6М</string>
+    <string name="one_y_one_year">1Г</string>
     <string name="all_time">Всё</string>
     <string name="shortcut_search_long_label">Поиск</string>
     <string name="shortcut_search_short_label">Поиск</string>

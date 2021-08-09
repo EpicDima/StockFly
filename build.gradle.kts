@@ -6,10 +6,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.2")
+        classpath("com.android.tools.build:gradle:7.0.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
+        classpath("com.autonomousapps:dependency-analysis-gradle-plugin:0.76.0")
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.17.1")
     }
 }
 
@@ -25,6 +27,8 @@ fun isNonStable(version: String): Boolean {
 allprojects {
     apply {
         plugin("com.github.ben-manes.versions")
+        plugin("com.autonomousapps.dependency-analysis")
+        plugin("io.gitlab.arturbosch.detekt")
     }
 
     tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates")

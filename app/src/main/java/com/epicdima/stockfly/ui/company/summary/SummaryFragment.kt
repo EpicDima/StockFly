@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.*
@@ -53,19 +53,19 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
         viewModel.company
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach {
-            if (it != null) {
-                loadImageWithGoneOnError(binding.imageView, it.logoUrl)
-                binding.fullname.text = it.name
-                binding.phoneValue.text = it.phone
-                binding.weburlValue.text = it.webUrl
-                binding.countryValue.text = it.countryName
-                binding.currencyValue.text = it.currentString
-                binding.soValue.text = it.shareOutstanding.toLocalString()
-                binding.mcValue.text = it.marketCapitalization.toLocalString()
-                binding.exchangeValue.text = it.exchange
-                binding.ipoValue.text = it.ipoLocalDateString()
+                if (it != null) {
+                    loadImageWithGoneOnError(binding.imageView, it.logoUrl)
+                    binding.fullname.text = it.name
+                    binding.phoneValue.text = it.phone
+                    binding.weburlValue.text = it.webUrl
+                    binding.countryValue.text = it.countryName
+                    binding.currencyValue.text = it.currentString
+                    binding.soValue.text = it.shareOutstanding.toLocalString()
+                    binding.mcValue.text = it.marketCapitalization.toLocalString()
+                    binding.exchangeValue.text = it.exchange
+                    binding.ipoValue.text = it.ipoLocalDateString()
+                }
             }
-        }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         setClickListeners()

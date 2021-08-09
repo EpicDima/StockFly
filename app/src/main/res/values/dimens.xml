@@ -2,7 +2,6 @@
 <resources>
 
     <dimen name="warnings_layout_height">256dp</dimen>
-    <dimen name="centerwidget_margin_top">256dp</dimen>
     <dimen name="progressbar_size">48dp</dimen>
     <dimen name="warning_textsize">18sp</dimen>
 
@@ -23,19 +22,14 @@
     <dimen name="company_name_textsize">12sp</dimen>
     <dimen name="company_name_height">16dp</dimen>
 
-    <dimen name="current_textsize">12sp</dimen>
-    <dimen name="current_height">16dp</dimen>
-
     <dimen name="search_title_textsize">18sp</dimen>
     <dimen name="search_title_height">24dp</dimen>
     <dimen name="search_title_margin_start">24dp</dimen>
 
     <dimen name="company_tablayout_side_padding">16dp</dimen>
-    <dimen name="company_tab_height">20dp</dimen>
     <dimen name="company_tab_selected_textsize">18sp</dimen>
     <dimen name="company_tab_textsize">14sp</dimen>
 
-    <dimen name="main_tab_height">34dp</dimen>
     <dimen name="main_tablayout_side_margin">8dp</dimen>
     <dimen name="main_tab_selected_textsize">28sp</dimen>
     <dimen name="main_tab_textsize">18sp</dimen>

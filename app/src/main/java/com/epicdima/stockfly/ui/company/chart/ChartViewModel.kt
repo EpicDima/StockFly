@@ -1,6 +1,7 @@
 package com.epicdima.stockfly.ui.company.chart
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.model.StockCandles
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.set
 
 @HiltViewModel
 class ChartViewModel @Inject constructor(

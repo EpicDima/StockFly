@@ -60,7 +60,8 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
             .onEach {
                 binding.apply {
                     current.text = it.currentString
-                    val changeText = it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")")
+                    val changeText =
+                        it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")")
                     change.text = changeText
                     change.setTextColor(
                         getColor(

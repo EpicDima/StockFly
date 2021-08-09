@@ -18,22 +18,19 @@ android {
         versionCode = 3
         versionName = "0.3"
 
+        vectorDrawables.useSupportLibrary = true
+
         buildConfigField(
             "String",
             "API_KEY",
             gradleLocalProperties(rootDir).getProperty("API_KEY").toString()
         )
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.incremental"] = "true"
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
-        }
-
         kapt {
             useBuildCache = true
             arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+                arg("dagger.fastInit", "enabled")
                 arg("dagger.formatGeneratedSource", "disabled")
             }
         }
@@ -64,7 +61,7 @@ android {
         viewBinding = true
     }
 
-    flavorDimensions("search")
+    flavorDimensions.addAll(listOf("search"))
     productFlavors {
         create("detailed") {
             dimension = "search"
@@ -100,8 +97,6 @@ dependencies {
     }
 
     Dependencies.lifecycle.apply {
-        implementation(common)
-        implementation(extensions)
         implementation(runtimeKtx)
         implementation(viewModelKtx)
         implementation(viewModelSavedstate)
@@ -129,7 +124,6 @@ dependencies {
         implementation(material)
         implementation(constraint)
         implementation(recyclerView)
-        implementation(activityKtx)
         implementation(fragmentKtx)
         implementation(coil)
         implementation(timber)

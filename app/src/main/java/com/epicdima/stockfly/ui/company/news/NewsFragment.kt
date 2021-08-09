@@ -82,7 +82,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
 
     private fun checkVisibility() {
         binding.recyclerView.isVisible =
-            !(viewModel.loading.value == true || viewModel.error.value == true || viewModel.news.value.isEmpty())
+            !(viewModel.loading.value || viewModel.error.value || viewModel.news.value.isEmpty())
         binding.emptyTextview.isVisible =
             viewModel.news.value.isEmpty() == true && viewModel.loading.value != true && viewModel.error.value != true
     }

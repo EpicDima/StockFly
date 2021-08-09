@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import coil.imageLoader
-import coil.request.Disposable
 import coil.request.ImageRequest
 import coil.request.ImageResult
 
@@ -21,8 +20,4 @@ fun Context.createImageRequest(url: String): ImageRequest {
 
 suspend fun Context.executeImageRequest(url: String): ImageResult {
     return imageLoader.execute(createImageRequest(url))
-}
-
-fun Context.enqueueImageRequest(url: String): Disposable {
-    return imageLoader.enqueue(createImageRequest(url))
 }

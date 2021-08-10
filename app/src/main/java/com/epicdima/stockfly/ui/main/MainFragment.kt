@@ -51,7 +51,7 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
             viewPager.also {
                 it.adapter = MainFragmentAdapter(this@MainFragment)
                 it.isUserInputEnabled = false
-                it.offscreenPageLimit = 1  // для загрузки списка избранных без ожидания
+                it.offscreenPageLimit = MainTab.values().size
             }
             searchLayout.setOnClickListener {
                 (requireActivity() as MainRouter.SearchFragmentOpener).openSearchFragment()

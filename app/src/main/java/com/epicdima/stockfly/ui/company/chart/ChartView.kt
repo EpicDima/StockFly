@@ -144,8 +144,14 @@ class ChartView @JvmOverloads constructor(
         } else {
             if (lengthAnimator == null || lengthAnimator?.isRunning != true) {
                 realLength = length
+                invalidate()
+            } else {
+                if (length < realLength) {
+                    invalidate()
+                } else {
+                    startAnimation(realLength, lengthAnimator?.currentPlayTime ?: 0)
+                }
             }
-            invalidate()
         }
     }
 
@@ -153,10 +159,10 @@ class ChartView @JvmOverloads constructor(
         dateTimeFormat = format
     }
 
-    private fun startAnimation() {
+    private fun startAnimation(start: Int = 2, currentAnimationTime: Long = 0L) {
         lengthAnimator?.cancel()
-        lengthAnimator = ValueAnimator.ofInt(2, length).apply {
-            duration = lengthAnimationDuration
+        lengthAnimator = ValueAnimator.ofInt(start, length).apply {
+            duration = (lengthAnimationDuration - currentAnimationTime).coerceAtLeast(0)
             addUpdateListener {
                 realLength = it.animatedValue as Int
                 invalidate()

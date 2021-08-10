@@ -16,10 +16,12 @@ import coil.request.Disposable
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.databinding.ItemCompanyBinding
 import com.epicdima.stockfly.model.Company
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.createUri
 import timber.log.Timber
 
 class CompanyAdapter(
+    private val formatter: Formatter,
     private val clickListener: OnCompanyClickListener
 ) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
@@ -37,7 +39,8 @@ class CompanyAdapter(
         super.submitList(list.mapIndexed { index, company ->
             CompanyViewHolderItem(
                 index,
-                company
+                company,
+                formatter
             ).apply {
                 rootCardBackgroundColor = getColor(context, rootCardBackgroundColorId)
                 logoBackgroundColor = getColor(context, logoBackgroundColorId)
@@ -159,7 +162,8 @@ class CompanyAdapter(
 
 class CompanyViewHolderItem(
     val position: Int,
-    company: Company
+    company: Company,
+    formatter: Formatter
 ) {
     val logoUrl = company.logoUrl
     val ticker = company.ticker
@@ -189,9 +193,9 @@ class CompanyViewHolderItem(
     var favouriteIcon: Drawable? = null
 
     val changeString = company.changeString +
-            (if (company.changePercentString.isEmpty()) "" else " (") +
-            company.changePercentString +
-            if (company.changePercentString.isEmpty()) "" else ")"
+            (if (company.changePercentString(formatter).isEmpty()) "" else " (") +
+            company.changePercentString(formatter) +
+            if (company.changePercentString(formatter).isEmpty()) "" else ")"
 
     val changeTextColorId = when {
         company.changeString.startsWith("+") -> R.color.green

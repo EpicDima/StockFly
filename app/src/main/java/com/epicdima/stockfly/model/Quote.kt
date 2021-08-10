@@ -1,8 +1,8 @@
 package com.epicdima.stockfly.model
 
 import com.epicdima.stockfly.other.FORMAT_CHANGE
-import com.epicdima.stockfly.other.FORMAT_CHANGE_PERCENT
 import com.epicdima.stockfly.other.FORMAT_PRICE
+import com.epicdima.stockfly.other.Formatter
 import kotlin.math.absoluteValue
 
 data class Quote(
@@ -30,6 +30,7 @@ data class Quote(
             return if ("+0" == result) "0" else result
         }
 
-    val changePercentString: String
-        get() = FORMAT_CHANGE_PERCENT.format(changePercent)
+    fun changePercentString(formatter: Formatter): String {
+        return formatter.getPercentFormat().format(changePercent)
+    }
 }

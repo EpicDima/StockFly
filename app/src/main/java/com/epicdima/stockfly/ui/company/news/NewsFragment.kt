@@ -11,12 +11,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.MainRouter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
@@ -32,6 +34,9 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     }
 
     override val viewModel: NewsViewModel by viewModels()
+
+    @Inject
+    lateinit var formatter: Formatter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -61,7 +66,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     }
 
     private fun setupList() {
-        val adapter = NewsAdapter { url ->
+        val adapter = NewsAdapter(formatter) { url ->
             (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener)
                 .openWebViewFragment(url)
         }

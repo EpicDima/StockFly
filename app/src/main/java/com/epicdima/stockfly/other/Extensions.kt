@@ -88,33 +88,26 @@ fun Configuration.locale(): Locale {
     }
 }
 
-fun Company.ipoLocalDateString(): String {
+fun Company.ipoLocalDateString(formatter: Formatter): String {
     return try {
         val ipoDate = FORMAT_DATE_API.parse(ipo)!!
-        DateFormat.getDateInstance(DateFormat.MEDIUM, Formatter.getCurrentLocale()).format(ipoDate)
+        DateFormat.getDateInstance(DateFormat.MEDIUM, formatter.getCurrentLocale()).format(ipoDate)
     } catch (e: ParseException) {
         ""
     }
 }
 
-fun Double.toLocalString(): String {
-    return Formatter.getNumberFormat().format(this)
+fun Double.toLocalString(formatter: Formatter): String {
+    return formatter.getNumberFormat().format(this)
 }
 
-fun Int.toLocalString(): String {
-    return Formatter.getNumberFormat().format(this)
+fun Int.toLocalString(formatter: Formatter): String {
+    return formatter.getNumberFormat().format(this)
 }
 
 fun <T : Fragment> T.setArgument(key: String, value: String): T {
     arguments = Bundle().apply {
         putString(key, value)
-    }
-    return this
-}
-
-fun <T : Fragment> T.setArgument(key: String, value: Int): T {
-    arguments = Bundle().apply {
-        putInt(key, value)
     }
     return this
 }

@@ -18,11 +18,18 @@ import com.epicdima.stockfly.other.getColor
 import java.text.DateFormat
 
 class NewsAdapter(
+    private val formatter: Formatter,
     private val clickListener: OnNewsItemClickListener
 ) : ListAdapter<NewsViewHolderItem, NewsAdapter.NewsItemViewHolder>(DIFF_CALLBACK) {
 
     fun submitNewsList(list: List<NewsItem>) {
-        super.submitList(list.mapIndexed { index, newsItem -> NewsViewHolderItem(index, newsItem) })
+        super.submitList(list.mapIndexed { index, newsItem ->
+            NewsViewHolderItem(
+                index,
+                newsItem,
+                formatter
+            )
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsItemViewHolder {
@@ -92,7 +99,8 @@ class NewsAdapter(
 
 class NewsViewHolderItem(
     position: Int,
-    newsItem: NewsItem
+    newsItem: NewsItem,
+    formatter: Formatter
 ) {
     val id = newsItem.id
     val url = newsItem.url
@@ -102,7 +110,7 @@ class NewsViewHolderItem(
     val summaryIsVisible = summary.isNotEmpty()
     val source = newsItem.source
     val datetime: String = DateFormat
-        .getDateInstance(DateFormat.MEDIUM, Formatter.getCurrentLocale())
+        .getDateInstance(DateFormat.MEDIUM, formatter.getCurrentLocale())
         .format(newsItem.datetime * 1000L)
 
     val rootCardBackgroundColor = if (position % 2 == 0) {

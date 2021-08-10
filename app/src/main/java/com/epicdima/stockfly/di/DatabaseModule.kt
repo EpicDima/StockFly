@@ -1,6 +1,6 @@
 package com.epicdima.stockfly.di
 
-import android.app.Application
+import android.content.Context
 import com.epicdima.stockfly.db.Database
 import com.epicdima.stockfly.db.buildDatabase
 import com.epicdima.stockfly.db.dao.CompanyDao
@@ -10,6 +10,7 @@ import com.epicdima.stockfly.db.dao.StockCandlesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -19,8 +20,8 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(application: Application): Database {
-        return buildDatabase(application)
+    fun provideDatabase(@ApplicationContext context: Context): Database {
+        return buildDatabase(context)
     }
 
     @Singleton

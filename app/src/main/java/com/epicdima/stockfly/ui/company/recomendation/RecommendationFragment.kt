@@ -10,12 +10,14 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentRecommendationBinding
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecommendationFragment :
@@ -33,6 +35,9 @@ class RecommendationFragment :
 
     override val viewModel: RecommendationViewModel by viewModels()
 
+    @Inject
+    lateinit var formatter: Formatter
+
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -43,6 +48,7 @@ class RecommendationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        binding.recommendationView.setFormatter(formatter)
         viewModel.loading
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach {

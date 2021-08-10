@@ -1,7 +1,8 @@
 package com.epicdima.stockfly.model
 
 import com.epicdima.stockfly.other.FORMAT_DATE_API
-import com.epicdima.stockfly.other.FORMAT_PERIOD_DATE
+import com.epicdima.stockfly.other.Formatter
+import com.epicdima.stockfly.other.PATTERN_DATE_WITHOUT_DAY
 import java.util.*
 
 data class Recommendation(
@@ -15,8 +16,11 @@ data class Recommendation(
     private val periodDate: Date
         get() = FORMAT_DATE_API.parse(period) ?: Date(0)
 
-    val periodFormatted: String
-        get() = FORMAT_PERIOD_DATE.format(periodDate).replaceFirstChar { it.titlecase() }
+    fun periodFormatted(formatter: Formatter): String {
+        return formatter
+            .getSimpleDateFormat(PATTERN_DATE_WITHOUT_DAY)
+            .format(periodDate).replaceFirstChar { it.titlecase() }
+    }
 
     val sum: Int
         get() = strongBuy + buy + hold + sell + strongSell

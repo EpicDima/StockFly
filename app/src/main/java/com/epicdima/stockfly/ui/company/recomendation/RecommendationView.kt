@@ -110,6 +110,12 @@ class RecommendationView @JvmOverloads constructor(
 
     private var selectedIndex = NO_POSITION
 
+    private lateinit var formatter: Formatter
+
+    fun setFormatter(formatter: Formatter) {
+        this.formatter = formatter
+    }
+
     fun updateData(
         newRecommendations: List<Recommendation>?,
         withResetSelectedIndex: Boolean = true
@@ -208,8 +214,8 @@ class RecommendationView @JvmOverloads constructor(
     }
 
     private fun drawSuggestion(recommendation: Recommendation, canvas: Canvas) {
-        val date = recommendation.periodFormatted
-        val stringValues = getStringValues(recommendation)
+        val date = recommendation.periodFormatted(formatter)
+        val stringValues = getStringValues(recommendation, formatter)
 
         val (dateWidth, dateHeight) = suggestionDatePaint.getTextWidthAndHeight(date)
         val valuesSizes = getValuesTextSizes(stringValues)
@@ -260,13 +266,22 @@ class RecommendationView @JvmOverloads constructor(
         )
     }
 
-    private fun getStringValues(recommendation: Recommendation): StringQuintuple {
+    private fun getStringValues(
+        recommendation: Recommendation,
+        formatter: Formatter
+    ): StringQuintuple {
         return StringQuintuple(
-            context.getString(R.string.strong_buy_value, recommendation.strongBuy.toLocalString()),
-            context.getString(R.string.buy_value, recommendation.buy.toLocalString()),
-            context.getString(R.string.hold_value, recommendation.hold.toLocalString()),
-            context.getString(R.string.sell_value, recommendation.sell.toLocalString()),
-            context.getString(R.string.strong_sell_value, recommendation.strongSell.toLocalString())
+            context.getString(
+                R.string.strong_buy_value,
+                recommendation.strongBuy.toLocalString(formatter)
+            ),
+            context.getString(R.string.buy_value, recommendation.buy.toLocalString(formatter)),
+            context.getString(R.string.hold_value, recommendation.hold.toLocalString(formatter)),
+            context.getString(R.string.sell_value, recommendation.sell.toLocalString(formatter)),
+            context.getString(
+                R.string.strong_sell_value,
+                recommendation.strongSell.toLocalString(formatter)
+            )
         )
     }
 

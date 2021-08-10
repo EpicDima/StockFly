@@ -3,6 +3,7 @@ package com.epicdima.stockfly.ui.company.recomendation
 import androidx.lifecycle.SavedStateHandle
 import com.epicdima.stockfly.base.DownloadableViewModel
 import com.epicdima.stockfly.model.Recommendation
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ private const val DEFAULT_RANGE = 12
 @HiltViewModel
 class RecommendationViewModel @Inject constructor(
     private val repository: Repository,
+    private val formatter: Formatter,
     state: SavedStateHandle
 ) : DownloadableViewModel() {
 
@@ -87,8 +89,8 @@ class RecommendationViewModel @Inject constructor(
         if (_recommendations.isNotEmpty()) {
             _brandNewData = true
             _periodRange.value = Pair(
-                _recommendations[beginIndex].periodFormatted,
-                _recommendations[endIndex].periodFormatted
+                _recommendations[beginIndex].periodFormatted(formatter),
+                _recommendations[endIndex].periodFormatted(formatter)
             )
         }
     }

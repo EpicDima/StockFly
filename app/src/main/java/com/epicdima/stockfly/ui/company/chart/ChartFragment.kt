@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() {
@@ -34,6 +35,9 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
     }
 
     override val viewModel: ChartViewModel by viewModels()
+
+    @Inject
+    lateinit var formatter: Formatter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -61,7 +65,12 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
                 binding.apply {
                     current.text = it.currentString
                     val changeText =
-                        it.changeString + (if (it.changePercentString.isEmpty()) "" else " (") + it.changePercentString + (if (it.changePercentString.isEmpty()) "" else ")")
+                        it.changeString + (if (it.changePercentString(formatter)
+                                .isEmpty()
+                        ) "" else " (") + it.changePercentString(formatter) + (if (it.changePercentString(
+                                formatter
+                            ).isEmpty()
+                        ) "" else ")")
                     change.text = changeText
                     change.setTextColor(
                         getColor(
@@ -119,7 +128,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
             .onEach {
                 unselectButtonByParam(viewModel.previousStockCandleParam)
                 selectButtonByParam(it)
-                binding.chart.updateFormat(it.format)
+                binding.chart.updateFormat(it.format(formatter))
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }

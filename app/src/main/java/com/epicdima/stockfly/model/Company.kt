@@ -1,5 +1,6 @@
 package com.epicdima.stockfly.model
 
+import com.epicdima.stockfly.other.Formatter
 import java.util.*
 
 data class Company(
@@ -24,8 +25,9 @@ data class Company(
     val changeString: String
         get() = quote?.changeString ?: ""
 
-    val changePercentString: String
-        get() = quote?.changePercentString ?: ""
+    fun changePercentString(formatter: Formatter): String {
+        return quote?.changePercentString(formatter) ?: ""
+    }
 
     val countryName: String
         get() = Locale("", country).displayCountry

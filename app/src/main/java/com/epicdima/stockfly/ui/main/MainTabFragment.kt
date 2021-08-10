@@ -8,22 +8,37 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.ui.MainRouter
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class MainTabFragment<VM : ViewModel> :
     ViewModelFragment<VM, FragmentTabMainBinding>() {
 
-    protected val companyAdapter = CompanyAdapter { ticker ->
-        (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
-            .openCompanyFragment(ticker)
-    }
+    @Inject
+    lateinit var formatter: Formatter
+
+    protected lateinit var companyAdapter: CompanyAdapter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentTabMainBinding {
         return FragmentTabMainBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        companyAdapter = CompanyAdapter(formatter) { ticker ->
+            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+                .openCompanyFragment(ticker)
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

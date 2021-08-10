@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
+import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.google.android.material.appbar.AppBarLayout
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>(),
@@ -65,6 +67,9 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
             showKeyboard()
         }
     }
+
+    @Inject
+    lateinit var formatter: Formatter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -154,7 +159,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     private fun setupResultList() {
-        val resultAdapter = CompanyAdapter { ticker ->
+        val resultAdapter = CompanyAdapter(formatter) { ticker ->
             (requireActivity() as MainRouter.CompanyFragmentOpener).openCompanyFragment(ticker)
         }
         binding.resultRecyclerView.apply {

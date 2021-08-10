@@ -19,17 +19,9 @@ fun getStringDateWeekEarlier(): String {
     return FORMAT_DATE_API.format(date.time)
 }
 
-fun getDateWeek(number: Int): Pair<Long, Long> {
-    val start = Calendar.getInstance()
-    start.add(Calendar.DAY_OF_YEAR, -WEEK * number)
-    val end = Calendar.getInstance()
-    end.add(Calendar.DAY_OF_YEAR, -WEEK * (number - 1))
-    return Pair(start.time.time / 1000L, end.time.time / 1000L)
-}
-
 private const val PATTERN_WITH_MINUTES = "HH:mm dd MMM yyyy"
 private const val PATTERN_DATE = "dd MMM yyyy"
-private const val PATTERN_DATE_WITHOUT_DAY = "LLLL yyyy"
+const val PATTERN_DATE_WITHOUT_DAY = "LLLL yyyy"
 
 
 enum class StockCandleParam(
@@ -52,8 +44,9 @@ enum class StockCandleParam(
         return Pair(end - seconds, end)
     }
 
-    val format: SimpleDateFormat
-        get() = Formatter.getSimpleDateFormat(pattern)
+    fun format(formatter: Formatter): SimpleDateFormat {
+        return formatter.getSimpleDateFormat(pattern)
+    }
 }
 
 
@@ -67,9 +60,3 @@ val FORMAT_PRICE: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US).app
 val FORMAT_CHANGE: NumberFormat = (FORMAT_PRICE.clone() as DecimalFormat).apply {
     positivePrefix = "+${currency!!.symbol}"
 }
-
-val FORMAT_CHANGE_PERCENT: NumberFormat
-    get() = Formatter.getPercentFormat()
-
-val FORMAT_PERIOD_DATE: SimpleDateFormat
-    get() = Formatter.getSimpleDateFormat(PATTERN_DATE_WITHOUT_DAY)

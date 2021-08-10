@@ -5,7 +5,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-object Formatter {
+class Formatter {
 
     private var currentLocale: Locale = Locale.getDefault()
 

@@ -23,6 +23,6 @@ object UtilsModule {
     @Singleton
     @Provides
     fun provideFormatter(): Formatter {
-        return Formatter
+        return Formatter()
     }
 }

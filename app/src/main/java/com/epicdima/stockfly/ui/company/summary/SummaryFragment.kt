@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBinding>() {
@@ -33,6 +34,9 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     }
 
     override val viewModel: SummaryViewModel by viewModels()
+
+    @Inject
+    lateinit var formatter: Formatter
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -60,10 +64,10 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
                     binding.weburlValue.text = it.webUrl
                     binding.countryValue.text = it.countryName
                     binding.currencyValue.text = it.currentString
-                    binding.soValue.text = it.shareOutstanding.toLocalString()
-                    binding.mcValue.text = it.marketCapitalization.toLocalString()
+                    binding.soValue.text = it.shareOutstanding.toLocalString(formatter)
+                    binding.mcValue.text = it.marketCapitalization.toLocalString(formatter)
                     binding.exchangeValue.text = it.exchange
-                    binding.ipoValue.text = it.ipoLocalDateString()
+                    binding.ipoValue.text = it.ipoLocalDateString(formatter)
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

@@ -5,6 +5,7 @@ import com.epicdima.stockfly.shortcut.ShortcutConfigurator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -14,7 +15,7 @@ object ShortcutModule {
 
     @Singleton
     @Provides
-    fun provideShortcutConfigurator(context: Context): ShortcutConfigurator {
+    fun provideShortcutConfigurator(@ApplicationContext context: Context): ShortcutConfigurator {
         return ShortcutConfigurator(context)
     }
 }

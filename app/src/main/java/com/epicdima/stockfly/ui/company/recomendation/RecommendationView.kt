@@ -151,13 +151,7 @@ class RecommendationView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val nullOrEmpty = try {
-            recommendations.isNullOrEmpty()
-        } catch (e: ConcurrentModificationException) {
-            invalidate()
-            return
-        }
-        if (!nullOrEmpty) {
+        if (!recommendations.isNullOrEmpty()) {
             if (selectedIndex == NO_POSITION) {
                 recommendations?.forEachIndexed { i, rec -> drawDefaultBar(i, rec, canvas) }
             } else {

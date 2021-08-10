@@ -91,7 +91,10 @@ class RecommendationFragment :
                     }
                     beginDate.text = it.first
                     endDate.text = it.second
-                    recommendationView.updateData(viewModel.recommendations, viewModel.brandNewData)
+                    recommendationView.updateData(
+                        viewModel.recommendations.toList(),
+                        viewModel.brandNewData
+                    )
                     checkVisibility()
                 }
             }

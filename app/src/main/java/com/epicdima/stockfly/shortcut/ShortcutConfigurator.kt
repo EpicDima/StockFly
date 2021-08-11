@@ -27,7 +27,6 @@ class ShortcutConfigurator(
             .map { list -> list.take(maxFavouriteShortcutsNumber - 1) }
             .distinctUntilChanged()
             .map { list -> list.map { createShortcut(it) } }
-            .flowOn(Dispatchers.Default)
             .onEach { list ->
                 Timber.v("real updateShortcuts")
                 ShortcutManagerCompat.removeAllDynamicShortcuts(context)

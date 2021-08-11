@@ -22,7 +22,7 @@ class ChartViewModel @Inject constructor(
     private val ticker = state.get<String>(ChartFragment.TICKER_KEY)!!
 
     private var _stockCandleParam = MutableStateFlow<StockCandleParam?>(null)
-    val stockCandleParam: Flow<StockCandleParam> = _stockCandleParam.filterNotNull()
+    val stockCandleParam: StateFlow<StockCandleParam?> = _stockCandleParam.asStateFlow()
 
     private var _previousStockCandleParam: StockCandleParam? = null
     val previousStockCandleParam: StockCandleParam?

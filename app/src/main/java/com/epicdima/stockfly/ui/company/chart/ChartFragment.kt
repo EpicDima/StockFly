@@ -125,6 +125,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
 
         viewModel.stockCandleParam
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .filterNotNull()
             .onEach {
                 unselectButtonByParam(viewModel.previousStockCandleParam)
                 selectButtonByParam(it)

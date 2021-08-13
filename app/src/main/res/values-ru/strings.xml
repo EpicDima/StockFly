@@ -43,4 +43,8 @@
     <string name="shortcut_search_long_label">Поиск</string>
     <string name="shortcut_search_short_label">Поиск</string>
     <string name="shortcut_search_disabled_label">Отключённый поиск</string>
+    <string name="companies_popup_menu_item_set_favourite">Добавить в избранное</string>
+    <string name="companies_popup_menu_item_delete">Удалить</string>
+    <string name="favourite_companies_popup_menu_item_delete">Удалить</string>
+    <string name="companies_popup_menu_item_set_unfavourite">Удалить из избранного</string>
 </resources>

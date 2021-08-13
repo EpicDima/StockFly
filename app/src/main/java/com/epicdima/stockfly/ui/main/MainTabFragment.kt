@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.ui.MainRouter
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,22 +27,10 @@ abstract class MainTabFragment<VM : ViewModel> :
         return FragmentTabMainBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-        companyAdapter = CompanyAdapter(formatter) { ticker ->
-            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
-                .openCompanyFragment(ticker)
-        }
-        return view
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        companyAdapter = createAdapter()
         binding.apply {
             recyclerView.apply {
                 adapter = companyAdapter
@@ -55,6 +42,8 @@ abstract class MainTabFragment<VM : ViewModel> :
         }
         setupList()
     }
+
+    protected abstract fun createAdapter(): CompanyAdapter
 
     protected abstract fun setupList()
 

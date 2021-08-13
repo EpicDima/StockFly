@@ -221,6 +221,10 @@ class AppRepository(
         )
     }
 
+    override suspend fun deleteCompany(company: Company) {
+        companyDao.delete(company.toEntity())
+    }
+
     private fun <T> getDataWithRefresh(
         getFromDatabase: suspend () -> T,
         getFromApi: suspend () -> T,

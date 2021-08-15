@@ -85,8 +85,15 @@ class RecommendationFragment :
                             stepSize = 1.0f
                             valueFrom = 0.0f
                             valueTo = (viewModel.length - 1).toFloat()
-                            values =
-                                listOf(viewModel.beginIndex.toFloat(), viewModel.endIndex.toFloat())
+
+                            if (valueTo - valueFrom < 1.0f) {
+                                valueTo = 1.0f
+                            }
+
+                            values = listOf(
+                                viewModel.beginIndex.toFloat(),
+                                viewModel.endIndex.toFloat()
+                            )
                         }
                     }
                     beginDate.text = it.first

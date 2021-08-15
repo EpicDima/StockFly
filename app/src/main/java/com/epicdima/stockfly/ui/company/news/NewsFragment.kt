@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,14 +50,14 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         viewModel.loading
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.progressBarWidget.root.isVisible = it
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.error
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.errorWidget.root.isVisible = it
                 checkVisibility()
@@ -77,7 +78,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
             setHasFixedSize(true)
         }
         viewModel.news
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 adapter.submitNewsList(it)
                 checkVisibility()

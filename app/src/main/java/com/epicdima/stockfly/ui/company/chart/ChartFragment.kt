@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
@@ -51,7 +52,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loading
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.chart.visibility = if (it) View.INVISIBLE else View.VISIBLE
                 binding.progressBar.isVisible = it
@@ -59,7 +60,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.company
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .filterNotNull()
             .onEach {
                 binding.apply {
@@ -117,14 +118,14 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
 
     private fun setupObservers() {
         viewModel.stockCandles
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.chart.updateData(it, viewModel.brandNewData, viewModel.brandNewData)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.stockCandleParam
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .filterNotNull()
             .onEach {
                 unselectButtonByParam(viewModel.previousStockCandleParam)

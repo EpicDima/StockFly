@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.base.ViewModelFragment
@@ -55,7 +56,7 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
         }
 
         viewModel.company
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 if (it != null) {
                     loadImageWithGoneOnError(binding.imageView, it.logoUrl)

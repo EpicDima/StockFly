@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.base.ViewModelFragment
@@ -50,14 +51,14 @@ class RecommendationFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.recommendationView.setFormatter(formatter)
         viewModel.loading
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.progressBarWidget.root.isVisible = it
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.error
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.errorWidget.root.isVisible = it
                 checkVisibility()
@@ -76,7 +77,7 @@ class RecommendationFragment :
 
     private fun setupObservers() {
         viewModel.periodRange
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .filterNotNull()
             .onEach {
                 binding.apply {

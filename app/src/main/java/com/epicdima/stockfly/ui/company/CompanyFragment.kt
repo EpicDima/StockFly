@@ -8,6 +8,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -69,7 +70,7 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
             )
         }
         viewModel.error
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
                 binding.errorWidget.root.isVisible = it
                 binding.favouriteButton.visibility =
@@ -82,7 +83,7 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.company
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach { setCompany(it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 

@@ -2,7 +2,6 @@ package com.epicdima.stockfly.ui.main.favourite
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -42,7 +41,7 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
 
     override fun createAdapter(): CompanyAdapter {
         return CompanyAdapter(formatter, { view, company ->
-            openPopUpMenu(view, company)
+            showPopupMenu(view, company)
         }) { ticker ->
             (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
                 .openCompanyFragment(ticker)
@@ -69,23 +68,11 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
         }).attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun openPopUpMenu(view: View, company: Company) {
-        PopupMenu(requireContext(), view).apply {
-            menu.add(
-                1, 1, 1,
-                if (company.favourite) R.string.companies_popup_menu_item_set_unfavourite
-                else R.string.companies_popup_menu_item_set_favourite
-            )
-            menu.add(1, 2, 2, R.string.companies_popup_menu_item_delete)
+    override fun changeFavourite(company: Company) {
+        viewModel.changeFavourite(company)
+    }
 
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    1 -> viewModel.changeFavourite(company)
-                    2 -> viewModel.deleteCompany(company)
-                    else -> throw RuntimeException("Unknown company popup menu item id: ${it.itemId}")
-                }
-                true
-            }
-        }.show()
+    override fun deleteCompany(company: Company) {
+        viewModel.deleteCompany(company)
     }
 }

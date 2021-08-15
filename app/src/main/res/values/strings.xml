@@ -63,7 +63,7 @@
     <string name="shortcut_search_short_label">Search</string>
     <string name="shortcut_search_disabled_label">Disabled search</string>
 
-    <string name="companies_popup_menu_item_set_favourite">Add to favorites</string>
-    <string name="companies_popup_menu_item_delete">Remove</string>
-    <string name="companies_popup_menu_item_set_unfavourite">Delete from favorites</string>
+    <string name="companies_popup_menu_item_add_to_favourites">Add to favorites</string>
+    <string name="companies_popup_menu_item_delete_from_favourites">Delete from favorites</string>
+    <string name="companies_popup_menu_item_remove">Remove</string>
 </resources>

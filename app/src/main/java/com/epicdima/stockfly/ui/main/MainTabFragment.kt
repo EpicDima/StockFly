@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
+import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,6 +23,10 @@ abstract class MainTabFragment<VM : ViewModel> :
 
     protected lateinit var companyAdapter: CompanyAdapter
 
+    private lateinit var addToFavouritesText: String
+    private lateinit var deleteFromFavouritesText: String
+    private lateinit var removeText: String
+
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -30,6 +37,12 @@ abstract class MainTabFragment<VM : ViewModel> :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+
+        addToFavouritesText = getString(R.string.companies_popup_menu_item_add_to_favourites)
+        deleteFromFavouritesText =
+            getString(R.string.companies_popup_menu_item_delete_from_favourites)
+        removeText = getString(R.string.companies_popup_menu_item_remove)
+
         companyAdapter = createAdapter()
         binding.apply {
             recyclerView.apply {
@@ -51,4 +64,28 @@ abstract class MainTabFragment<VM : ViewModel> :
         binding.recyclerView.adapter = null
         super.onDestroyView()
     }
+
+    protected fun showPopupMenu(view: View, company: Company) {
+        PopupMenu(requireContext(), view).apply {
+            menu.add(
+                1, 1, 1,
+                if (company.favourite) deleteFromFavouritesText
+                else addToFavouritesText
+            )
+            menu.add(1, 2, 2, removeText)
+
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    1 -> changeFavourite(company)
+                    2 -> deleteCompany(company)
+                    else -> throw RuntimeException("Unknown company popup menu item id: ${it.itemId}")
+                }
+                true
+            }
+        }.show()
+    }
+
+    protected abstract fun changeFavourite(company: Company)
+
+    protected abstract fun deleteCompany(company: Company)
 }

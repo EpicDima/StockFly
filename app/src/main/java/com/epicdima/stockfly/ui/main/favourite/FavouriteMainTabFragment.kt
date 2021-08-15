@@ -9,6 +9,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.epicdima.stockfly.R
+import com.epicdima.stockfly.model.Company
+import com.epicdima.stockfly.ui.MainRouter
+import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +39,15 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
         binding.emptyTextview.setText(R.string.favourite_empty_list)
     }
 
+    override fun createAdapter(): CompanyAdapter {
+        return CompanyAdapter(formatter, { view, company ->
+            showPopupMenu(view, company)
+        }) { ticker ->
+            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+                .openCompanyFragment(ticker)
+        }
+    }
+
     override fun setupList() {
         viewModel.companies
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
@@ -54,5 +66,13 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
             viewModel.changeFavouriteNumber(from, to)
             companyAdapter.notifyItemMoved(from, to)
         }).attachToRecyclerView(binding.recyclerView)
+    }
+
+    override fun changeFavourite(company: Company) {
+        viewModel.changeFavourite(company)
+    }
+
+    override fun deleteCompany(company: Company) {
+        viewModel.deleteCompany(company)
     }
 }

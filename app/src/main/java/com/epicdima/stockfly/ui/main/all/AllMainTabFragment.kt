@@ -8,6 +8,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
+import com.epicdima.stockfly.model.Company
+import com.epicdima.stockfly.ui.MainRouter
+import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,15 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
         binding.emptyTextview.setText(R.string.stocks_empty_list)
     }
 
+    override fun createAdapter(): CompanyAdapter {
+        return CompanyAdapter(formatter, { view, company ->
+            showPopupMenu(view, company)
+        }) { ticker ->
+            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+                .openCompanyFragment(ticker)
+        }
+    }
+
     override fun setupList() {
         viewModel.companies
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
@@ -48,5 +60,13 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    override fun changeFavourite(company: Company) {
+        viewModel.changeFavourite(company)
+    }
+
+    override fun deleteCompany(company: Company) {
+        viewModel.deleteCompany(company)
     }
 }

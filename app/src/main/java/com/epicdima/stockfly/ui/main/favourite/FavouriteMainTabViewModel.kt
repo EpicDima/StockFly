@@ -30,4 +30,16 @@ class FavouriteMainTabViewModel @Inject constructor(
             repository.changeFavouriteNumber(from, to)
         }
     }
+
+    fun changeFavourite(company: Company) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.changeFavourite(company)
+        }
+    }
+
+    fun deleteCompany(company: Company) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteCompany(company)
+        }
+    }
 }

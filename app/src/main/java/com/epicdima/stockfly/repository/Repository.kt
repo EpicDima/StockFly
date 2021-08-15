@@ -38,4 +38,6 @@ interface Repository {
     fun getCompanyNewsWithRefresh(ticker: String): Flow<List<NewsItem>>
 
     fun getCompanyRecommendationsWithRefresh(ticker: String): Flow<List<Recommendation>>
+
+    suspend fun deleteCompany(company: Company)
 }

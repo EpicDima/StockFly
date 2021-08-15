@@ -37,6 +37,9 @@ interface CompanyDao {
     @Update
     suspend fun update(companies: List<CompanyEntity>)
 
+    @Delete
+    suspend fun delete(company: CompanyEntity)
+
     @Transaction
     suspend fun upsertAndSelect(company: CompanyEntity): CompanyEntity {
         if (insert(company) == -1L) {

@@ -3,6 +3,7 @@ package com.epicdima.stockfly.ui.main
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat.getColor
@@ -22,6 +23,7 @@ import timber.log.Timber
 
 class CompanyAdapter(
     private val formatter: Formatter,
+    private val longClickListener: OnCompanyLongClickListener? = null,
     private val clickListener: OnCompanyClickListener
 ) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
@@ -57,7 +59,7 @@ class CompanyAdapter(
     }
 
     override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
+        holder.bind(getItem(position), clickListener, longClickListener)
     }
 
     override fun onBindViewHolder(
@@ -68,7 +70,11 @@ class CompanyAdapter(
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
-            holder.bind(getItem(position), payloads.first() as CompanyItemPayload)
+            holder.bind(
+                getItem(position),
+                payloads.first() as CompanyItemPayload,
+                longClickListener
+            )
         }
     }
 
@@ -83,7 +89,11 @@ class CompanyAdapter(
 
         private var logoDisposable: Disposable? = null
 
-        fun bind(companyItem: CompanyViewHolderItem, clickListener: OnCompanyClickListener) {
+        fun bind(
+            companyItem: CompanyViewHolderItem,
+            clickListener: OnCompanyClickListener,
+            longClickListener: OnCompanyLongClickListener?
+        ) {
             Timber.v("bind %s", companyItem)
             binding.apply {
                 root.setCardBackgroundColor(companyItem.rootCardBackgroundColor)
@@ -101,6 +111,14 @@ class CompanyAdapter(
                 setLogo(logo, companyItem)
                 root.setOnClickListener {
                     clickListener.onClick(companyItem.ticker)
+                }
+                if (longClickListener != null) {
+                    root.setOnLongClickListener {
+                        longClickListener.onLongClick(root, companyItem.company)
+                        true
+                    }
+                } else {
+                    root.setOnLongClickListener(null)
                 }
             }
         }
@@ -121,19 +139,31 @@ class CompanyAdapter(
             }
         }
 
-        fun bind(companyItem: CompanyViewHolderItem, payload: CompanyItemPayload) {
+        fun bind(
+            companyItem: CompanyViewHolderItem,
+            payload: CompanyItemPayload,
+            longClickListener: OnCompanyLongClickListener?
+        ) {
             Timber.v("bind %s with payload %s", companyItem, payload)
             binding.apply {
                 if (payload.name) {
                     name.text = companyItem.name
                 }
-                if (payload.favouriteIcon) {
+                if (payload.favourite) {
                     ticker.setCompoundDrawablesWithIntrinsicBounds(
                         null,
                         null,
                         companyItem.favouriteIcon,
                         null
                     )
+                    if (longClickListener != null) {
+                        root.setOnLongClickListener {
+                            longClickListener.onLongClick(root, companyItem.company)
+                            true
+                        }
+                    } else {
+                        root.setOnLongClickListener(null)
+                    }
                 }
                 if (payload.currentString) {
                     current.text = companyItem.currentString
@@ -157,12 +187,17 @@ class CompanyAdapter(
     fun interface OnCompanyClickListener {
         fun onClick(ticker: String)
     }
+
+
+    fun interface OnCompanyLongClickListener {
+        fun onLongClick(view: View, company: Company)
+    }
 }
 
 
 class CompanyViewHolderItem(
     val position: Int,
-    company: Company,
+    val company: Company,
     formatter: Formatter
 ) {
     val logoUrl = company.logoUrl
@@ -238,7 +273,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem
 
         val payload = CompanyItemPayload(
             oldItem.name != newItem.name,
-            oldItem.favouriteIconId != newItem.favouriteIconId,
+            oldItem.favourite != newItem.favourite,
             oldItem.currentString != newItem.currentString,
             oldItem.changeString != newItem.changeString,
             oldItem.changeTextColorId != newItem.changeTextColorId,
@@ -255,7 +290,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem
 
 data class CompanyItemPayload(
     var name: Boolean = false,
-    var favouriteIcon: Boolean = false,
+    var favourite: Boolean = false,
     var currentString: Boolean = false,
     var changeString: Boolean = false,
     var changeTextColor: Boolean = false,

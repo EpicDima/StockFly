@@ -13,8 +13,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
-import com.epicdima.stockfly.databinding.FragmentChartBinding
-import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint

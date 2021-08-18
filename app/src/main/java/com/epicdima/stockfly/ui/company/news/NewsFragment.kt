@@ -48,6 +48,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
         FragmentNewsBinding.inflate(inflater, container, attachToParent)
 
     override fun bind(view: View) = FragmentNewsBinding.bind(view)
+
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider
 

@@ -40,12 +40,12 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
     @Inject
     lateinit var formatter: Formatter
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentChartBinding {
-        return FragmentChartBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_chart
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentChartBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentChartBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

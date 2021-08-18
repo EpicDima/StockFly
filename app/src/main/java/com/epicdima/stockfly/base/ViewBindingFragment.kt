@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.epicdima.stockfly.other.LayoutPool
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
 
@@ -14,7 +16,29 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
     protected val binding
         get() = _binding!!
 
-    protected abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): VDB
+    @Inject
+    lateinit var layoutPool: LayoutPool
+
+    protected abstract fun getLayoutId(): Int
+
+    protected abstract fun inflate(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        attachToParent: Boolean
+    ): VDB
+
+    protected abstract fun bind(
+        view: View
+    ): VDB
+
+    private fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): VDB {
+        val view = layoutPool.getLayout(getLayoutId(), container)
+        return if (view == null) {
+            inflate(inflater, container, false)
+        } else {
+            bind(view)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

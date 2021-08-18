@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
 import com.epicdima.stockfly.other.Formatter
@@ -39,12 +40,12 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     @Inject
     lateinit var formatter: Formatter
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentNewsBinding {
-        return FragmentNewsBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_news
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentNewsBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentNewsBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

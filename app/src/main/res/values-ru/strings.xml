@@ -45,6 +45,5 @@
     <string name="shortcut_search_disabled_label">Отключённый поиск</string>
     <string name="companies_popup_menu_item_add_to_favourites">Добавить в избранное</string>
     <string name="companies_popup_menu_item_remove">Удалить</string>
-    <string name="favourite_companies_popup_menu_item_delete">Удалить</string>
     <string name="companies_popup_menu_item_delete_from_favourites">Удалить из избранного</string>
 </resources>

@@ -36,12 +36,12 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentMainBinding {
-        return FragmentMainBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_main
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentMainBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentMainBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

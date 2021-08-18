@@ -1,4 +1,4 @@
-package com.epicdima.stockfly.other
+package com.epicdima.stockfly.customtabs
 
 import android.content.ComponentName
 import android.content.Context
@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.epicdima.stockfly.customtabs.CustomTabsHelper.getPackageNameToUse
 import timber.log.Timber
 
 class CustomTabsProvider(
@@ -19,13 +20,14 @@ class CustomTabsProvider(
     private var session: CustomTabsSession? = null
     private val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun bindService() {
         Timber.v("bindService")
+        getPackageNameToUse(context)
         CustomTabsClient.bindCustomTabsService(context, "com.android.chrome", this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun unbindService() {
         Timber.v("unbindService")
         if (client != null) {

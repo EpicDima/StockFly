@@ -1,7 +1,7 @@
 package com.epicdima.stockfly.di
 
 import android.content.Context
-import com.epicdima.stockfly.other.CustomTabsProvider
+import com.epicdima.stockfly.customtabs.CustomTabsProvider
 import com.epicdima.stockfly.other.LayoutPool
 import dagger.Module
 import dagger.Provides

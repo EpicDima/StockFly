@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
-import com.epicdima.stockfly.other.CustomTabsProvider
+import com.epicdima.stockfly.customtabs.CustomTabsProvider
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,15 +42,15 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     @Inject
     lateinit var formatter: Formatter
 
+    @Inject
+    lateinit var customTabsProvider: CustomTabsProvider
+
     override fun getLayoutId(): Int = R.layout.fragment_news
 
     override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
         FragmentNewsBinding.inflate(inflater, container, attachToParent)
 
     override fun bind(view: View) = FragmentNewsBinding.bind(view)
-
-    @Inject
-    lateinit var customTabsProvider: CustomTabsProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

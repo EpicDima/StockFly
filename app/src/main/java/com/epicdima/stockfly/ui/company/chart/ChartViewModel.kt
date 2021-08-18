@@ -29,7 +29,7 @@ class ChartViewModel @Inject constructor(
         get() = _previousStockCandleParam
 
     val company: StateFlow<Company?> = repository.getCompany(ticker)
-        .onEach { updateChart() }
+        .onEach { updateChart(repeat = true) }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _stockCandles = MutableStateFlow<StockCandles?>(null)
@@ -41,18 +41,24 @@ class ChartViewModel @Inject constructor(
 
     private val cache: MutableMap<StockCandleParam, StockCandles> = mutableMapOf()
 
-    private fun updateChart(newStockCandleParam: StockCandleParam = StockCandleParam.MONTH) {
-        if (_stockCandleParam.value != newStockCandleParam) {
+    private fun updateChart(newStockCandleParam: StockCandleParam = StockCandleParam.MONTH, repeat: Boolean = false) {
+        if (_stockCandleParam.value != newStockCandleParam || repeat) {
+            val newStockCandleParamTemp = if (repeat) {
+                 _stockCandleParam.value ?: newStockCandleParam
+            } else {
+                newStockCandleParam
+            }
+
             _brandNewData = false
-            beforeUpdate(newStockCandleParam)
-            if (cache.containsKey(newStockCandleParam)) {
+            beforeUpdate(newStockCandleParamTemp)
+            if (cache.containsKey(newStockCandleParamTemp)) {
                 _brandNewData = true
-                _stockCandles.value = cache[newStockCandleParam]
+                _stockCandles.value = cache[newStockCandleParamTemp]
                 stopLoading()
             } else {
                 beforeUpdateStart()
                 startJob(stopImmediately = true) {
-                    doJob(newStockCandleParam)
+                    doJob(newStockCandleParamTemp)
                 }
             }
         }

@@ -12,8 +12,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     MainRouter.SearchFragmentOpener,
-    MainRouter.CompanyFragmentOpener,
-    MainRouter.WebViewFragmentOpener {
+    MainRouter.CompanyFragmentOpener {
 
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider
@@ -68,9 +67,5 @@ class MainActivity : AppCompatActivity(),
 
     override fun openCompanyFragment(ticker: String) {
         router?.openCompanyFragment(ticker)
-    }
-
-    override fun openWebViewFragment(url: String) {
-        router?.openWebViewFragment(url)
     }
 }

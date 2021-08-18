@@ -8,13 +8,11 @@ object Versions {
     const val constraint = "2.1.0"
     const val recyclerView = "1.2.1"
 
-    const val activityKtx = "1.3.1"
     const val fragmentKtx = "1.3.6"
 
     const val material = "1.4.0"
 
     const val lifecycle = "2.4.0-alpha03" // для использования repeatOnLifecycle
-    const val lifecycleExt = "2.2.0"
     const val archLfecycleExt = "1.1.1"
 
     const val coroutines = "1.5.1"
@@ -29,9 +27,11 @@ object Versions {
 
     const val coil = "1.3.2"
 
-    const val timber = "4.7.1"
+    const val timber = "5.0.1"
 
     const val okhttp = "4.9.1"
 
     const val leakCanary = "2.7"
+
+    const val asynclayoutinflater = "1.0.0"
 }

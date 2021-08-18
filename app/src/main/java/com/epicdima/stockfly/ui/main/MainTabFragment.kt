@@ -27,12 +27,12 @@ abstract class MainTabFragment<VM : ViewModel> :
     private lateinit var deleteFromFavouritesText: String
     private lateinit var removeText: String
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentTabMainBinding {
-        return FragmentTabMainBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_tab_main
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentTabMainBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentTabMainBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

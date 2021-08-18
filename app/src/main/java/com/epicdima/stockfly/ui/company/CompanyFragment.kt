@@ -16,10 +16,7 @@ import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.other.customize
-import com.epicdima.stockfly.other.getDimensionInSp
-import com.epicdima.stockfly.other.set
-import com.epicdima.stockfly.other.setArgument
+import com.epicdima.stockfly.other.*
 import com.epicdima.stockfly.ui.company.chart.ChartFragment
 import com.epicdima.stockfly.ui.company.news.NewsFragment
 import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment
@@ -50,12 +47,12 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentCompanyBinding {
-        return FragmentCompanyBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_company
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentCompanyBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentCompanyBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

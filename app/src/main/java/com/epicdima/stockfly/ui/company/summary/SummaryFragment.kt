@@ -11,7 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
+import com.epicdima.stockfly.databinding.FragmentChartBinding
+import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.*
 import com.epicdima.stockfly.ui.MainRouter
@@ -39,12 +42,12 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     @Inject
     lateinit var formatter: Formatter
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSummaryBinding {
-        return FragmentSummaryBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_summary
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentSummaryBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentSummaryBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

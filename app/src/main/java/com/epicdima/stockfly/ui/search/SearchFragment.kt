@@ -71,12 +71,12 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     @Inject
     lateinit var formatter: Formatter
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSearchBinding {
-        return FragmentSearchBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_search
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentSearchBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentSearchBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

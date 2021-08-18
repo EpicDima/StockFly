@@ -10,11 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.core.view.isVisible
+import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewBindingFragment
 import com.epicdima.stockfly.databinding.FragmentWebviewBinding
 import com.epicdima.stockfly.other.setArgument
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class WebViewFragment : ViewBindingFragment<FragmentWebviewBinding>() {
 
     companion object {
@@ -27,12 +30,12 @@ class WebViewFragment : ViewBindingFragment<FragmentWebviewBinding>() {
         }
     }
 
-    override fun inflateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentWebviewBinding {
-        return FragmentWebviewBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_webview
+
+    override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
+        FragmentWebviewBinding.inflate(inflater, container, attachToParent)
+
+    override fun bind(view: View) = FragmentWebviewBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")

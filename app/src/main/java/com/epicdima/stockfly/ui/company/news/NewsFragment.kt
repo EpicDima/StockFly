@@ -12,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
+import com.epicdima.stockfly.other.CustomTabsProvider
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.setArgument
-import com.epicdima.stockfly.ui.MainRouter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -39,6 +41,9 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     @Inject
     lateinit var formatter: Formatter
 
+    @Inject
+    lateinit var customTabsProvider: CustomTabsProvider
+
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -49,6 +54,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.loading
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
@@ -56,6 +62,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
         viewModel.error
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
@@ -63,14 +70,13 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
         setupList()
     }
 
     private fun setupList() {
-        val adapter = NewsAdapter(formatter) { url ->
-            (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener)
-                .openWebViewFragment(url)
-        }
+        val adapter = NewsAdapter(formatter) { customTabsProvider.launchUrl(it) }
+
         binding.recyclerView.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(context)
@@ -79,10 +85,10 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
         }
         viewModel.news
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
-            .onEach {
-                adapter.submitNewsList(it)
-                checkVisibility()
-            }
+            .onEach { adapter.submitNewsList(it) }
+            .onEach { list -> customTabsProvider.mayLaunchManyUrls(list.map { it.url }.toList()) }
+            .flowOn(Dispatchers.Default)
+            .onEach { checkVisibility() }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 

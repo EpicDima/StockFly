@@ -4,14 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.epicdima.stockfly.databinding.ActivityMainBinding
+import com.epicdima.stockfly.other.CustomTabsProvider
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     MainRouter.SearchFragmentOpener,
     MainRouter.CompanyFragmentOpener,
     MainRouter.WebViewFragmentOpener {
+
+    @Inject
+    lateinit var customTabsProvider: CustomTabsProvider
 
     private var router: MainRouter? = null
 
@@ -22,6 +27,8 @@ class MainActivity : AppCompatActivity(),
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        lifecycle.addObserver(customTabsProvider)
+
         router = MainRouter(supportFragmentManager, binding.fragmentContainer.id)
 
         if (savedInstanceState == null) {
@@ -30,8 +37,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onDestroy() {
-        router = null
         Timber.v("onDestroy")
+        router = null
         super.onDestroy()
     }
 

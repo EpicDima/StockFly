@@ -127,6 +127,7 @@ dependencies {
         implementation(fragmentKtx)
         implementation(coil)
         implementation(timber)
+        implementation(browser)
     }
 
     Dependencies.debug.apply {

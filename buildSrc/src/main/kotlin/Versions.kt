@@ -34,4 +34,6 @@ object Versions {
     const val okhttp = "4.9.1"
 
     const val leakCanary = "2.7"
+
+    const val browser = "1.3.0"
 }

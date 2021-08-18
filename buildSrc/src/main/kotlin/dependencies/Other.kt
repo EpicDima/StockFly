@@ -14,4 +14,6 @@ object Other {
     const val coil = "io.coil-kt:coil:${Versions.coil}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
+    const val browser = "androidx.browser:browser:${Versions.browser}"
 }

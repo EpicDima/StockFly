@@ -128,6 +128,7 @@ dependencies {
         implementation(coil)
         implementation(timber)
         implementation(asynclayoutinflater)
+        implementation(browser)
     }
 
     Dependencies.debug.apply {

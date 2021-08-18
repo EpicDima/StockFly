@@ -27,11 +27,13 @@ object Versions {
 
     const val coil = "1.3.2"
 
-    const val timber = "5.0.1"
+    const val timber = "4.7.1"
 
     const val okhttp = "4.9.1"
 
     const val leakCanary = "2.7"
 
     const val asynclayoutinflater = "1.0.0"
+
+    const val browser = "1.3.0"
 }

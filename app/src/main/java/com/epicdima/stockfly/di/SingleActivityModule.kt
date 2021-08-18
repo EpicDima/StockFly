@@ -1,6 +1,7 @@
 package com.epicdima.stockfly.di
 
 import android.content.Context
+import com.epicdima.stockfly.other.CustomTabsProvider
 import com.epicdima.stockfly.other.LayoutPool
 import dagger.Module
 import dagger.Provides
@@ -17,5 +18,11 @@ object SingleActivityModule {
     @Provides
     fun provideLayoutPool(@ActivityContext context: Context): LayoutPool {
         return LayoutPool(context)
+    }
+
+    @ActivityScoped
+    @Provides
+    fun provideCustomTabsProvider(@ActivityContext context: Context): CustomTabsProvider {
+        return CustomTabsProvider(context)
     }
 }

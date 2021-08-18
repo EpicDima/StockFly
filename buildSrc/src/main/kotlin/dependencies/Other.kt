@@ -15,5 +15,7 @@ object Other {
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
+    const val browser = "androidx.browser:browser:${Versions.browser}"
+
     const val asynclayoutinflater = "androidx.asynclayoutinflater:asynclayoutinflater:${Versions.asynclayoutinflater}"
 }

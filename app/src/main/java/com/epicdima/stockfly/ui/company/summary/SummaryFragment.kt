@@ -17,7 +17,6 @@ import com.epicdima.stockfly.databinding.FragmentChartBinding
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
 import com.epicdima.stockfly.other.*
-import com.epicdima.stockfly.ui.MainRouter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,6 +41,9 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     @Inject
     lateinit var formatter: Formatter
 
+    @Inject
+    lateinit var customTabsProvider: CustomTabsProvider
+
     override fun getLayoutId(): Int = R.layout.fragment_summary
 
     override fun inflate(inflater: LayoutInflater, container: ViewGroup?, attachToParent: Boolean) =
@@ -63,15 +65,18 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
             .onEach {
                 if (it != null) {
                     loadImageWithGoneOnError(binding.imageView, it.logoUrl)
-                    binding.fullname.text = it.name
-                    binding.phoneValue.text = it.phone
-                    binding.weburlValue.text = it.webUrl
-                    binding.countryValue.text = it.countryName
-                    binding.currencyValue.text = it.currentString
-                    binding.soValue.text = it.shareOutstanding.toLocalString(formatter)
-                    binding.mcValue.text = it.marketCapitalization.toLocalString(formatter)
-                    binding.exchangeValue.text = it.exchange
-                    binding.ipoValue.text = it.ipoLocalDateString(formatter)
+                    binding.apply {
+                        fullname.text = it.name
+                        phoneValue.text = it.phone
+                        weburlValue.text = it.webUrl
+                        countryValue.text = it.countryName
+                        currencyValue.text = it.currency
+                        soValue.text = it.shareOutstanding.toLocalString(formatter)
+                        mcValue.text = it.marketCapitalization.toLocalString(formatter)
+                        exchangeValue.text = it.exchange
+                        ipoValue.text = it.ipoLocalDateString(formatter)
+                    }
+                    customTabsProvider.mayLaunchUrl(it.webUrl)
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -80,20 +85,20 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     }
 
     private fun setClickListeners() {
-        binding.phoneValue.setOnClickListener {
-            val phoneNumber = binding.phoneValue.text.toString()
-            if (phoneNumber.isNotEmpty()) {
-                Timber.i("open phone number '%s'", phoneNumber)
-                startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}")))
+        binding.apply {
+            phoneValue.setOnClickListener {
+                val phoneNumber = phoneValue.text.toString()
+                if (phoneNumber.isNotEmpty()) {
+                    Timber.i("open phone number '%s'", phoneNumber)
+                    startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}")))
+                }
             }
-        }
-        binding.weburlValue.setOnClickListener {
-            val url = binding.weburlValue.text.toString()
-            if (url.isNotEmpty()) {
-                Timber.i("open url '%s'", url)
-                (requireParentFragment().requireActivity() as MainRouter.WebViewFragmentOpener).openWebViewFragment(
-                    createUri(url).toString()
-                )
+
+            weburlValue.setOnClickListener {
+                val url = weburlValue.text.toString()
+                if (url.isNotEmpty()) {
+                    customTabsProvider.launchUrl(url)
+                }
             }
         }
     }

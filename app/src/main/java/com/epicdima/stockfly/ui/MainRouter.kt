@@ -7,7 +7,6 @@ import androidx.fragment.app.commit
 import com.epicdima.stockfly.ui.company.CompanyFragment
 import com.epicdima.stockfly.ui.main.MainFragment
 import com.epicdima.stockfly.ui.search.SearchFragment
-import com.epicdima.stockfly.ui.web.WebViewFragment
 import timber.log.Timber
 
 class MainRouter(
@@ -16,7 +15,7 @@ class MainRouter(
 ) {
 
     private enum class FragmentPage {
-        MAIN, SEARCH, COMPANY, WEBVIEW;
+        MAIN, SEARCH, COMPANY;
 
         val tag: String = toString()
     }
@@ -88,12 +87,6 @@ class MainRouter(
         }
     }
 
-    fun openWebViewFragment(url: String) {
-        fragmentManager.commit {
-            openFragment(WebViewFragment.newInstance(url), FragmentPage.WEBVIEW)
-        }
-    }
-
 
     interface SearchFragmentOpener {
 
@@ -104,11 +97,5 @@ class MainRouter(
     interface CompanyFragmentOpener {
 
         fun openCompanyFragment(ticker: String)
-    }
-
-
-    interface WebViewFragmentOpener {
-
-        fun openWebViewFragment(url: String)
     }
 }

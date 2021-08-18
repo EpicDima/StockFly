@@ -63,7 +63,7 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
         titles = CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.viewPager.apply {
             isUserInputEnabled = false
-            offscreenPageLimit = CompanyTab.values().size
+            offscreenPageLimit = 1
             adapter = CompanyFragmentAdapter(
                 requireArguments().getString(TICKER_KEY)!!,
                 this@CompanyFragment

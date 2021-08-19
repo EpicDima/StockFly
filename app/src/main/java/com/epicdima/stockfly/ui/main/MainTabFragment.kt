@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
@@ -43,7 +44,9 @@ abstract class MainTabFragment<VM : ViewModel> :
             getString(R.string.companies_popup_menu_item_delete_from_favourites)
         removeText = getString(R.string.companies_popup_menu_item_remove)
 
-        companyAdapter = createAdapter()
+        companyAdapter = createAdapter().apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
         binding.apply {
             recyclerView.apply {
                 adapter = companyAdapter

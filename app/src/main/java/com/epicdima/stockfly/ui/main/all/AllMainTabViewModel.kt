@@ -18,7 +18,7 @@ class AllMainTabViewModel @Inject constructor(
 ) : ViewModel() {
 
     val companies: StateFlow<List<Company>> = repository.companies
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun changeFavourite(company: Company) {
         viewModelScope.launch(Dispatchers.IO) {

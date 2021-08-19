@@ -62,18 +62,25 @@ class AppRepository(
         return adapter.fromJson(preferences.getSearched() ?: EMPTY_JSON_STRING)!!
     }
 
-    private suspend fun getCompanyWithQuote(ticker: String): Company? {
-        return try {
-            val quote = apiService.getQuote(ticker).toModel()
-            apiService.getCompany(ticker).toModel().copy(quote = quote)
-        } catch (e: Exception) {
-            Timber.w(e)
-            null
+    private suspend fun getCompanyWithQuote(ticker: String): Company? =
+        withContext(Dispatchers.IO) {
+            try {
+                apiService
+                    .getCompany(ticker)
+                    .toModel()
+                    .copy(
+                        quote = apiService
+                            .getQuote(ticker)
+                            .toModel()
+                    )
+            } catch (e: Exception) {
+                Timber.w(e)
+                null
+            }
         }
-    }
 
-    override suspend fun search(query: String): List<Company> {
-        return apiService.search(query).result
+    override suspend fun search(query: String): List<Company> = withContext(Dispatchers.IO) {
+        apiService.search(query).result
             .filter { !isWrongTicker(it.ticker) }
             .map { companyDao.selectAsModel(it.ticker)?.toModel() ?: it.toModel() }
     }
@@ -85,18 +92,19 @@ class AppRepository(
         return ticker.contains(".") || ticker.contains(":")
     }
 
-    override suspend fun getCompanyForSearch(company: Company): Company {
-        val updatedCompany = getCompanyWithQuote(company.ticker)
-        return if (updatedCompany != null) {
-            if (company.favourite) {
-                updatedCompany.copy(favourite = company.favourite)
+    override suspend fun getCompanyForSearch(company: Company): Company =
+        withContext(Dispatchers.Default) {
+            val updatedCompany = getCompanyWithQuote(company.ticker)
+            if (updatedCompany != null) {
+                if (company.favourite) {
+                    updatedCompany.copy(favourite = company.favourite)
+                } else {
+                    updatedCompany
+                }
             } else {
-                updatedCompany
+                company
             }
-        } else {
-            company
         }
-    }
 
     override fun addSearchRequest(request: String) {
         val list = searchedRequests.toMutableList()
@@ -109,20 +117,21 @@ class AppRepository(
         preferences.setSearched(adapter.toJson(list))
     }
 
-    override suspend fun refreshCompanies() {
-        withContext(Dispatchers.IO) {
-            val list = companyDao.selectAllAsList()
-            companyDao.update(list.mapNotNull {
+    override suspend fun refreshCompanies() = withContext(Dispatchers.IO) {
+        companyDao.update(companyDao
+            .selectAllAsList()
+            .mapNotNull {
                 val existing = companyDao.selectAsModel(it.ticker)!!
-                getCompanyWithQuote(it.ticker)?.toEntity()?.copy(
-                    favourite = existing.favourite,
-                    favouriteNumber = existing.favouriteNumber
-                )
+                getCompanyWithQuote(it.ticker)
+                    ?.toEntity()
+                    ?.copy(
+                        favourite = existing.favourite,
+                        favouriteNumber = existing.favouriteNumber
+                    )
             })
-        }
     }
 
-    override suspend fun changeFavourite(company: Company) {
+    override suspend fun changeFavourite(company: Company) = withContext(Dispatchers.IO) {
         val fromDb = companyDao.selectAsModel(company.ticker)!!.toModel()
         companyDao.update(
             fromDb.copy(favourite = !fromDb.favourite, favouriteNumber = 0).toEntity()
@@ -133,19 +142,20 @@ class AppRepository(
         companyDao.update(list)
     }
 
-    override suspend fun changeFavouriteNumber(from: Int, to: Int) {
-        val list = companyDao.selectFavouritesAsList().toMutableList()
-        if (from < to) {
-            for (i in from until to) {
-                Collections.swap(list, i, i + 1)
+    override suspend fun changeFavouriteNumber(from: Int, to: Int) =
+        withContext(Dispatchers.Default) {
+            val list = companyDao.selectFavouritesAsList().toMutableList()
+            if (from < to) {
+                for (i in from until to) {
+                    Collections.swap(list, i, i + 1)
+                }
+            } else {
+                for (i in from downTo to + 1) {
+                    Collections.swap(list, i, i - 1)
+                }
             }
-        } else {
-            for (i in from downTo to + 1) {
-                Collections.swap(list, i, i - 1)
-            }
+            companyDao.update(list.mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) })
         }
-        companyDao.update(list.mapIndexed { index, entity -> entity.copy(favouriteNumber = index + 1) })
-    }
 
     override fun getCompany(ticker: String): Flow<Company> {
         return companyDao.select(ticker)
@@ -172,21 +182,22 @@ class AppRepository(
         )
     }
 
-    override suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles? {
-        val (from, _) = param.getTimeInterval()
-        return stockCandlesDao.select(ticker, param, from).map { it.toModel() }
-            .toStockCandles()
-    }
+    override suspend fun getStockCandles(ticker: String, param: StockCandleParam): StockCandles? =
+        withContext(Dispatchers.IO) {
+            val (from, _) = param.getTimeInterval()
+            stockCandlesDao.select(ticker, param, from).map { it.toModel() }
+                .toStockCandles()
+        }
 
     override suspend fun getStockCandlesWithRefresh(
         ticker: String,
         param: StockCandleParam
-    ): StockCandles? {
+    ): StockCandles? = withContext(Dispatchers.IO) {
         val (from, to) = param.getTimeInterval()
         val fromApi = apiService.getStockCandles(ticker, param.resolution, from, to).toModel()
         val forDb = fromApi.toStockCandleItems().map { it.toEntity(ticker, param) }
         val fromDb = stockCandlesDao.insertAndSelect(ticker, param, from, forDb)
-        return fromDb.map { it.toModel() }.toStockCandles()
+        fromDb.map { it.toModel() }.toStockCandles()
     }
 
     override fun getCompanyNewsWithRefresh(
@@ -223,7 +234,7 @@ class AppRepository(
         )
     }
 
-    override suspend fun deleteCompany(company: Company) {
+    override suspend fun deleteCompany(company: Company) = withContext(Dispatchers.IO) {
         companyDao.delete(company.toEntity())
     }
 
@@ -243,6 +254,8 @@ class AppRepository(
                         .onFailure { Timber.w(it, "refreshDbAndGetNew") }
                 }
                 .onFailure { Timber.w(it, "getFromApi") }
-        }.flowOn(Dispatchers.IO)
+        }
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
     }
 }

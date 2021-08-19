@@ -58,6 +58,7 @@ class RecommendationFragment :
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
         viewModel.error
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {

@@ -21,7 +21,7 @@ class FavouriteMainTabViewModel @Inject constructor(
     val companies: StateFlow<List<Company>> = repository.favourites
         .distinctUntilChanged()
         .onEach { shortcutConfigurator.updateShortcuts(it) }
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun changeFavouriteNumber(from: Int, to: Int) {
         Timber.i("changeFavouriteNumber from %d to %d", from, to)

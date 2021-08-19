@@ -8,6 +8,7 @@ import com.epicdima.stockfly.model.StockCandles
 import com.epicdima.stockfly.other.StockCandleParam
 import com.epicdima.stockfly.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class ChartViewModel @Inject constructor(
 
     val company: StateFlow<Company?> = repository.getCompany(ticker)
         .onEach { updateChart(repeat = true) }
+        .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val _stockCandles = MutableStateFlow<StockCandles?>(null)

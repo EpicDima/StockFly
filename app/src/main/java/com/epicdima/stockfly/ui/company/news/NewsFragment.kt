@@ -55,6 +55,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.loading
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
@@ -62,6 +63,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
         viewModel.error
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
@@ -69,6 +71,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
                 checkVisibility()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
         setupList()
     }
 

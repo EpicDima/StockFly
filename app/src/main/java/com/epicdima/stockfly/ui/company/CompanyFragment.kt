@@ -69,13 +69,14 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
         viewModel.error
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
-                binding.errorWidget.root.isVisible = it
-                binding.favouriteButton.visibility =
-                    if (viewModel.company.value != null && !it) View.VISIBLE else View.INVISIBLE
-                binding.tabLayout.isVisible = (viewModel.company.value != null && !it)
-                binding.viewPager.isVisible = (viewModel.company.value != null && !it)
-                binding.progressBarWidget.root.isVisible =
-                    (viewModel.company.value == null && !it)
+                binding.apply {
+                    errorWidget.root.isVisible = it
+                    favouriteButton.visibility =
+                        if (viewModel.company.value != null && !it) View.VISIBLE else View.INVISIBLE
+                    tabLayout.isVisible = (viewModel.company.value != null && !it)
+                    viewPager.isVisible = (viewModel.company.value != null && !it)
+                    progressBarWidget.root.isVisible = (viewModel.company.value == null && !it)
+                }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -89,15 +90,16 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
     }
 
     private fun setCompany(company: Company?) {
-        binding.ticker.text = company?.ticker ?: ""
-        binding.name.text = company?.name ?: ""
-        binding.favouriteButton.visibility =
-            if (company != null && !viewModel.error.value) View.VISIBLE else View.INVISIBLE
-        binding.favouriteIcon.setImageResource(if (company?.favourite == true) R.drawable.ic_star_selected else R.drawable.ic_star)
-        binding.tabLayout.isVisible = (company != null && !viewModel.error.value)
-        binding.viewPager.isVisible = (company != null && !viewModel.error.value)
-        binding.progressBarWidget.root.isVisible =
-            (company == null && !viewModel.error.value)
+        binding.apply {
+            ticker.text = company?.ticker ?: ""
+            name.text = company?.name ?: ""
+            favouriteButton.visibility =
+                if (company != null && !viewModel.error.value) View.VISIBLE else View.INVISIBLE
+            favouriteIcon.setImageResource(if (company?.favourite == true) R.drawable.ic_star_selected else R.drawable.ic_star)
+            tabLayout.isVisible = (company != null && !viewModel.error.value)
+            viewPager.isVisible = (company != null && !viewModel.error.value)
+            progressBarWidget.root.isVisible = (company == null && !viewModel.error.value)
+        }
     }
 
     private fun setupTabs() {
@@ -120,11 +122,14 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
     }
 
     private fun setupClickListeners() {
-        binding.backButton.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
-        binding.favouriteButton.setOnClickListener {
-            viewModel.changeFavourite()
+        binding.apply {
+            backButton.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+
+            favouriteButton.setOnClickListener {
+                viewModel.changeFavourite()
+            }
         }
     }
 

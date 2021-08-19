@@ -32,10 +32,8 @@ import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -161,6 +159,8 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     private fun setupResultList() {
         val resultAdapter = CompanyAdapter(formatter) { ticker ->
             (requireActivity() as MainRouter.CompanyFragmentOpener).openCompanyFragment(ticker)
+        }.apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.resultRecyclerView.apply {
             adapter = resultAdapter
@@ -172,6 +172,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         viewModel.result
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { resultAdapter.submitCompanyList(it, requireContext()) }
+            .flowOn(Dispatchers.Default)
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 

@@ -15,6 +15,7 @@ import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -52,9 +53,10 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
         viewModel.companies
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
             .onEach {
-                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
-                    companyAdapter.submitCompanyList(it, requireContext())
-                }
+                companyAdapter.submitCompanyList(it, requireContext())
+            }
+            .flowOn(Dispatchers.Default)
+            .onEach {
                 binding.apply {
                     recyclerView.isVisible = it.isNotEmpty()
                     emptyTextview.isVisible = it.isEmpty()

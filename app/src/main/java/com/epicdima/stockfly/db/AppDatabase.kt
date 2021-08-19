@@ -37,11 +37,10 @@ abstract class AppDatabase : RoomDatabase(), com.epicdima.stockfly.db.Database {
 }
 
 
-fun buildDatabase(context: Context): AppDatabase {
-    return Room.databaseBuilder(
-        context.applicationContext,
-        AppDatabase::class.java, "stockfly.db"
-    )
-        .fallbackToDestructiveMigration()
-        .build()
-}
+fun buildDatabase(context: Context): AppDatabase = Room.databaseBuilder(
+    context.applicationContext,
+    AppDatabase::class.java,
+    "stockfly.db"
+)
+    .fallbackToDestructiveMigration()
+    .build()

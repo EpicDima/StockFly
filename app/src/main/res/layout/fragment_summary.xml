@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image_view"
@@ -40,6 +40,20 @@
             app:layout_constraintTop_toBottomOf="@+id/image_view"
             tools:text="KJjasdhjkh KJHkjashdjh JHkjhasfjkh JKHafjksdhjkashjkfh jkhasfjkh asjklhfljkhaskjhf jklahs" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontal_center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/phone_number_and_weburl_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="phone_title,weburl_title,phone_value,weburl_value" />
+
         <TextView
             android:id="@+id/phone_title"
             style="@style/SummaryFieldTitle"
@@ -49,7 +63,7 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="@string/phone_number"
-            app:layout_constraintEnd_toStartOf="@id/weburl_title"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fullname" />
@@ -62,11 +76,11 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:gravity="center"
-            app:layout_constraintEnd_toStartOf="@id/weburl_value"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/phone_title"
-            tools:text="3726472123" />
+            tools:text="3726472dfsdfsdfsdfsdfsdfsfskldjfkljasasdl;kaskdl;askdl;aksl;dka;lskdl;adlkfjdlkjsadlkfjlaksdjfdfsdfsdfsdfs123" />
 
         <TextView
             android:id="@+id/weburl_title"
@@ -79,7 +93,7 @@
             android:text="@string/website"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/phone_title"
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
             app:layout_constraintTop_toBottomOf="@+id/fullname" />
 
         <TextView
@@ -92,9 +106,16 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/phone_value"
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
             app:layout_constraintTop_toBottomOf="@+id/weburl_title"
             tools:text="apple.com" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/country_and_currency_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="country_title,currency_value,currency_title,country_value" />
 
         <TextView
             android:id="@+id/country_title"
@@ -105,10 +126,11 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="@string/country"
-            app:layout_constraintEnd_toStartOf="@id/currency_title"
+            app:layout_constraintBottom_toTopOf="@id/country_value"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_value" />
+            app:layout_constraintTop_toBottomOf="@+id/phone_number_and_weburl_barrier" />
 
         <TextView
             android:id="@+id/country_value"
@@ -119,7 +141,7 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:textIsSelectable="true"
-            app:layout_constraintEnd_toStartOf="@id/currency_value"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/country_title"
@@ -136,8 +158,8 @@
             android:text="@string/currency"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/country_title"
-            app:layout_constraintTop_toBottomOf="@+id/weburl_value" />
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
+            app:layout_constraintTop_toBottomOf="@+id/phone_number_and_weburl_barrier" />
 
         <TextView
             android:id="@+id/currency_value"
@@ -150,9 +172,16 @@
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/country_value"
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
             app:layout_constraintTop_toBottomOf="@+id/currency_title"
             tools:text="USD" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/so_and_mc_barrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="so_title,so_value,mc_title,mc_value" />
 
         <TextView
             android:id="@+id/so_title"
@@ -163,10 +192,10 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="@string/shares_outstanding"
-            app:layout_constraintEnd_toStartOf="@id/mc_title"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/country_value" />
+            app:layout_constraintTop_toBottomOf="@+id/country_and_currency_barrier" />
 
         <TextView
             android:id="@+id/so_value"
@@ -177,7 +206,7 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:textIsSelectable="true"
-            app:layout_constraintEnd_toStartOf="@id/mc_value"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/so_title"
@@ -194,8 +223,8 @@
             android:text="@string/market_capitalization"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/so_title"
-            app:layout_constraintTop_toBottomOf="@+id/currency_value" />
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
+            app:layout_constraintTop_toBottomOf="@+id/country_and_currency_barrier" />
 
         <TextView
             android:id="@+id/mc_value"
@@ -208,7 +237,7 @@
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/so_value"
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
             app:layout_constraintTop_toBottomOf="@+id/mc_title"
             tools:text="435634636" />
 
@@ -221,10 +250,10 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:text="@string/exchange"
-            app:layout_constraintEnd_toStartOf="@id/ipo_title"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/so_value" />
+            app:layout_constraintTop_toBottomOf="@+id/so_and_mc_barrier" />
 
         <TextView
             android:id="@+id/exchange_value"
@@ -235,7 +264,7 @@
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:textIsSelectable="true"
-            app:layout_constraintEnd_toStartOf="@id/ipo_value"
+            app:layout_constraintEnd_toEndOf="@id/horizontal_center"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exchange_title"
@@ -252,8 +281,8 @@
             android:text="@string/ipo_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/exchange_title"
-            app:layout_constraintTop_toBottomOf="@+id/mc_value" />
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
+            app:layout_constraintTop_toBottomOf="@+id/so_and_mc_barrier" />
 
         <TextView
             android:id="@+id/ipo_value"
@@ -266,7 +295,7 @@
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/exchange_value"
+            app:layout_constraintStart_toStartOf="@id/horizontal_center"
             app:layout_constraintTop_toBottomOf="@+id/ipo_title"
             tools:text="1980-12-12" />
 

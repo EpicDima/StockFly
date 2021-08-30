@@ -1,5 +1,6 @@
 package com.epicdima.stockfly.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,16 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        Timber.v("onAttach")
+        super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.v("onCreate")
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,9 +61,39 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        Timber.v("onStart")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        Timber.v("onResume")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Timber.v("onPause")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        Timber.v("onStop")
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         Timber.v("onDestroyView")
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        Timber.v("onDestroy")
+        super.onDestroy()
+    }
+
+    override fun onDetach() {
+        Timber.v("onDetach")
+        super.onDetach()
     }
 }

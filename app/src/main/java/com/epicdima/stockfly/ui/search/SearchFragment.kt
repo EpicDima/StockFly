@@ -77,7 +77,6 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     override fun bind(view: View) = FragmentSearchBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {

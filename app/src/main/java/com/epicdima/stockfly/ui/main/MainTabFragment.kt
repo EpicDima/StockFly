@@ -36,7 +36,6 @@ abstract class MainTabFragment<VM : ViewModel> :
     override fun bind(view: View) = FragmentTabMainBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
         addToFavouritesText = getString(R.string.companies_popup_menu_item_add_to_favourites)

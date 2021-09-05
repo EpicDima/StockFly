@@ -55,7 +55,6 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
     override fun bind(view: View) = FragmentCompanyBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         titles = CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.viewPager.apply {

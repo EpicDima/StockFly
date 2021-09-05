@@ -53,7 +53,6 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     override fun bind(view: View) = FragmentNewsBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loading

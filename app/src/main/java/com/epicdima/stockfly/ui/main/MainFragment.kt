@@ -44,7 +44,6 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
     override fun bind(view: View) = FragmentMainBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         titles = MainTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.apply {

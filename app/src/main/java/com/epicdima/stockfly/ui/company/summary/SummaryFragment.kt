@@ -51,7 +51,6 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     override fun bind(view: View) = FragmentSummaryBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {

@@ -48,7 +48,6 @@ class RecommendationFragment :
     override fun bind(view: View) = FragmentRecommendationBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         binding.recommendationView.setFormatter(formatter)
         viewModel.loading

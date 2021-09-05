@@ -48,7 +48,6 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
     override fun bind(view: View) = FragmentChartBinding.bind(view)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.v("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loading

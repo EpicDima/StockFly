@@ -63,6 +63,11 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        logWithCurrentMethodName()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onStart() {
         logWithCurrentMethodName()
         super.onStart()

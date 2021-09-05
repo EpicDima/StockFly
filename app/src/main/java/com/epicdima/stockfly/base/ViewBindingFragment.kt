@@ -35,21 +35,21 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
     private fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): VDB {
         val view = layoutPool.getLayout(getLayoutId(), container)
         return if (view == null) {
-            Timber.v("%-15s %-30s", "inflate", javaClass.simpleName)
+            logWithCurrentClassName("inflate")
             inflate(inflater, container, false)
         } else {
-            Timber.v("%-15s %-30s", "bind", javaClass.simpleName)
+            logWithCurrentClassName("bind")
             bind(view)
         }
     }
 
     override fun onAttach(context: Context) {
-        Timber.v("%-15s %-30s", "onAttach", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.v("%-15s %-30s", "onCreate", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onCreate(savedInstanceState)
     }
 
@@ -58,44 +58,56 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.v("%-15s %-30s", "onCreateView", javaClass.simpleName)
+        logWithCurrentMethodName()
         _binding = inflateBinding(inflater, container)
         return binding.root
     }
 
     override fun onStart() {
-        Timber.v("%-15s %-30s", "onStart", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onStart()
     }
 
     override fun onResume() {
-        Timber.v("%-15s %-30s", "onResume", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onResume()
     }
 
     override fun onPause() {
-        Timber.v("%-15s %-30s", "onPause", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onPause()
     }
 
     override fun onStop() {
-        Timber.v("%-15s %-30s", "onStop", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onStop()
     }
 
     override fun onDestroyView() {
-        Timber.v("%-15s %-30s", "onDestroyView", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onDestroyView()
         _binding = null
     }
 
     override fun onDestroy() {
-        Timber.v("%-15s %-30s", "onDestroy", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onDestroy()
     }
 
     override fun onDetach() {
-        Timber.v("%-15s %-30s", "onDetach", javaClass.simpleName)
+        logWithCurrentMethodName()
         super.onDetach()
+    }
+
+    private fun logWithCurrentMethodName() {
+        if (Timber.treeCount > 0) {
+            logWithCurrentClassName(Thread.currentThread().stackTrace[3].methodName)
+        }
+    }
+
+    private fun logWithCurrentClassName(message: String) {
+        if (Timber.treeCount > 0) {
+            Timber.i("%-15s %-30s", message, javaClass.simpleName)
+        }
     }
 }

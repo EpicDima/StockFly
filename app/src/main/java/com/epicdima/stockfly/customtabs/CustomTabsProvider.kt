@@ -13,8 +13,11 @@ import com.epicdima.stockfly.customtabs.CustomTabsHelper.getPackageNameToUse
 import timber.log.Timber
 
 class CustomTabsProvider(
-    private val context: Context
+    private var _context: Context?
 ) : CustomTabsServiceConnection(), LifecycleObserver {
+
+    private val context: Context
+        get() = _context!!
 
     private var client: CustomTabsClient? = null
     private var session: CustomTabsSession? = null
@@ -33,6 +36,12 @@ class CustomTabsProvider(
         if (client != null) {
             context.unbindService(this)
         }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        Timber.v("onDestroy")
+        _context = null
     }
 
     fun mayLaunchUrl(url: String) {

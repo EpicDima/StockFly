@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import com.epicdima.stockfly.ui.company.CompanyFragment
 import com.epicdima.stockfly.ui.main.MainFragment
 import com.epicdima.stockfly.ui.search.SearchFragment
@@ -22,6 +23,25 @@ class MainRouter(
 
     init {
         Timber.v("init")
+
+        fragmentManager.addOnBackStackChangedListener {
+            Timber.i("OnBackStackChangedListener %s", fragmentManager.fragments)
+
+            fragmentManager.fragments.dropLast(1).forEach {
+                fragmentManager.commit {
+                    hide(it)
+                    setMaxLifecycle(it, Lifecycle.State.STARTED)
+                }
+            }
+
+            fragmentManager.fragments.lastOrNull()?.let {
+                fragmentManager.commit {
+                    show(it)
+                    setMaxLifecycle(it, Lifecycle.State.RESUMED)
+                }
+            }
+        }
+
         if (fragmentManager.fragments.isEmpty()) {
             Timber.i("new MainFragment")
 
@@ -48,7 +68,7 @@ class MainRouter(
             tag
         )
 
-        replace(containerId, fragment, tag)
+        add(containerId, fragment, tag)
 
         if (toBackStack) {
             addToBackStack(tag)

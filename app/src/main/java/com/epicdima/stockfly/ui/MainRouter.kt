@@ -27,15 +27,13 @@ class MainRouter(
         fragmentManager.addOnBackStackChangedListener {
             Timber.i("OnBackStackChangedListener %s", fragmentManager.fragments)
 
-            fragmentManager.fragments.dropLast(1).forEach {
-                fragmentManager.commit {
+            fragmentManager.commit {
+                fragmentManager.fragments.dropLast(1).forEach {
                     hide(it)
                     setMaxLifecycle(it, Lifecycle.State.STARTED)
                 }
-            }
 
-            fragmentManager.fragments.lastOrNull()?.let {
-                fragmentManager.commit {
+                fragmentManager.fragments.lastOrNull()?.let {
                     show(it)
                     setMaxLifecycle(it, Lifecycle.State.RESUMED)
                 }

@@ -10,20 +10,35 @@ class Formatter(context: Context) {
 
     private val stringDateFormatMap = mutableMapOf<String, SimpleDateFormat>()
 
-    val currentLocale: Locale = context.resources.configuration.let {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            it.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            it.locale
-        }
+    lateinit var currentLocale: Locale
+        private set
+
+    private lateinit var numberFormat: NumberFormat
+
+    private lateinit var percentFormat: NumberFormat
+
+    init {
+        refresh(context)
     }
 
-    private val numberFormat: NumberFormat = NumberFormat.getNumberInstance(currentLocale)
+    fun refresh(context: Context) {
+        stringDateFormatMap.clear()
 
-    private val percentFormat: NumberFormat = NumberFormat.getPercentInstance(currentLocale).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
+        currentLocale = context.resources.configuration.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                it.locales[0]
+            } else {
+                @Suppress("DEPRECATION")
+                it.locale
+            }
+        }
+
+        numberFormat = NumberFormat.getNumberInstance(currentLocale)
+
+        percentFormat = NumberFormat.getPercentInstance(currentLocale).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
     }
 
     fun getSimpleDateFormat(pattern: String): SimpleDateFormat {

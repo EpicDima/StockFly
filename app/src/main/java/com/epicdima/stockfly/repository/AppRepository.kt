@@ -243,7 +243,7 @@ class AppRepository(
         getFromApi: suspend () -> T,
         refreshDatabaseAndGetNew: suspend (value: T) -> T
     ): Flow<T> {
-        return flow {
+        return flow<T> {
             runCatching { getFromDatabase() }
                 .onSuccess { databaseData -> emit(databaseData) }
                 .onFailure { Timber.w(it, "getFromDatabase") }

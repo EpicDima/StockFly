@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.5.21"
+    const val kotlin = "1.5.30"
 
     const val coreKtx = "1.6.0"
 
@@ -15,7 +15,7 @@ object Versions {
     const val lifecycle = "2.4.0-alpha03" // для использования repeatOnLifecycle
     const val archLfecycleExt = "1.1.1"
 
-    const val coroutines = "1.5.1"
+    const val coroutines = "1.5.2"
 
     const val room = "2.3.0"
 
@@ -27,7 +27,7 @@ object Versions {
 
     const val coil = "1.3.2"
 
-    const val timber = "4.7.1"
+    const val timber = "5.0.1"
 
     const val okhttp = "4.9.1"
 

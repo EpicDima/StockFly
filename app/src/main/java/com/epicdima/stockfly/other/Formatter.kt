@@ -1,64 +1,40 @@
 package com.epicdima.stockfly.other
 
-import timber.log.Timber
+import android.content.Context
+import android.os.Build
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Formatter {
-
-    private var currentLocale: Locale = Locale.getDefault()
+class Formatter(context: Context) {
 
     private val stringDateFormatMap = mutableMapOf<String, SimpleDateFormat>()
 
-    private lateinit var numberFormat: NumberFormat
-    private lateinit var percentFormat: NumberFormat
-
-    init {
-        Timber.v("init")
-        resetNumberFormat()
-        resetPercentFormat()
-    }
-
-    fun updateLocale(locale: Locale) {
-        Timber.i("updateLocale on %s", locale)
-
-        if (locale != currentLocale) {
-            currentLocale = locale
-            resetStringDateFormatMap()
-            resetNumberFormat()
-            resetPercentFormat()
+    val currentLocale: Locale = context.resources.configuration.let {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            it.locales[0]
+        } else {
+            @Suppress("DEPRECATION")
+            it.locale
         }
     }
 
-    fun getCurrentLocale(): Locale {
-        return currentLocale
-    }
+    private val numberFormat: NumberFormat = NumberFormat.getNumberInstance(currentLocale)
 
-    private fun resetStringDateFormatMap() {
-        stringDateFormatMap.clear()
-    }
-
-    private fun resetNumberFormat() {
-        numberFormat = NumberFormat.getNumberInstance(currentLocale)
-    }
-
-    private fun resetPercentFormat() {
-        percentFormat = NumberFormat.getPercentInstance(currentLocale).apply {
-            minimumFractionDigits = 2
-            maximumFractionDigits = 2
-        }
+    private val percentFormat: NumberFormat = NumberFormat.getPercentInstance(currentLocale).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
     }
 
     fun getSimpleDateFormat(pattern: String): SimpleDateFormat {
         return stringDateFormatMap.getOrPut(pattern) { SimpleDateFormat(pattern, currentLocale) }
     }
 
-    fun getNumberFormat(): NumberFormat {
-        return numberFormat
+    fun numberFormat(obj: Any): String {
+        return numberFormat.format(obj)
     }
 
-    fun getPercentFormat(): NumberFormat {
-        return percentFormat
+    fun percentFormat(obj: Any): String {
+        return percentFormat.format(obj)
     }
 }

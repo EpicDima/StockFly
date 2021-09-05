@@ -3,8 +3,8 @@ package com.epicdima.stockfly.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.epicdima.stockfly.databinding.ActivityMainBinding
 import com.epicdima.stockfly.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject

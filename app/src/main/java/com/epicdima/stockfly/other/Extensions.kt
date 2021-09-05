@@ -1,11 +1,9 @@
 package com.epicdima.stockfly.other
 
 import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -22,7 +20,6 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.text.DateFormat
 import java.text.ParseException
-import java.util.*
 
 fun Float.dpToPx(context: Context): Float {
     return TypedValue.applyDimension(
@@ -79,30 +76,21 @@ fun TabLayout.Tab.set(textSize: Float, @ColorRes id: Int) {
     }
 }
 
-@Suppress("DEPRECATION")
-fun Configuration.locale(): Locale {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        locales.get(0)
-    } else {
-        locale
-    }
-}
-
 fun Company.ipoLocalDateString(formatter: Formatter): String {
     return try {
         val ipoDate = FORMAT_DATE_API.parse(ipo)!!
-        DateFormat.getDateInstance(DateFormat.MEDIUM, formatter.getCurrentLocale()).format(ipoDate)
+        DateFormat.getDateInstance(DateFormat.MEDIUM, formatter.currentLocale).format(ipoDate)
     } catch (e: ParseException) {
         ""
     }
 }
 
 fun Double.toLocalString(formatter: Formatter): String {
-    return formatter.getNumberFormat().format(this)
+    return formatter.numberFormat(this)
 }
 
 fun Int.toLocalString(formatter: Formatter): String {
-    return formatter.getNumberFormat().format(this)
+    return formatter.numberFormat(this)
 }
 
 fun <T : Fragment> T.setArgument(key: String, value: String): T {

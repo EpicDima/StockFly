@@ -1,7 +1,6 @@
 package com.epicdima.stockfly.di
 
 import android.content.SharedPreferences
-import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.Refresher
 import com.epicdima.stockfly.repository.Repository
 import dagger.Module
@@ -18,11 +17,5 @@ object UtilsModule {
     @Provides
     fun provideRefresher(repository: Repository, preferences: SharedPreferences): Refresher {
         return Refresher(repository, preferences)
-    }
-
-    @Singleton
-    @Provides
-    fun provideFormatter(): Formatter {
-        return Formatter()
     }
 }

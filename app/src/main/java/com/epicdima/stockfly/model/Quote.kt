@@ -31,6 +31,6 @@ data class Quote(
         }
 
     fun changePercentString(formatter: Formatter): String {
-        return formatter.getPercentFormat().format(changePercent)
+        return formatter.percentFormat(changePercent)
     }
 }

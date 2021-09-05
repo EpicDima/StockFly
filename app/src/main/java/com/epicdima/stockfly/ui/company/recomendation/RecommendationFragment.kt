@@ -99,8 +99,8 @@ class RecommendationFragment :
                             )
                         }
                     }
-                    beginDate.text = it.first
-                    endDate.text = it.second
+                    beginDate.text = it.first.periodFormatted(formatter)
+                    endDate.text = it.second.periodFormatted(formatter)
                     recommendationView.updateData(
                         viewModel.recommendations.toList(),
                         viewModel.brandNewData

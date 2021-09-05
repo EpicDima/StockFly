@@ -19,7 +19,6 @@ private const val DEFAULT_RANGE = 12
 @HiltViewModel
 class RecommendationViewModel @Inject constructor(
     private val repository: Repository,
-    private val formatter: Formatter,
     state: SavedStateHandle
 ) : DownloadableViewModel() {
 
@@ -53,8 +52,8 @@ class RecommendationViewModel @Inject constructor(
     val brandNewData: Boolean
         get() = _brandNewData
 
-    private val _periodRange = MutableStateFlow<Pair<String, String>?>(null)
-    val periodRange: StateFlow<Pair<String, String>?> = _periodRange.asStateFlow()
+    private val _periodRange = MutableStateFlow<Pair<Recommendation, Recommendation>?>(null)
+    val periodRange: StateFlow<Pair<Recommendation, Recommendation>?> = _periodRange.asStateFlow()
 
     private val _recommendations = mutableListOf<Recommendation>()
     val recommendations: List<Recommendation>
@@ -89,8 +88,8 @@ class RecommendationViewModel @Inject constructor(
         if (_recommendations.isNotEmpty()) {
             _brandNewData = true
             _periodRange.value = Pair(
-                _recommendations[beginIndex].periodFormatted(formatter),
-                _recommendations[endIndex].periodFormatted(formatter)
+                _recommendations[beginIndex],
+                _recommendations[endIndex]
             )
         }
     }

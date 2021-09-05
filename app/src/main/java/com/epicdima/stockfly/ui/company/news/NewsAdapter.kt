@@ -110,7 +110,7 @@ class NewsViewHolderItem(
     val summaryIsVisible = summary.isNotEmpty()
     val source = newsItem.source
     val datetime: String = DateFormat
-        .getDateInstance(DateFormat.MEDIUM, formatter.getCurrentLocale())
+        .getDateInstance(DateFormat.MEDIUM, formatter.currentLocale)
         .format(newsItem.datetime * 1000L)
 
     val rootCardBackgroundColor = if (position % 2 == 0) {

@@ -34,17 +34,15 @@ class LayoutPool(context: Context) {
 
     private fun createLayout(key: LayoutKey, queue: LayoutQueue?) {
         CoroutineScope(Dispatchers.Default).launch {
-            delay(500L) // задержка, чтобы не нагружать железо во время отображения данных
+            delay(400L) // задержка, чтобы не нагружать железо во время отображения данных
 
             if (queue == null) {
-                layoutMap[key] = ArrayDeque(2)
+                layoutMap[key] = ArrayDeque(1)
             }
 
             if (queue.isNullOrEmpty()) {
                 inflate(key)
             }
-
-            inflate(key)
         }
     }
 

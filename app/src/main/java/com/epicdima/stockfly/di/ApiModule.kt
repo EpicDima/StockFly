@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,31 +25,55 @@ object ApiModule {
     fun provideOkHttpClient(application: Application): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .cache(Cache(application.cacheDir, 20L * 1024 * 1024)) // 20 MB
-            .addInterceptor { chain ->
-                chain.proceed(
-                    chain
-                        .request()
-                        .newBuilder()
-                        .url(
-                            chain
-                                .request()
-                                .url
-                                .newBuilder()
-                                .addQueryParameter("token", BuildConfig.API_KEY)
-                                .build()
-                        )
-                        .build()
-                )
-            }
+            .addInterceptor(userAgentTokenInterceptor(application))
+            .addInterceptor(queryTokenInterceptor())
 
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(
-                HttpLoggingInterceptor()
-                    .setLevel(HttpLoggingInterceptor.Level.BASIC)
-            )
+            builder.addInterceptor(loggingInterceptor())
         }
 
         return builder.build()
+    }
+
+    private fun userAgentTokenInterceptor(application: Application): Interceptor {
+        val userAgent =
+            "${application.packageName}/${BuildConfig.VERSION_NAME}/${BuildConfig.VERSION_CODE} ${
+                System.getProperty("http.agent", "")
+            }".trim()
+
+        return Interceptor { chain ->
+            chain.proceed(
+                chain
+                    .request()
+                    .newBuilder()
+                    .header("User-Agent", userAgent)
+                    .build()
+            )
+        }
+    }
+
+    private fun queryTokenInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            chain.proceed(
+                chain
+                    .request()
+                    .newBuilder()
+                    .url(
+                        chain
+                            .request()
+                            .url
+                            .newBuilder()
+                            .addQueryParameter("token", BuildConfig.API_KEY)
+                            .build()
+                    )
+                    .build()
+            )
+        }
+    }
+
+    private fun loggingInterceptor(): Interceptor {
+        return HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BASIC)
     }
 
     @Singleton

@@ -12,6 +12,7 @@ import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.Buffer
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -40,13 +41,14 @@ object ApiModule {
             "${application.packageName}/${BuildConfig.VERSION_NAME}/${BuildConfig.VERSION_CODE} ${
                 System.getProperty("http.agent", "")
             }".trim()
+        val humanReadableUserAgent = toHumanReadableAscii(userAgent)
 
         return Interceptor { chain ->
             chain.proceed(
                 chain
                     .request()
                     .newBuilder()
-                    .header("User-Agent", userAgent)
+                    .header("User-Agent", humanReadableUserAgent)
                     .build()
             )
         }
@@ -74,6 +76,29 @@ object ApiModule {
     private fun loggingInterceptor(): Interceptor {
         return HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BASIC)
+    }
+
+    private fun toHumanReadableAscii(s: String): String {
+        var i = 0
+        val length = s.length
+        var c: Int
+        while (i < length) {
+            c = s.codePointAt(i)
+            if (c > '\u001f'.toInt() && c < '\u007f'.toInt()) {
+                i += Character.charCount(c)
+                continue
+            }
+            val buffer = Buffer()
+            buffer.writeUtf8(s, 0, i)
+            var j = i
+            while (j < length) {
+                c = s.codePointAt(j)
+                buffer.writeUtf8CodePoint(if (c > '\u001f'.toInt() && c < '\u007f'.toInt()) c else '?'.toInt())
+                j += Character.charCount(c)
+            }
+            return buffer.readUtf8()
+        }
+        return s
     }
 
     @Singleton

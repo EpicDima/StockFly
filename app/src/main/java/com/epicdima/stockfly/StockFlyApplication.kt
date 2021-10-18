@@ -3,6 +3,7 @@ package com.epicdima.stockfly
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.os.StrictMode
 import android.util.Log.VERBOSE
 import coil.ImageLoader
 import coil.ImageLoaderFactory
@@ -25,13 +26,17 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
     lateinit var refresher: Refresher
 
     override fun onCreate() {
+        Timber.i("onCreate Start")
         super.onCreate()
+
         configuration = Configuration(resources.configuration)
 
         initTimber()
+        initStrictMode()
+
         refresher.refresh()
 
-        Timber.i("onCreate")
+        Timber.i("onCreate Finish")
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -57,6 +62,12 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
     private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    private fun initStrictMode() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.enableDefaults()
         }
     }
 }

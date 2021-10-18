@@ -112,7 +112,7 @@ abstract class ViewBindingFragment<VDB : ViewBinding> : Fragment() {
 
     private fun logWithCurrentClassName(message: String) {
         if (Timber.treeCount > 0) {
-            Timber.i("%-15s %-30s", message, javaClass.simpleName)
+            Timber.d("%-15s %-30s", message, javaClass.simpleName)
         }
     }
 }

@@ -6,15 +6,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.*
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.epicdima.stockfly.customtabs.CustomTabsHelper.getPackageNameToUse
 import timber.log.Timber
 
 class CustomTabsProvider(
     private var _context: Context?
-) : CustomTabsServiceConnection(), LifecycleObserver {
+) : CustomTabsServiceConnection(), DefaultLifecycleObserver {
 
     private val context: Context
         get() = _context!!
@@ -23,23 +22,32 @@ class CustomTabsProvider(
     private var session: CustomTabsSession? = null
     private val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun bindService() {
+    override fun onResume(owner: LifecycleOwner) {
+        bindService()
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        unbindService()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        onDestroy()
+    }
+
+    private fun bindService() {
         Timber.v("bindService")
         getPackageNameToUse(context)
         CustomTabsClient.bindCustomTabsService(context, "com.android.chrome", this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun unbindService() {
+    private fun unbindService() {
         Timber.v("unbindService")
         if (client != null) {
             context.unbindService(this)
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
+    private fun onDestroy() {
         Timber.v("onDestroy")
         _context = null
     }

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -213,7 +212,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         if (isAppBarExpanded && !isKeyboardShowing && binding.searchEditText.requestFocus()) {
             Timber.v("showKeyboard with request focus")
             (requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-                .toggleSoftInput(SHOW_FORCED, 0)
+                .showSoftInput(binding.searchEditText, 0)
         }
     }
 

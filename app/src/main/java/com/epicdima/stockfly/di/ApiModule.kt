@@ -84,7 +84,7 @@ object ApiModule {
         var c: Int
         while (i < length) {
             c = s.codePointAt(i)
-            if (c > '\u001f'.toInt() && c < '\u007f'.toInt()) {
+            if (c > '\u001f'.code && c < '\u007f'.code) {
                 i += Character.charCount(c)
                 continue
             }
@@ -93,7 +93,7 @@ object ApiModule {
             var j = i
             while (j < length) {
                 c = s.codePointAt(j)
-                buffer.writeUtf8CodePoint(if (c > '\u001f'.toInt() && c < '\u007f'.toInt()) c else '?'.toInt())
+                buffer.writeUtf8CodePoint(if (c > '\u001f'.code && c < '\u007f'.code) c else '?'.code)
                 j += Character.charCount(c)
             }
             return buffer.readUtf8()

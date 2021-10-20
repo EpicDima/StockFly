@@ -71,6 +71,7 @@ android {
         create("undetailed") {
             dimension = "search"
             buildConfigField("boolean", "DETAILED_SEARCH", "false")
+            versionNameSuffix = ".$name"
         }
     }
 }

@@ -13,7 +13,6 @@ import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
-import timber.log.Timber
 import javax.inject.Inject
 
 abstract class MainTabFragment<VM : ViewModel> :
@@ -24,9 +23,15 @@ abstract class MainTabFragment<VM : ViewModel> :
 
     protected lateinit var companyAdapter: CompanyAdapter
 
-    private lateinit var addToFavouritesText: String
-    private lateinit var deleteFromFavouritesText: String
-    private lateinit var removeText: String
+    private val addToFavouritesText: String by lazy(LazyThreadSafetyMode.NONE) {
+        getString(R.string.companies_popup_menu_item_add_to_favourites)
+    }
+    private val deleteFromFavouritesText: String by lazy(LazyThreadSafetyMode.NONE) {
+        getString(R.string.companies_popup_menu_item_delete_from_favourites)
+    }
+    private val removeText: String by lazy(LazyThreadSafetyMode.NONE) {
+        getString(R.string.companies_popup_menu_item_remove)
+    }
 
     override fun getLayoutId(): Int = R.layout.fragment_tab_main
 
@@ -37,11 +42,6 @@ abstract class MainTabFragment<VM : ViewModel> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        addToFavouritesText = getString(R.string.companies_popup_menu_item_add_to_favourites)
-        deleteFromFavouritesText =
-            getString(R.string.companies_popup_menu_item_delete_from_favourites)
-        removeText = getString(R.string.companies_popup_menu_item_remove)
 
         companyAdapter = createAdapter().apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY

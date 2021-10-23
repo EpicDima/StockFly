@@ -75,7 +75,12 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     @Inject
     lateinit var formatter: Formatter
 
-    private lateinit var removeText: String
+    private val removeText: String by lazy(LazyThreadSafetyMode.NONE) {
+        getString(R.string.search_popup_menu_request_item_remove)
+    }
+    private val mustBeNotEmptyRequest: String by lazy(LazyThreadSafetyMode.NONE) {
+        getString(R.string.not_empty_request)
+    }
 
     override fun getLayoutId(): Int = R.layout.fragment_search
 
@@ -86,8 +91,6 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        removeText = getString(R.string.search_popup_menu_request_item_remove)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -205,7 +208,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        getString(R.string.not_empty_request),
+                        mustBeNotEmptyRequest,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

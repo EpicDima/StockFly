@@ -43,7 +43,9 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
 
     override val viewModel: CompanyViewModel by viewModels()
 
-    private lateinit var titles: Array<String>
+    private val titles: Array<String> by lazy(LazyThreadSafetyMode.NONE) {
+        CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
+    }
 
     private var tabLayoutMediator: TabLayoutMediator? = null
 
@@ -56,7 +58,6 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        titles = CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
         binding.viewPager.apply {
             isUserInputEnabled = false
             offscreenPageLimit = 1

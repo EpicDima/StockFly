@@ -1,6 +1,7 @@
 import dependencies.*
 
 object Dependencies {
+
     val main = Main
     val coroutines = Coroutines
     val di = Hilt

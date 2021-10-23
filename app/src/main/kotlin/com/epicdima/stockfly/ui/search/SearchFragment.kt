@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -66,8 +67,15 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         }
     }
 
+    private val onChipLongClick: (View, String) -> Unit = { view, request ->
+        Timber.i("onChipLongClick %s", request)
+        showPopupMenu(view, request)
+    }
+
     @Inject
     lateinit var formatter: Formatter
+
+    private lateinit var removeText: String
 
     override fun getLayoutId(): Int = R.layout.fragment_search
 
@@ -78,6 +86,9 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        removeText = getString(R.string.search_popup_menu_request_item_remove)
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -123,8 +134,8 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
 
         setupSearchField()
         setupButtons()
-        binding.popularRecyclerView.setupSearchChipList(viewModel.popular)
-        binding.searchedRecyclerView.setupSearchChipList(viewModel.searched)
+        binding.popularRecyclerView.setupSearchChipList(viewModel.popular, null)
+        binding.searchedRecyclerView.setupSearchChipList(viewModel.searched, onChipLongClick)
         setupResultList()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -237,8 +248,25 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         }
     }
 
-    private fun RecyclerView.setupSearchChipList(listFlow: StateFlow<List<String>>) {
-        val adapter = SearchChipAdapter(onChipClick)
+    private fun showPopupMenu(view: View, searchRequest: String) {
+        PopupMenu(requireContext(), view).apply {
+            menu.add(1, 1, 1, removeText)
+
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    1 -> viewModel.removeSearchRequest(searchRequest)
+                    else -> throw RuntimeException("Unknown search request popup menu item id: ${it.itemId}")
+                }
+                true
+            }
+        }.show()
+    }
+
+    private fun RecyclerView.setupSearchChipList(
+        listFlow: StateFlow<List<String>>,
+        onLongClick: SearchChipAdapter.OnSearchChipLongClickListener?
+    ) {
+        val adapter = SearchChipAdapter(onChipClick, onLongClick)
         this.adapter = adapter
         layoutManager = StaggeredGridLayoutManager(2, HORIZONTAL)
         itemAnimator = null

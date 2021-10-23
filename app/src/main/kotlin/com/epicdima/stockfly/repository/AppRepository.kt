@@ -106,10 +106,20 @@ class AppRepository(
             }
         }
 
-    override fun addSearchRequest(request: String) {
-        val list = searchedRequests.toMutableList()
-        list.add(0, request)
-        setSearched(list, stringListAdapter)
+    override suspend fun addSearchRequest(request: String) {
+        withContext(Dispatchers.IO) {
+            val list = searchedRequests.toMutableList()
+            list.add(0, request)
+            setSearched(list, stringListAdapter)
+        }
+    }
+
+    override suspend fun removeSearchRequest(request: String) {
+        withContext(Dispatchers.IO) {
+            val list = searchedRequests.toMutableList()
+            list.remove(request)
+            setSearched(list, stringListAdapter)
+        }
     }
 
     private fun setSearched(searched: List<String>, adapter: JsonAdapter<List<String>>) {

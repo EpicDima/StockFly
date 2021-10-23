@@ -19,7 +19,9 @@ interface Repository {
 
     suspend fun getCompanyForSearch(company: Company): Company
 
-    fun addSearchRequest(request: String)
+    suspend fun addSearchRequest(request: String)
+
+    suspend fun removeSearchRequest(request: String)
 
     suspend fun refreshCompanies()
 

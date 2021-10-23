@@ -54,8 +54,12 @@ class SearchViewModel @Inject constructor(
         _showSearched.value = _searched.value.isNotEmpty()
         _showResult.value = false
         _emptyResult.value = false
-        _searched.value = repository.searchedRequests.toList()
+        refreshSearched()
         _result.value = emptyList()
+    }
+
+    private fun refreshSearched() {
+        _searched.value = repository.searchedRequests.toList()
     }
 
     fun search(query: String): Boolean {
@@ -64,8 +68,9 @@ class SearchViewModel @Inject constructor(
         val text = query.trim()
         return if (text.isNotEmpty()) {
             beforeSearchStart()
-            startJob(stopImmediately = true) {
+            startJob {
                 repository.addSearchRequest(text)
+                refreshSearched()
                 val list = repository.search(text)
                 if (stopTimeoutJob()) {
                     onLoad(list)
@@ -79,6 +84,11 @@ class SearchViewModel @Inject constructor(
         } else {
             false
         }
+    }
+
+    fun removeSearchRequest(request: String) = viewModelScope.launch {
+        repository.removeSearchRequest(request)
+        refreshSearched()
     }
 
     private fun beforeSearchStart() {

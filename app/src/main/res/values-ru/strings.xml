@@ -46,4 +46,5 @@
     <string name="companies_popup_menu_item_add_to_favourites">Добавить в избранное</string>
     <string name="companies_popup_menu_item_remove">Удалить</string>
     <string name="companies_popup_menu_item_delete_from_favourites">Удалить из избранного</string>
+    <string name="search_popup_menu_request_item_remove">Удалить</string>
 </resources>

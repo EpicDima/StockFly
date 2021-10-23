@@ -66,4 +66,6 @@
     <string name="companies_popup_menu_item_add_to_favourites">Add to favorites</string>
     <string name="companies_popup_menu_item_delete_from_favourites">Delete from favorites</string>
     <string name="companies_popup_menu_item_remove">Remove</string>
+
+    <string name="search_popup_menu_request_item_remove">Remove</string>
 </resources>

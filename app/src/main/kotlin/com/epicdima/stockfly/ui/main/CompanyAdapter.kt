@@ -163,6 +163,7 @@ class CompanyAdapter(
                         }
                     } else {
                         root.setOnLongClickListener(null)
+                        root.isLongClickable = false
                     }
                 }
                 if (payload.currentString) {

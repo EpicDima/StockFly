@@ -2,6 +2,7 @@ package com.epicdima.stockfly.ui.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -125,6 +126,14 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         binding.popularRecyclerView.setupSearchChipList(viewModel.popular)
         binding.searchedRecyclerView.setupSearchChipList(viewModel.searched)
         setupResultList()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.resultRecyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+                if (scrollY > oldScrollY) {
+                    hideKeyboard()
+                }
+            }
+        }
     }
 
     override fun onGlobalLayout() {

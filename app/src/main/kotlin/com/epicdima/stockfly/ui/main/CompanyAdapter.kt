@@ -20,6 +20,7 @@ import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.createUri
 import timber.log.Timber
+import java.lang.ref.SoftReference
 
 class CompanyAdapter(
     private val formatter: Formatter,
@@ -28,10 +29,22 @@ class CompanyAdapter(
 ) : ListAdapter<CompanyViewHolderItem, CompanyAdapter.CompanyViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val commonRecycledViewPool by lazy {
-            RecyclerView.RecycledViewPool().apply {
-                setMaxRecycledViews(0, 10)
+
+        private var softReferenceRecycledViewPool = SoftReference(createRecycledViewPool())
+        private val commonRecycledViewPool: RecyclerView.RecycledViewPool
+            get() {
+                val recycledViewPool = softReferenceRecycledViewPool.get()
+                return if (recycledViewPool != null) {
+                    recycledViewPool
+                } else {
+                    val newRecycledViewPool = createRecycledViewPool()
+                    softReferenceRecycledViewPool = SoftReference(newRecycledViewPool)
+                    newRecycledViewPool
+                }
             }
+
+        private fun createRecycledViewPool() = RecyclerView.RecycledViewPool().apply {
+            setMaxRecycledViews(0, 10)
         }
     }
 

@@ -91,6 +91,7 @@ dependencies {
     Dependencies.di.apply {
         implementation(android)
         kapt(androidCompiler)
+        implementation(workManager)
     }
 
     Dependencies.lifecycle.apply {
@@ -126,6 +127,7 @@ dependencies {
         implementation(timber)
         implementation(asynclayoutinflater)
         implementation(browser)
+        implementation(workManager)
     }
 
     Dependencies.debug.apply {

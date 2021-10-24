@@ -5,17 +5,19 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.StrictMode
 import android.util.Log.VERBOSE
+import androidx.hilt.work.HiltWorkerFactory
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.util.DebugLogger
 import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.Refresher
+import com.epicdima.stockfly.other.RefreshWorker
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-class StockFlyApplication : Application(), ImageLoaderFactory {
+class StockFlyApplication : Application(), ImageLoaderFactory,
+    androidx.work.Configuration.Provider {
 
     private lateinit var configuration: Configuration
 
@@ -23,7 +25,7 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
     lateinit var formatter: Formatter
 
     @Inject
-    lateinit var refresher: Refresher
+    lateinit var workerFactory: HiltWorkerFactory
 
     override fun onCreate() {
         Timber.i("onCreate Start")
@@ -34,7 +36,7 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
         initTimber()
         initStrictMode()
 
-        refresher.refresh()
+        RefreshWorker.startRefreshWork(this)
 
         Timber.i("onCreate Finish")
     }
@@ -69,5 +71,11 @@ class StockFlyApplication : Application(), ImageLoaderFactory {
         if (BuildConfig.DEBUG) {
             StrictMode.enableDefaults()
         }
+    }
+
+    override fun getWorkManagerConfiguration(): androidx.work.Configuration {
+        return androidx.work.Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
     }
 }

@@ -23,6 +23,10 @@ class SearchChipAdapter(
         holder.bind(getItem(position), clickListener, longClickListener)
     }
 
+    override fun onViewRecycled(holder: SearchChipViewHolder) {
+        holder.unbind()
+    }
+
 
     class SearchChipViewHolder(private val binding: ItemSearchChipBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -47,6 +51,12 @@ class SearchChipAdapter(
                 }
                 this.requestTextview.text = request
             }
+        }
+
+        fun unbind() {
+            binding.root.setOnClickListener(null)
+            binding.root.setOnLongClickListener(null)
+            binding.root.isLongClickable = false
         }
     }
 

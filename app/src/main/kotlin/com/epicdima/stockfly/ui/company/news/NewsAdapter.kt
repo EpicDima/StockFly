@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import coil.load
 import coil.request.Disposable
 import com.epicdima.stockfly.R
@@ -42,7 +43,7 @@ class NewsAdapter(
         holder.bind(getItem(position), clickListener)
     }
 
-    override fun onViewDetachedFromWindow(holder: NewsItemViewHolder) {
+    override fun onViewRecycled(holder: NewsItemViewHolder) {
         holder.unbind()
     }
 
@@ -87,6 +88,8 @@ class NewsAdapter(
 
         fun unbind() {
             imageDisposable?.dispose()
+            binding.imageView.clear()
+            binding.root.setOnClickListener(null)
         }
     }
 

@@ -91,7 +91,7 @@ class CompanyAdapter(
         }
     }
 
-    override fun onViewDetachedFromWindow(holder: CompanyViewHolder) {
+    override fun onViewRecycled(holder: CompanyViewHolder) {
         holder.unbind()
     }
 
@@ -194,6 +194,9 @@ class CompanyAdapter(
         fun unbind() {
             logoDisposable?.dispose()
             binding.logo.clear()
+            binding.root.setOnClickListener(null)
+            binding.root.setOnLongClickListener(null)
+            binding.root.isLongClickable = false
         }
     }
 

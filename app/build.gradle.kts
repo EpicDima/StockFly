@@ -91,6 +91,7 @@ dependencies {
     Dependencies.di.apply {
         implementation(android)
         kapt(androidCompiler)
+        kapt(hiltCompiler)
         implementation(workManager)
     }
 

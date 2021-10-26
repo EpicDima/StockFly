@@ -12,6 +12,7 @@ object Versions {
     const val coroutines = "1.5.2"
     const val room = "2.3.0"
     const val hilt = "2.39.1"
+    const val hiltCompiler = "1.0.0"
     const val hiltWorkManager = "1.0.0"
     const val moshi = "1.12.0"
     const val retrofit = "2.9.0"

@@ -10,7 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
-import javax.inject.Named
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -30,10 +30,15 @@ object SingleActivityModule {
 
     @ActivityScoped
     @Provides
-    @Named("company")
+    @CompanyList
     fun provideCompanyRecycledViewPool(): RecyclerView.RecycledViewPool {
         return RecyclerView.RecycledViewPool().apply {
             setMaxRecycledViews(0, 10)
         }
     }
 }
+
+
+@Qualifier
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class CompanyList

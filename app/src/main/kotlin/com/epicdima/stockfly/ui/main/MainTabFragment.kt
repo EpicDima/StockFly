@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
+import com.epicdima.stockfly.di.CompanyList
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
 import javax.inject.Inject
@@ -23,7 +24,7 @@ abstract class MainTabFragment<VM : ViewModel> :
     lateinit var formatter: Formatter
 
     @Inject
-    @Named("company")
+    @CompanyList
     lateinit var companyRecycledViewPool: RecyclerView.RecycledViewPool
 
     protected lateinit var companyAdapter: CompanyAdapter

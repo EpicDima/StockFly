@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
+import com.epicdima.stockfly.di.CompanyList
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
@@ -53,7 +54,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     @Inject
-    @Named("company")
+    @CompanyList
     lateinit var companyRecycledViewPool: RecyclerView.RecycledViewPool
 
     override val viewModel: SearchViewModel by viewModels()

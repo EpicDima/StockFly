@@ -1,6 +1,7 @@
 package com.epicdima.stockfly.di
 
 import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
 import com.epicdima.stockfly.customtabs.CustomTabsProvider
 import com.epicdima.stockfly.other.LayoutPool
 import dagger.Module
@@ -9,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
+import javax.inject.Named
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -24,5 +26,14 @@ object SingleActivityModule {
     @Provides
     fun provideCustomTabsProvider(@ActivityContext context: Context): CustomTabsProvider {
         return CustomTabsProvider(context)
+    }
+
+    @ActivityScoped
+    @Provides
+    @Named("company")
+    fun provideCompanyRecycledViewPool(): RecyclerView.RecycledViewPool {
+        return RecyclerView.RecycledViewPool().apply {
+            setMaxRecycledViews(0, 10)
+        }
     }
 }

@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 @AndroidEntryPoint
 class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>(),
@@ -50,6 +51,10 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
             return SearchFragment()
         }
     }
+
+    @Inject
+    @Named("company")
+    lateinit var companyRecycledViewPool: RecyclerView.RecycledViewPool
 
     override val viewModel: SearchViewModel by viewModels()
 
@@ -185,7 +190,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         }
         binding.resultRecyclerView.apply {
             adapter = resultAdapter
-            setRecycledViewPool(resultAdapter.recycledViewPool)
+            setRecycledViewPool(companyRecycledViewPool)
             layoutManager = LinearLayoutManager(context)
             itemAnimator = null
             setHasFixedSize(true)

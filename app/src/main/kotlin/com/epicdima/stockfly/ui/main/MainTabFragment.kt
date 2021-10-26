@@ -14,12 +14,17 @@ import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
 import javax.inject.Inject
+import javax.inject.Named
 
 abstract class MainTabFragment<VM : ViewModel> :
     ViewModelFragment<VM, FragmentTabMainBinding>() {
 
     @Inject
     lateinit var formatter: Formatter
+
+    @Inject
+    @Named("company")
+    lateinit var companyRecycledViewPool: RecyclerView.RecycledViewPool
 
     protected lateinit var companyAdapter: CompanyAdapter
 
@@ -49,7 +54,7 @@ abstract class MainTabFragment<VM : ViewModel> :
         binding.apply {
             recyclerView.apply {
                 adapter = companyAdapter
-                setRecycledViewPool(companyAdapter.recycledViewPool)
+                setRecycledViewPool(companyRecycledViewPool)
                 layoutManager = LinearLayoutManager(context)
                 itemAnimator = null
                 setHasFixedSize(true)

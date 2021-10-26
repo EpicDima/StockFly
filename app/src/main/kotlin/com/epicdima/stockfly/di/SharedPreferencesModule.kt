@@ -9,11 +9,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-private const val APP_PREFERENCES = "app_preferences"
-
 @Module
 @InstallIn(SingletonComponent::class)
 object SharedPreferencesModule {
+
+    private const val APP_PREFERENCES = "app_preferences"
 
     @Singleton
     @Provides

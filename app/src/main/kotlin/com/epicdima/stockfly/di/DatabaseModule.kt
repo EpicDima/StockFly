@@ -1,8 +1,8 @@
 package com.epicdima.stockfly.di
 
 import android.content.Context
+import com.epicdima.stockfly.db.AppDatabase
 import com.epicdima.stockfly.db.Database
-import com.epicdima.stockfly.db.buildDatabase
 import com.epicdima.stockfly.db.dao.CompanyDao
 import com.epicdima.stockfly.db.dao.NewsItemDao
 import com.epicdima.stockfly.db.dao.RecommendationDao
@@ -21,7 +21,7 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): Database {
-        return buildDatabase(context)
+        return AppDatabase.buildDatabase(context)
     }
 
     @Singleton

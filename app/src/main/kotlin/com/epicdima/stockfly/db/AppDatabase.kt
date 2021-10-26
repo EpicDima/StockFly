@@ -27,6 +27,16 @@ import com.epicdima.stockfly.db.other.StockCandleParamConverter
 @TypeConverters(StockCandleParamConverter::class)
 abstract class AppDatabase : RoomDatabase(), com.epicdima.stockfly.db.Database {
 
+    companion object {
+        fun buildDatabase(context: Context): AppDatabase = Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "stockfly.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
     abstract override fun companyDao(): CompanyDao
 
     abstract override fun newsItemDao(): NewsItemDao
@@ -35,12 +45,3 @@ abstract class AppDatabase : RoomDatabase(), com.epicdima.stockfly.db.Database {
 
     abstract override fun stockCandlesDao(): StockCandlesDao
 }
-
-
-fun buildDatabase(context: Context): AppDatabase = Room.databaseBuilder(
-    context.applicationContext,
-    AppDatabase::class.java,
-    "stockfly.db"
-)
-    .fallbackToDestructiveMigration()
-    .build()

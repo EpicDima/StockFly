@@ -20,9 +20,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
-private const val EMPTY_JSON_STRING = "[]"
-private const val MAX_SEARCHED_REQUESTS = 50
-
 class AppRepository(
     private val apiService: ApiService,
     private val companyDao: CompanyDao,
@@ -32,6 +29,11 @@ class AppRepository(
     private val preferences: SharedPreferences,
     private val stringListAdapter: JsonAdapter<List<String>>,
 ) : Repository {
+
+    companion object {
+        private const val EMPTY_JSON_STRING = "[]"
+        private const val MAX_SEARCHED_REQUESTS = 50
+    }
 
     override val companies: Flow<List<Company>> = flow {
         companyDao

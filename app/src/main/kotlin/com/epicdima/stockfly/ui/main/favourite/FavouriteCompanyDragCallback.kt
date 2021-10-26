@@ -1,5 +1,6 @@
 package com.epicdima.stockfly.ui.main.favourite
 
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
@@ -18,6 +19,9 @@ class FavouriteCompanyDragCallback(
         target: RecyclerView.ViewHolder
     ): Boolean {
         Timber.v("onMove")
+
+        (viewHolder.itemView.tag as? PopupMenu)?.dismiss()
+
         onMoveListener(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
         return true
     }

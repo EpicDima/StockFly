@@ -18,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -41,9 +40,7 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
     }
 
     override fun createAdapter(): CompanyAdapter {
-        return CompanyAdapter(formatter, { view, company ->
-            showPopupMenu(view, company)
-        }) { ticker ->
+        return CompanyAdapter(formatter, this::showPopupMenu) { ticker ->
             (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
                 .openCompanyFragment(ticker)
         }

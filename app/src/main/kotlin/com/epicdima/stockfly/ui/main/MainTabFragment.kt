@@ -73,7 +73,7 @@ abstract class MainTabFragment<VM : ViewModel> :
     }
 
     protected fun showPopupMenu(view: View, company: Company) {
-        PopupMenu(requireContext(), view).apply {
+        PopupMenu(view.context, view).apply {
             menu.add(
                 1, 1, 1,
                 if (company.favourite) deleteFromFavouritesText
@@ -89,6 +89,12 @@ abstract class MainTabFragment<VM : ViewModel> :
                 }
                 true
             }
+
+            setOnDismissListener {
+                view.tag = null
+            }
+
+            view.tag = this
         }.show()
     }
 

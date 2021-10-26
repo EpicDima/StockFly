@@ -39,9 +39,7 @@ class AllMainTabFragment : MainTabFragment<AllMainTabViewModel>() {
     }
 
     override fun createAdapter(): CompanyAdapter {
-        return CompanyAdapter(formatter, { view, company ->
-            showPopupMenu(view, company)
-        }) { ticker ->
+        return CompanyAdapter(formatter, this::showPopupMenu) { ticker ->
             (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
                 .openCompanyFragment(ticker)
         }

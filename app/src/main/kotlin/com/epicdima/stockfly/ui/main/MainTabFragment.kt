@@ -15,7 +15,6 @@ import com.epicdima.stockfly.di.CompanyList
 import com.epicdima.stockfly.model.Company
 import com.epicdima.stockfly.other.Formatter
 import javax.inject.Inject
-import javax.inject.Named
 
 abstract class MainTabFragment<VM : ViewModel> :
     ViewModelFragment<VM, FragmentTabMainBinding>() {

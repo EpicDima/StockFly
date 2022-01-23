@@ -43,10 +43,13 @@ class ChartViewModel @Inject constructor(
 
     private val cache: MutableMap<StockCandleParam, StockCandles> = mutableMapOf()
 
-    private fun updateChart(newStockCandleParam: StockCandleParam = StockCandleParam.MONTH, repeat: Boolean = false) {
+    private fun updateChart(
+        newStockCandleParam: StockCandleParam = StockCandleParam.MONTH,
+        repeat: Boolean = false
+    ) {
         if (_stockCandleParam.value != newStockCandleParam || repeat) {
             val newStockCandleParamTemp = if (repeat) {
-                 _stockCandleParam.value ?: newStockCandleParam
+                _stockCandleParam.value ?: newStockCandleParam
             } else {
                 newStockCandleParam
             }

@@ -8,7 +8,8 @@ object Lifecycle {
 
     const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 
-    const val viewModelSavedstate = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
+    const val viewModelSavedstate =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
 
     const val archExt = "android.arch.lifecycle:extensions:${Versions.archLfecycleExt}"
 }

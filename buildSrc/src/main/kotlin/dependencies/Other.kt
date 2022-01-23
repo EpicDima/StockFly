@@ -17,7 +17,8 @@ object Other {
 
     const val browser = "androidx.browser:browser:${Versions.browser}"
 
-    const val asynclayoutinflater = "androidx.asynclayoutinflater:asynclayoutinflater:${Versions.asynclayoutinflater}"
+    const val asynclayoutinflater =
+        "androidx.asynclayoutinflater:asynclayoutinflater:${Versions.asynclayoutinflater}"
 
     const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
 }

@@ -35,11 +35,13 @@ import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 
 @AndroidEntryPoint
 class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>(),

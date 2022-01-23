@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
-import com.epicdima.stockfly.databinding.FragmentNewsBinding
 import com.epicdima.stockfly.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.databinding.FragmentNewsBinding
 import com.epicdima.stockfly.other.Formatter
 import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint

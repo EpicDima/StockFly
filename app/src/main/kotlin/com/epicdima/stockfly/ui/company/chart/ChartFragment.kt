@@ -143,6 +143,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
             StockCandleParam.SIX_MONTHS -> unselectButton(binding.sixMonthsButton)
             StockCandleParam.YEAR -> unselectButton(binding.yearButton)
             StockCandleParam.ALL_TIME -> unselectButton(binding.allTimeButton)
+            else -> {}
         }
     }
 

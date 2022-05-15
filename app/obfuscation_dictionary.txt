@@ -76,6 +76,7 @@ interface
 protected
 typealias
 companion
+synthetic
 transient
 annotation
 implements

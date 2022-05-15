@@ -20,7 +20,12 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--repackageclasses
+-optimizationpasses 30
+
+-flattenpackagehierarchy
+-allowaccessmodification
+-keeppackagenames
+
 -obfuscationdictionary obfuscation_dictionary.txt
 -classobfuscationdictionary obfuscation_dictionary.txt
 -packageobfuscationdictionary obfuscation_dictionary.txt
@@ -38,3 +43,13 @@
 }
 
 -keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
+
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE

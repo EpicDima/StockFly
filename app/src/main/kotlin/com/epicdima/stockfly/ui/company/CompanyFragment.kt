@@ -16,7 +16,10 @@ import com.epicdima.stockfly.R
 import com.epicdima.stockfly.base.ViewModelFragment
 import com.epicdima.stockfly.databinding.FragmentCompanyBinding
 import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.other.*
+import com.epicdima.stockfly.other.customize
+import com.epicdima.stockfly.other.getDimensionInSp
+import com.epicdima.stockfly.other.set
+import com.epicdima.stockfly.other.setArgument
 import com.epicdima.stockfly.ui.company.chart.ChartFragment
 import com.epicdima.stockfly.ui.company.news.NewsFragment
 import com.epicdima.stockfly.ui.company.recomendation.RecommendationFragment

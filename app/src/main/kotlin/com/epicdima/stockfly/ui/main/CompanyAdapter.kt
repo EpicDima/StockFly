@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
+import coil.dispose
 import coil.load
 import coil.request.Disposable
 import com.epicdima.stockfly.R
@@ -170,7 +170,7 @@ class CompanyAdapter(
 
         fun unbind() {
             logoDisposable?.dispose()
-            binding.logo.clear()
+            binding.logo.dispose()
             binding.root.setOnClickListener(null)
             binding.root.setOnLongClickListener(null)
             binding.root.isLongClickable = false

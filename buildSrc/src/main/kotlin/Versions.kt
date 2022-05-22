@@ -8,7 +8,6 @@ object Versions {
     const val fragmentKtx = "1.4.1"
     const val material = "1.6.0"
     const val lifecycle = "2.4.1"
-    const val archLfecycleExt = "1.1.1"
     const val coroutines = "1.6.1"
     const val room = "2.4.2"
     const val hilt = "2.42"

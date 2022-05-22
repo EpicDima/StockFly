@@ -10,6 +10,4 @@ object Lifecycle {
 
     const val viewModelSavedstate =
         "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Versions.lifecycle}"
-
-    const val archExt = "android.arch.lifecycle:extensions:${Versions.archLfecycleExt}"
 }

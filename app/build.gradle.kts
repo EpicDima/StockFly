@@ -77,13 +77,11 @@ android {
 
 dependencies {
     implementation(project(":core-buildconfig"))
-    implementation(project(":core-utils"))
     implementation(project(":core-common"))
+    implementation(project(":core-utils"))
     implementation(project(":core-navigation"))
     implementation(project(":core-ui"))
     implementation(project(":core-model"))
-    implementation(project(":core-data"))
-    implementation(project(":core-preferences"))
     implementation(project(":core-customtabs"))
     implementation(project(":core-shortcuts"))
     implementation(project(":core-work"))
@@ -94,7 +92,6 @@ dependencies {
     implementation(project(":feature-details"))
 
     Dependencies.main.apply {
-        implementation(kotlinStd)
         implementation(coreKtx)
         implementation(appCompat)
     }
@@ -111,37 +108,10 @@ dependencies {
         implementation(workManager)
     }
 
-    Dependencies.lifecycle.apply {
-        implementation(runtimeKtx)
-        implementation(viewModelKtx)
-        implementation(viewModelSavedstate)
-    }
-
-    Dependencies.room.apply {
-        implementation(runtime)
-        kapt(compiler)
-        implementation(ktx)
-    }
-
-    Dependencies.retrofit.apply {
-        implementation(retrofit)
-        implementation(moshiConverter)
-        implementation(interceptor)
-    }
-
-    Dependencies.moshi.apply {
-        implementation(moshi)
-        kapt(codegen)
-    }
-
     Dependencies.other.apply {
-        implementation(material)
-        implementation(constraint)
-        implementation(recyclerView)
         implementation(fragmentKtx)
         implementation(coil)
         implementation(timber)
-        implementation(browser)
     }
 
     Dependencies.debug.apply {

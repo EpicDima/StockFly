@@ -50,8 +50,5 @@ dependencies {
         kapt(hiltCompiler)
     }
 
-    Dependencies.other.apply {
-        implementation(fragmentKtx)
-        implementation(timber)
-    }
+    implementation(Dependencies.other.timber)
 }

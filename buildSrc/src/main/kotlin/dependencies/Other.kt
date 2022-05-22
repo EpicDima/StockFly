@@ -7,6 +7,7 @@ object Other {
     const val material = "com.google.android.material:material:${Versions.material}"
 
     const val constraint = "androidx.constraintlayout:constraintlayout:${Versions.constraint}"
+
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
 
     const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"

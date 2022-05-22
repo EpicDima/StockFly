@@ -8,11 +8,12 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewBindingFragment
+import com.epicdima.stockfly.core.common.ViewBindingFragment
+import com.epicdima.stockfly.core.navigation.SearchFragmentOpener
+import com.epicdima.stockfly.core.ui.customize
+import com.epicdima.stockfly.core.ui.getDimensionInSp
+import com.epicdima.stockfly.core.ui.set
 import com.epicdima.stockfly.databinding.FragmentMainBinding
-import com.epicdima.stockfly.other.customize
-import com.epicdima.stockfly.other.getDimensionInSp
-import com.epicdima.stockfly.other.set
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.all.AllMainTabFragment
 import com.epicdima.stockfly.ui.main.favourite.FavouriteMainTabFragment
@@ -54,7 +55,7 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
                 it.offscreenPageLimit = MainTab.values().size
             }
             searchLayout.setOnClickListener {
-                (requireActivity() as MainRouter.SearchFragmentOpener).openSearchFragment()
+                (requireActivity() as SearchFragmentOpener).openSearchFragment()
             }
         }
         setupTabs()

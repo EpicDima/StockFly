@@ -9,7 +9,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.model.Company
+import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
 import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.epicdima.stockfly.ui.main.MainTabFragment
@@ -41,7 +42,7 @@ class FavouriteMainTabFragment : MainTabFragment<FavouriteMainTabViewModel>() {
 
     override fun createAdapter(): CompanyAdapter {
         return CompanyAdapter(formatter, this::showPopupMenu) { ticker ->
-            (requireParentFragment().requireActivity() as MainRouter.CompanyFragmentOpener)
+            (requireParentFragment().requireActivity() as CompanyFragmentOpener)
                 .openCompanyFragment(ticker)
         }
     }

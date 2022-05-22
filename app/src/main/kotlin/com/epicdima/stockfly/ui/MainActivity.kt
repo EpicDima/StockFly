@@ -3,15 +3,15 @@ package com.epicdima.stockfly.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.epicdima.stockfly.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.core.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
+import com.epicdima.stockfly.core.navigation.SearchFragmentOpener
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),
-    MainRouter.SearchFragmentOpener,
-    MainRouter.CompanyFragmentOpener {
+class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentOpener {
 
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider

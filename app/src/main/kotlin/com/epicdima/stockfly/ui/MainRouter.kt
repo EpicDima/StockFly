@@ -104,16 +104,4 @@ class MainRouter(
             }
         }
     }
-
-
-    interface SearchFragmentOpener {
-
-        fun openSearchFragment()
-    }
-
-
-    interface CompanyFragmentOpener {
-
-        fun openCompanyFragment(ticker: String)
-    }
 }

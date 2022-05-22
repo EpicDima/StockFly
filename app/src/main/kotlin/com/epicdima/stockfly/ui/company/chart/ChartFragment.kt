@@ -12,9 +12,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.common.setArgument
+import com.epicdima.stockfly.core.formatter.model.changePercentString
+import com.epicdima.stockfly.core.formatter.model.changeString
+import com.epicdima.stockfly.core.formatter.model.currentString
+import com.epicdima.stockfly.core.formatter.model.format
+import com.epicdima.stockfly.core.ui.color
+import com.epicdima.stockfly.core.ui.drawable
+import com.epicdima.stockfly.core.ui.getColor
 import com.epicdima.stockfly.databinding.FragmentChartBinding
-import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
@@ -38,7 +45,7 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
     override val viewModel: ChartViewModel by viewModels()
 
     @Inject
-    lateinit var formatter: Formatter
+    lateinit var formatter: com.epicdima.stockfly.core.formatter.Formatter
 
     override fun getLayoutId(): Int = R.layout.fragment_chart
 
@@ -134,28 +141,28 @@ class ChartFragment : ViewModelFragment<ChartViewModel, FragmentChartBinding>() 
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun unselectButtonByParam(stockCandleParam: StockCandleParam?) {
+    private fun unselectButtonByParam(stockCandleParam: com.epicdima.stockfly.core.model.StockCandleParam?) {
         Timber.v("unselect button %s", stockCandleParam)
         when (stockCandleParam) {
-            StockCandleParam.DAY -> unselectButton(binding.dayButton)
-            StockCandleParam.WEEK -> unselectButton(binding.weekButton)
-            StockCandleParam.MONTH -> unselectButton(binding.monthButton)
-            StockCandleParam.SIX_MONTHS -> unselectButton(binding.sixMonthsButton)
-            StockCandleParam.YEAR -> unselectButton(binding.yearButton)
-            StockCandleParam.ALL_TIME -> unselectButton(binding.allTimeButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.DAY -> unselectButton(binding.dayButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.WEEK -> unselectButton(binding.weekButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.MONTH -> unselectButton(binding.monthButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.SIX_MONTHS -> unselectButton(binding.sixMonthsButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.YEAR -> unselectButton(binding.yearButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.ALL_TIME -> unselectButton(binding.allTimeButton)
             else -> {}
         }
     }
 
-    private fun selectButtonByParam(stockCandleParam: StockCandleParam) {
+    private fun selectButtonByParam(stockCandleParam: com.epicdima.stockfly.core.model.StockCandleParam) {
         Timber.i("select button %s", stockCandleParam)
         when (stockCandleParam) {
-            StockCandleParam.DAY -> selectButton(binding.dayButton)
-            StockCandleParam.WEEK -> selectButton(binding.weekButton)
-            StockCandleParam.MONTH -> selectButton(binding.monthButton)
-            StockCandleParam.SIX_MONTHS -> selectButton(binding.sixMonthsButton)
-            StockCandleParam.YEAR -> selectButton(binding.yearButton)
-            StockCandleParam.ALL_TIME -> selectButton(binding.allTimeButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.DAY -> selectButton(binding.dayButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.WEEK -> selectButton(binding.weekButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.MONTH -> selectButton(binding.monthButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.SIX_MONTHS -> selectButton(binding.sixMonthsButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.YEAR -> selectButton(binding.yearButton)
+            com.epicdima.stockfly.core.model.StockCandleParam.ALL_TIME -> selectButton(binding.allTimeButton)
         }
     }
 

@@ -21,4 +21,6 @@ object Other {
         "androidx.asynclayoutinflater:asynclayoutinflater:${Versions.asynclayoutinflater}"
 
     const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
+
+    const val inject = "javax.inject:javax.inject:${Versions.inject}"
 }

@@ -2,9 +2,9 @@ package com.epicdima.stockfly.ui.main.favourite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.repository.Repository
-import com.epicdima.stockfly.shortcut.ShortcutConfigurator
+import com.epicdima.stockfly.core.data.Repository
+import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.shortcuts.ShortcutsConfigurator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavouriteMainTabViewModel @Inject constructor(
     private val repository: Repository,
-    private val shortcutConfigurator: ShortcutConfigurator,
+    private val shortcutConfigurator: ShortcutsConfigurator,
 ) : ViewModel() {
 
     val companies: StateFlow<List<Company>> = repository.favourites

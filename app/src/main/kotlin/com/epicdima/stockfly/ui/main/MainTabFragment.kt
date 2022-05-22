@@ -9,15 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.formatter.Formatter
 import com.epicdima.stockfly.databinding.FragmentTabMainBinding
 import com.epicdima.stockfly.di.CompanyList
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.other.Formatter
 import javax.inject.Inject
 
-abstract class MainTabFragment<VM : ViewModel> :
-    ViewModelFragment<VM, FragmentTabMainBinding>() {
+abstract class MainTabFragment<VM : ViewModel> : ViewModelFragment<VM, FragmentTabMainBinding>() {
 
     @Inject
     lateinit var formatter: Formatter
@@ -72,7 +70,7 @@ abstract class MainTabFragment<VM : ViewModel> :
         super.onDestroyView()
     }
 
-    protected fun showPopupMenu(view: View, company: Company) {
+    protected fun showPopupMenu(view: View, company: com.epicdima.stockfly.core.model.Company) {
         PopupMenu(view.context, view).apply {
             menu.add(
                 1, 1, 1,
@@ -98,7 +96,7 @@ abstract class MainTabFragment<VM : ViewModel> :
         }.show()
     }
 
-    protected abstract fun changeFavourite(company: Company)
+    protected abstract fun changeFavourite(company: com.epicdima.stockfly.core.model.Company)
 
-    protected abstract fun deleteCompany(company: Company)
+    protected abstract fun deleteCompany(company: com.epicdima.stockfly.core.model.Company)
 }

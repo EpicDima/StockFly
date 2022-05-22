@@ -2,42 +2,30 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
     compileSdk = Android.compileSdk
-    buildToolsVersion = Android.buildTools
 
     defaultConfig {
         applicationId = "com.epicdima.stockfly"
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
-        versionCode = 3
-        versionName = "0.3"
-
-        vectorDrawables.useSupportLibrary = true
+        versionCode = 4
+        versionName = "0.3.1"
 
         buildConfigField(
             "String",
             "API_KEY",
             gradleLocalProperties(rootDir).getProperty("API_KEY").toString()
         )
-
-        kapt {
-            useBuildCache = true
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-                arg("dagger.fastInit", "enabled")
-                arg("dagger.formatGeneratedSource", "disabled")
-            }
-        }
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -46,17 +34,28 @@ android {
             )
             signingConfig = signingConfigs.getByName("debug")
         }
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
-        jvmTarget = "11"
-    }
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
 
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-opt-in=kotlin.RequiresOptIn"
+        )
+    }
+    kapt {
+        useBuildCache = true
+        arguments {
+            arg("dagger.fastInit", "enabled")
+            arg("dagger.formatGeneratedSource", "disabled")
+        }
+    }
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -77,6 +76,19 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-buildconfig"))
+    implementation(project(":core-utils"))
+    implementation(project(":core-common"))
+    implementation(project(":core-navigation"))
+    implementation(project(":core-ui"))
+    implementation(project(":core-model"))
+    implementation(project(":core-data"))
+    implementation(project(":core-preferences"))
+    implementation(project(":core-customtabs"))
+    implementation(project(":core-shortcuts"))
+    implementation(project(":core-work"))
+    implementation(project(":core-formatter"))
+
     Dependencies.main.apply {
         implementation(kotlinStd)
         implementation(coreKtx)
@@ -126,9 +138,7 @@ dependencies {
         implementation(fragmentKtx)
         implementation(coil)
         implementation(timber)
-        implementation(asynclayoutinflater)
         implementation(browser)
-        implementation(workManager)
     }
 
     Dependencies.debug.apply {

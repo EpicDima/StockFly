@@ -11,11 +11,10 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
-import com.epicdima.stockfly.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.common.setArgument
+import com.epicdima.stockfly.core.customtabs.CustomTabsProvider
 import com.epicdima.stockfly.databinding.FragmentNewsBinding
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
@@ -40,7 +39,7 @@ class NewsFragment : ViewModelFragment<NewsViewModel, FragmentNewsBinding>() {
     override val viewModel: NewsViewModel by viewModels()
 
     @Inject
-    lateinit var formatter: Formatter
+    lateinit var formatter: com.epicdima.stockfly.core.formatter.Formatter
 
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider

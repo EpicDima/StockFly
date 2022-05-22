@@ -2,11 +2,11 @@ package com.epicdima.stockfly.ui.company.chart
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.epicdima.stockfly.base.DownloadableViewModel
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.model.StockCandles
-import com.epicdima.stockfly.other.StockCandleParam
-import com.epicdima.stockfly.repository.Repository
+import com.epicdima.stockfly.core.common.DownloadableViewModel
+import com.epicdima.stockfly.core.data.Repository
+import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.model.StockCandleParam
+import com.epicdima.stockfly.core.model.StockCandles
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

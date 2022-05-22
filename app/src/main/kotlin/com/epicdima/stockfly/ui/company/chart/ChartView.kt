@@ -9,8 +9,14 @@ import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.model.StockCandles
-import com.epicdima.stockfly.other.*
+import com.epicdima.stockfly.core.formatter.model.getTimestampString
+import com.epicdima.stockfly.core.formatter.model.priceString
+import com.epicdima.stockfly.core.model.StockCandles
+import com.epicdima.stockfly.core.ui.color
+import com.epicdima.stockfly.core.ui.dpToPx
+import com.epicdima.stockfly.core.ui.drawable
+import com.epicdima.stockfly.core.ui.spToPx
+import com.epicdima.stockfly.core.utils.Quadruple
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt

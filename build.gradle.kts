@@ -7,10 +7,10 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:7.2.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.42.0")
-        classpath("com.autonomousapps:dependency-analysis-gradle-plugin:1.2.0")
+        classpath("com.autonomousapps:dependency-analysis-gradle-plugin:1.2.1")
     }
 }
 

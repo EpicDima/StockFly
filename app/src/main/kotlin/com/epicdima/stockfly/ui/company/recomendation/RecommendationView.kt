@@ -10,8 +10,14 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.model.Recommendation
-import com.epicdima.stockfly.other.*
+import com.epicdima.stockfly.core.formatter.model.periodFormatted
+import com.epicdima.stockfly.core.formatter.toLocalString
+import com.epicdima.stockfly.core.model.Recommendation
+import com.epicdima.stockfly.core.ui.color
+import com.epicdima.stockfly.core.ui.darken
+import com.epicdima.stockfly.core.ui.dpToPx
+import com.epicdima.stockfly.core.ui.spToPx
+import com.epicdima.stockfly.core.utils.Quintuple
 
 private typealias PaintQuintuple = Quintuple<Paint, Paint, Paint, Paint, Paint>
 private typealias StringQuintuple = Quintuple<String, String, String, String, String>
@@ -110,9 +116,9 @@ class RecommendationView @JvmOverloads constructor(
 
     private var selectedIndex = NO_POSITION
 
-    private lateinit var formatter: Formatter
+    private lateinit var formatter: com.epicdima.stockfly.core.formatter.Formatter
 
-    fun setFormatter(formatter: Formatter) {
+    fun setFormatter(formatter: com.epicdima.stockfly.core.formatter.Formatter) {
         this.formatter = formatter
     }
 
@@ -262,7 +268,7 @@ class RecommendationView @JvmOverloads constructor(
 
     private fun getStringValues(
         recommendation: Recommendation,
-        formatter: Formatter
+        formatter: com.epicdima.stockfly.core.formatter.Formatter
     ): StringQuintuple {
         return StringQuintuple(
             context.getString(

@@ -2,7 +2,6 @@ package com.epicdima.stockfly.ui.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,11 +25,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.formatter.Formatter
+import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
 import com.epicdima.stockfly.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.di.CompanyList
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -149,11 +148,9 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
         binding.searchedRecyclerView.setupSearchChipList(viewModel.searched, onChipLongClick)
         setupResultList()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            binding.resultRecyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-                if (scrollY > oldScrollY) {
-                    hideKeyboard()
-                }
+        binding.resultRecyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY > oldScrollY) {
+                hideKeyboard()
             }
         }
     }
@@ -187,7 +184,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
 
     private fun setupResultList() {
         val resultAdapter = CompanyAdapter(formatter) { ticker ->
-            (requireActivity() as MainRouter.CompanyFragmentOpener).openCompanyFragment(ticker)
+            (requireActivity() as CompanyFragmentOpener).openCompanyFragment(ticker)
         }.apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }

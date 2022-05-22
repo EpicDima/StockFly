@@ -1,9 +1,9 @@
 package com.epicdima.stockfly.ui.company.recomendation
 
 import androidx.lifecycle.SavedStateHandle
-import com.epicdima.stockfly.base.DownloadableViewModel
-import com.epicdima.stockfly.model.Recommendation
-import com.epicdima.stockfly.repository.Repository
+import com.epicdima.stockfly.core.common.DownloadableViewModel
+import com.epicdima.stockfly.core.data.Repository
+import com.epicdima.stockfly.core.model.Recommendation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -15,10 +15,13 @@ import coil.dispose
 import coil.load
 import coil.request.Disposable
 import com.epicdima.stockfly.R
+import com.epicdima.stockfly.core.formatter.Formatter
+import com.epicdima.stockfly.core.formatter.model.changePercentString
+import com.epicdima.stockfly.core.formatter.model.changeString
+import com.epicdima.stockfly.core.formatter.model.currentString
+import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.utils.createUri
 import com.epicdima.stockfly.databinding.ItemCompanyBinding
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.createUri
 import timber.log.Timber
 
 class CompanyAdapter(

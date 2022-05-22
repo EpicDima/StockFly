@@ -42,8 +42,6 @@
     public static int wtf(...);
 }
 
--keepclasseswithmembers class * { @retrofit2.http.* <methods>; }
-
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
 -dontwarn org.bouncycastle.jsse.BCSSLSocket
 -dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider

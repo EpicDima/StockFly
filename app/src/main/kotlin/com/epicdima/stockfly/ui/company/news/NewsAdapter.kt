@@ -11,11 +11,11 @@ import coil.dispose
 import coil.load
 import coil.request.Disposable
 import com.epicdima.stockfly.R
+import com.epicdima.stockfly.core.formatter.Formatter
+import com.epicdima.stockfly.core.model.NewsItem
+import com.epicdima.stockfly.core.ui.getColor
+import com.epicdima.stockfly.core.utils.createUri
 import com.epicdima.stockfly.databinding.ItemNewsItemBinding
-import com.epicdima.stockfly.model.NewsItem
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.createUri
-import com.epicdima.stockfly.other.getColor
 import java.text.DateFormat
 
 class NewsAdapter(

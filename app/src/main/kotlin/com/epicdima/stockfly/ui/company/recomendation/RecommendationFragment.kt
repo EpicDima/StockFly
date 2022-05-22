@@ -10,10 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.common.setArgument
+import com.epicdima.stockfly.core.formatter.Formatter
+import com.epicdima.stockfly.core.formatter.model.periodFormatted
 import com.epicdima.stockfly.databinding.FragmentRecommendationBinding
-import com.epicdima.stockfly.other.Formatter
-import com.epicdima.stockfly.other.setArgument
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn

@@ -7,15 +7,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.epicdima.stockfly.R
-import com.epicdima.stockfly.base.ViewModelFragment
-import com.epicdima.stockfly.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.common.setArgument
+import com.epicdima.stockfly.core.customtabs.CustomTabsProvider
+import com.epicdima.stockfly.core.formatter.model.countryName
+import com.epicdima.stockfly.core.formatter.model.ipoLocalDateString
+import com.epicdima.stockfly.core.formatter.toLocalString
+import com.epicdima.stockfly.core.utils.createUri
 import com.epicdima.stockfly.databinding.FragmentSummaryBinding
-import com.epicdima.stockfly.other.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,7 +44,7 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
     override val viewModel: SummaryViewModel by viewModels()
 
     @Inject
-    lateinit var formatter: Formatter
+    lateinit var formatter: com.epicdima.stockfly.core.formatter.Formatter
 
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider
@@ -99,5 +105,23 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
                 }
             }
         }
+    }
+}
+
+fun loadImageWithGoneOnError(imageView: ImageView, imageUrl: String?) {
+    if (imageUrl.isNullOrEmpty()) {
+        imageView.visibility = View.GONE
+        return
+    }
+
+    imageView.load(createUri(imageUrl)) {
+        target(onStart = {
+            imageView.setImageDrawable(null)
+        }, onSuccess = {
+            imageView.visibility = View.VISIBLE
+            imageView.setImageDrawable(it)
+        }, onError = {
+            imageView.visibility = View.GONE
+        })
     }
 }

@@ -3,8 +3,8 @@ package com.epicdima.stockfly.ui.company.summary
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.repository.Repository
+import com.epicdima.stockfly.core.data.Repository
+import com.epicdima.stockfly.core.model.Company
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

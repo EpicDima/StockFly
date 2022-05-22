@@ -2,9 +2,9 @@ package com.epicdima.stockfly.ui.search
 
 import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.BuildConfig
-import com.epicdima.stockfly.base.DownloadableViewModel
-import com.epicdima.stockfly.model.Company
-import com.epicdima.stockfly.repository.Repository
+import com.epicdima.stockfly.core.common.DownloadableViewModel
+import com.epicdima.stockfly.core.data.Repository
+import com.epicdima.stockfly.core.model.Company
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

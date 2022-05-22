@@ -1,0 +1,1 @@
+-keepclasseswithmembers class * { @retrofit2.http.* <methods>; }

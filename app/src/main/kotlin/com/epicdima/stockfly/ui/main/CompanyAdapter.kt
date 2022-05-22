@@ -204,23 +204,23 @@ class CompanyViewHolderItem(
     val currentString = company.currentString
 
     val rootCardBackgroundColorId = if (position % 2 == 0) {
-        R.color.light
+        com.epicdima.stockfly.core.ui.R.color.light
     } else {
-        R.color.white
+        com.epicdima.stockfly.core.ui.R.color.white
     }
     var rootCardBackgroundColor = 0
 
     val logoBackgroundColorId = if (position % 2 == 0) {
-        R.color.white
+        com.epicdima.stockfly.core.ui.R.color.white
     } else {
-        R.color.light
+        com.epicdima.stockfly.core.ui.R.color.light
     }
     var logoBackgroundColor: Int = 0
 
     val favouriteIconId = if (favourite) {
-        R.drawable.ic_star_solid_selected
+        com.epicdima.stockfly.core.ui.R.drawable.ic_star_solid_selected
     } else {
-        R.drawable.ic_star_solid
+        com.epicdima.stockfly.core.ui.R.drawable.ic_star_solid
     }
     var favouriteIcon: Drawable? = null
 
@@ -230,9 +230,9 @@ class CompanyViewHolderItem(
             if (company.changePercentString(formatter).isEmpty()) "" else ")"
 
     val changeTextColorId = when {
-        company.changeString.startsWith("+") -> R.color.green
-        company.changeString.startsWith("-") -> R.color.red
-        else -> R.color.black
+        company.changeString.startsWith("+") -> com.epicdima.stockfly.core.ui.R.color.green
+        company.changeString.startsWith("-") -> com.epicdima.stockfly.core.ui.R.color.red
+        else -> com.epicdima.stockfly.core.ui.R.color.black
     }
     var changeTextColor: Int = 0
 }

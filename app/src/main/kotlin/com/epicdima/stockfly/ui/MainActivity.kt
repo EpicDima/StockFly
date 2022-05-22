@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider
 
-    private var router: MainRouter? = null
+    private var router: NavigationRouter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
 
         lifecycle.addObserver(customTabsProvider)
 
-        router = MainRouter(supportFragmentManager, android.R.id.content)
+        router = NavigationRouter(supportFragmentManager, android.R.id.content)
 
         if (savedInstanceState == null) {
             openFragmentByIntent(intent)

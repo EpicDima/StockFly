@@ -23,5 +23,4 @@ object Versions {
     const val asynclayoutinflater = "1.0.0"
     const val browser = "1.4.0"
     const val workManager = "2.7.1"
-    const val inject = "1"
 }

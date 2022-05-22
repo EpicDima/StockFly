@@ -17,7 +17,7 @@ object SingleActivityModule {
     @CompanyList
     fun provideCompanyRecycledViewPool(): RecyclerView.RecycledViewPool {
         return RecyclerView.RecycledViewPool().apply {
-            setMaxRecycledViews(0, 10)
+            setMaxRecycledViews(0, 15)
         }
     }
 }

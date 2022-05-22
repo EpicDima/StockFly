@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="d_day">D</string>
+    <string name="w_week">W</string>
+    <string name="m_month">M</string>
+    <string name="six_m_six_months">6M</string>
+    <string name="one_y_one_year">1Y</string>
+    <string name="all_time">All</string>
+    <string name="buy_stock">Buy for %1$s</string>
+    <string name="bought_stock">You bought %1$s for %2$s</string>
+    <string name="no_data">No available data</string>
+</resources>

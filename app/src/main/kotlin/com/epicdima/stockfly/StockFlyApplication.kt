@@ -9,6 +9,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.util.DebugLogger
+import com.epicdima.stockfly.core.formatter.Formatter
 import com.epicdima.stockfly.core.work.RefreshWorker
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -21,7 +22,7 @@ class StockFlyApplication : Application(), ImageLoaderFactory,
     private lateinit var configuration: Configuration
 
     @Inject
-    lateinit var formatter: com.epicdima.stockfly.core.formatter.Formatter
+    lateinit var formatter: Formatter
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory

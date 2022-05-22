@@ -18,9 +18,6 @@ android {
             isMinifyEnabled = true
         }
     }
-    buildFeatures {
-        viewBinding = true
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -28,8 +25,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    implementation(Dependencies.other.material)
+    api(Dependencies.other.material)
+    api(Dependencies.other.constraint)
 }

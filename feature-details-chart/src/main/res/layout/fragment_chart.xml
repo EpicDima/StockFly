@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/WithoutOverScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/current"
+            style="@style/SingleLineTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/chart_current_textsize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$131.93" />
+
+        <TextView
+            android:id="@+id/change"
+            style="@style/SingleLineTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textSize="@dimen/chart_change_textsize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current"
+            tools:text="+$0.12 (1,15%)" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/ProgressBar"
+            app:layout_constraintBottom_toBottomOf="@id/chart"
+            app:layout_constraintEnd_toEndOf="@id/chart"
+            app:layout_constraintStart_toStartOf="@id/chart"
+            app:layout_constraintTop_toTopOf="@id/chart" />
+
+        <com.epicdima.stockfly.feature.details.chart.ChartView
+            android:id="@+id/chart"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/warnings_layout_height"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/change" />
+
+        <TextView
+            android:id="@+id/day_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_screen_side_margin"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="@dimen/date_button_side_margin"
+            android:text="@string/d_day"
+            app:layout_constraintEnd_toStartOf="@+id/week_button"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart" />
+
+        <TextView
+            android:id="@+id/week_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_side_margin"
+            android:layout_marginEnd="@dimen/date_button_side_margin"
+            android:text="@string/w_week"
+            app:layout_constraintBottom_toBottomOf="@id/day_button"
+            app:layout_constraintEnd_toStartOf="@+id/month_button"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/day_button"
+            app:layout_constraintTop_toTopOf="@id/day_button" />
+
+        <TextView
+            android:id="@+id/month_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_side_margin"
+            android:layout_marginEnd="@dimen/date_button_side_margin"
+            android:minHeight="@dimen/date_buttons_height"
+            android:text="@string/m_month"
+            app:layout_constraintBottom_toBottomOf="@id/day_button"
+            app:layout_constraintEnd_toStartOf="@+id/six_months_button"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/week_button"
+            app:layout_constraintTop_toTopOf="@id/day_button" />
+
+        <TextView
+            android:id="@+id/six_months_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_side_margin"
+            android:layout_marginEnd="@dimen/date_button_side_margin"
+            android:text="@string/six_m_six_months"
+            app:layout_constraintBottom_toBottomOf="@id/day_button"
+            app:layout_constraintEnd_toStartOf="@+id/year_button"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/month_button"
+            app:layout_constraintTop_toTopOf="@id/day_button" />
+
+        <TextView
+            android:id="@+id/year_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_side_margin"
+            android:layout_marginEnd="@dimen/date_button_side_margin"
+            android:text="@string/one_y_one_year"
+            app:layout_constraintBottom_toBottomOf="@id/day_button"
+            app:layout_constraintEnd_toStartOf="@+id/all_time_button"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/six_months_button"
+            app:layout_constraintTop_toTopOf="@id/day_button" />
+
+        <TextView
+            android:id="@+id/all_time_button"
+            style="@style/DateTimeButton"
+            android:layout_height="@dimen/date_buttons_height"
+            android:layout_marginStart="@dimen/date_button_side_margin"
+            android:layout_marginEnd="@dimen/date_button_screen_side_margin"
+            android:text="@string/all_time"
+            app:layout_constraintBottom_toBottomOf="@id/day_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/year_button"
+            app:layout_constraintTop_toTopOf="@id/day_button" />
+
+        <TextView
+            android:id="@+id/buy_button"
+            style="@style/BuyButton"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/day_button"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Buy for $132.04" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

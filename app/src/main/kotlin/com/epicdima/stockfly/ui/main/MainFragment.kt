@@ -14,7 +14,6 @@ import com.epicdima.stockfly.core.ui.customize
 import com.epicdima.stockfly.core.ui.getDimensionInSp
 import com.epicdima.stockfly.core.ui.set
 import com.epicdima.stockfly.databinding.FragmentMainBinding
-import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.all.AllMainTabFragment
 import com.epicdima.stockfly.ui.main.favourite.FavouriteMainTabFragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -66,11 +65,14 @@ class MainFragment : ViewBindingFragment<FragmentMainBinding>() {
             tabLayoutMediator =
                 tabLayout.customize(viewPager, R.layout.main_tab_item_layout, titles, onSelect = {
                     it.set(
-                        resources.getDimensionInSp(R.dimen.main_tab_selected_textsize),
-                        R.color.black
+                        resources.getDimensionInSp(com.epicdima.stockfly.core.ui.R.dimen.main_tab_selected_textsize),
+                        com.epicdima.stockfly.core.ui.R.color.black
                     )
                 }, onUnselect = {
-                    it.set(resources.getDimensionInSp(R.dimen.main_tab_textsize), R.color.dark)
+                    it.set(
+                        resources.getDimensionInSp(com.epicdima.stockfly.core.ui.R.dimen.main_tab_textsize),
+                        com.epicdima.stockfly.core.ui.R.color.dark
+                    )
                 })
             tabLayout.getTabAt(0)?.select()
         }

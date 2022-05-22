@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/WithoutOverScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/progress_bar_widget"
+            layout="@layout/screen_progress_bar_widget" />
+
+        <include
+            android:id="@+id/error_widget"
+            layout="@layout/screen_error_widget" />
+
+        <com.epicdima.stockfly.feature.details.recommendations.RecommendationsView
+            android:id="@+id/recommendations_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recommendations_view_height"
+            android:layout_marginTop="32dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/begin_date"
+            style="@style/SingleLineTextView"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="36dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recommendations_view"
+            tools:text="Март 2020" />
+
+        <TextView
+            android:id="@+id/end_date"
+            style="@style/SingleLineTextView"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recommendations_view"
+            tools:text="Апрель 2021" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/period_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:haloColor="@color/dark_translucent"
+            app:haloRadius="14dp"
+            app:labelBehavior="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/begin_date"
+            app:thumbColor="@color/black"
+            app:thumbElevation="0dp"
+            app:thumbRadius="8dp"
+            app:tickColorActive="@color/dark"
+            app:tickColorInactive="@color/black"
+            app:tickVisible="false"
+            app:trackColorActive="@color/black"
+            app:trackColorInactive="@color/light"
+            app:trackHeight="6dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="company_logo">Company’s logo</string>
+
+    <string name="phone_number">Phone number</string>
+    <string name="website">Website</string>
+    <string name="country">Country</string>
+    <string name="currency">Currency</string>
+    <string name="exchange">Exchange</string>
+    <string name="ipo_date">IPO Date</string>
+    <string name="shares_outstanding">Shares outstanding</string>
+    <string name="market_capitalization">Market capitalization</string>
+
+</resources>

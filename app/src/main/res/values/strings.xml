@@ -10,8 +10,6 @@
     <string name="stocks_empty_list">You have not searched or viewed anything</string>
     <string name="favourite_empty_list">You did not mark any companies as favorites</string>
 
-    <string name="company_logo">Company’s logo</string>
-
     <string name="search_hint">Find company or ticker</string>
     <string name="search_icon">Search icon</string>
     <string name="back_icon">Back icon</string>
@@ -22,42 +20,6 @@
     <string name="popular_title">Popular requests</string>
     <string name="searched_title">You’ve searched for this</string>
     <string name="search_result_title">Stocks</string>
-
-    <string name="chart">Chart</string>
-    <string name="summary">Summary</string>
-    <string name="news">News</string>
-    <string name="recommendations">Recommendations</string>
-
-    <string name="d_day">D</string>
-    <string name="w_week">W</string>
-    <string name="m_month">M</string>
-    <string name="six_m_six_months">6M</string>
-    <string name="one_y_one_year">1Y</string>
-    <string name="all_time">All</string>
-    <string name="buy_stock">Buy for %1$s</string>
-    <string name="bought_stock">You bought %1$s for %2$s</string>
-    <string name="no_data">No available data</string>
-
-    <string name="news_item_image">Image from the news</string>
-    <string name="no_news">No news</string>
-
-    <string name="phone_number">Phone number</string>
-    <string name="website">Website</string>
-    <string name="country">Country</string>
-    <string name="currency">Currency</string>
-    <string name="exchange">Exchange</string>
-    <string name="ipo_date">IPO Date</string>
-    <string name="shares_outstanding">Shares outstanding</string>
-    <string name="market_capitalization">Market capitalization</string>
-
-    <string name="no_recommendations">No recommendations</string>
-
-    <!-- Нужен хороший правильный перевод для этих строк -->
-    <string name="strong_sell_value" translatable="false">Strong sell: %1$s</string>
-    <string name="sell_value" translatable="false">Sell: %1$s</string>
-    <string name="hold_value" translatable="false">Hold: %1$s</string>
-    <string name="buy_value" translatable="false">Buy: %1$s</string>
-    <string name="strong_buy_value" translatable="false">Strong buy: %1$s</string>
 
     <string name="shortcut_search_long_label">Search</string>
     <string name="shortcut_search_short_label">Search</string>

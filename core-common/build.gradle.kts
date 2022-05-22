@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -18,9 +20,6 @@ android {
             isMinifyEnabled = true
         }
     }
-    buildFeatures {
-        viewBinding = true
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -28,13 +27,31 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    kapt {
+        useBuildCache = true
+        arguments {
+            arg("dagger.fastInit", "enabled")
+            arg("dagger.formatGeneratedSource", "disabled")
+        }
+    }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(project(":core-utils"))
 
     implementation(Dependencies.lifecycle.viewModelKtx)
-    implementation(Dependencies.other.fragmentKtx)
-    implementation(Dependencies.other.inject)
-    implementation(Dependencies.other.timber)
+
+    Dependencies.di.apply {
+        implementation(android)
+        kapt(androidCompiler)
+        kapt(hiltCompiler)
+    }
+
+    Dependencies.other.apply {
+        implementation(fragmentKtx)
+        implementation(timber)
+    }
 }

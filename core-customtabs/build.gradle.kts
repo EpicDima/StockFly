@@ -45,6 +45,8 @@ dependencies {
         kapt(hiltCompiler)
     }
 
-    implementation(Dependencies.other.timber)
-    implementation(Dependencies.other.browser)
+    Dependencies.other.apply {
+        implementation(timber)
+        api(browser)
+    }
 }

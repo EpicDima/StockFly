@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.epicdima.stockfly.R
 import com.epicdima.stockfly.core.model.Company
 import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
-import com.epicdima.stockfly.ui.MainRouter
 import com.epicdima.stockfly.ui.main.CompanyAdapter
 import com.epicdima.stockfly.ui.main.MainTabFragment
 import dagger.hilt.android.AndroidEntryPoint

@@ -89,6 +89,8 @@ dependencies {
     implementation(project(":core-work"))
     implementation(project(":core-formatter"))
 
+    implementation(project(":feature-details"))
+
     Dependencies.main.apply {
         implementation(kotlinStd)
         implementation(coreKtx)
@@ -111,7 +113,6 @@ dependencies {
         implementation(runtimeKtx)
         implementation(viewModelKtx)
         implementation(viewModelSavedstate)
-        implementation(archExt)
     }
 
     Dependencies.room.apply {

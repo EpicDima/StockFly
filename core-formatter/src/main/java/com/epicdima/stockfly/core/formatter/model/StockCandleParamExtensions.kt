@@ -9,8 +9,12 @@ import java.text.SimpleDateFormat
 
 fun StockCandleParam.format(formatter: Formatter): SimpleDateFormat {
     return when (this) {
-        StockCandleParam.DAY, StockCandleParam.WEEK, StockCandleParam.MONTH -> formatter.getSimpleDateFormat(PATTERN_WITH_MINUTES)
-        StockCandleParam.SIX_MONTHS, StockCandleParam.YEAR -> formatter.getSimpleDateFormat(PATTERN_DATE)
+        StockCandleParam.DAY, StockCandleParam.WEEK, StockCandleParam.MONTH -> formatter.getSimpleDateFormat(
+            PATTERN_WITH_MINUTES
+        )
+        StockCandleParam.SIX_MONTHS, StockCandleParam.YEAR -> formatter.getSimpleDateFormat(
+            PATTERN_DATE
+        )
         StockCandleParam.ALL_TIME -> return formatter.getSimpleDateFormat(PATTERN_DATE_WITHOUT_DAY)
     }
 }

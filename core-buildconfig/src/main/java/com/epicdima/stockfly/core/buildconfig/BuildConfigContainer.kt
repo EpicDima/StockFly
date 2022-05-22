@@ -4,5 +4,6 @@ class BuildConfigContainer(
     val isDebug: Boolean,
     val versionName: String,
     val versionCode: Int,
-    val apiKey: String
+    val apiKey: String,
+    val detailedSearch: Boolean
 )

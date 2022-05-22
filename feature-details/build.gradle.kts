@@ -50,9 +50,11 @@ dependencies {
     implementation(project(":feature-details-news"))
     implementation(project(":feature-details-recommendations"))
 
-    implementation(Dependencies.lifecycle.runtimeKtx)
-    implementation(Dependencies.lifecycle.viewModelKtx)
-    implementation(Dependencies.lifecycle.viewModelSavedstate)
+    Dependencies.lifecycle.apply {
+        implementation(runtimeKtx)
+        implementation(viewModelKtx)
+        implementation(viewModelSavedstate)
+    }
 
     Dependencies.coroutines.apply {
         implementation(core)
@@ -65,6 +67,8 @@ dependencies {
         kapt(hiltCompiler)
     }
 
-    implementation(Dependencies.other.timber)
-    implementation(Dependencies.other.fragmentKtx)
+    Dependencies.other.apply {
+        implementation(timber)
+        implementation(fragmentKtx)
+    }
 }

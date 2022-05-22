@@ -19,7 +19,8 @@ object BuildConfigModule {
             BuildConfig.DEBUG,
             BuildConfig.VERSION_NAME,
             BuildConfig.VERSION_CODE,
-            BuildConfig.API_KEY
+            BuildConfig.API_KEY,
+            BuildConfig.DETAILED_SEARCH,
         )
     }
 }

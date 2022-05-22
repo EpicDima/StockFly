@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
-    api(Dependencies.other.material)
-    api(Dependencies.other.constraint)
+    Dependencies.other.apply {
+        api(material)
+        api(constraint)
+    }
 }

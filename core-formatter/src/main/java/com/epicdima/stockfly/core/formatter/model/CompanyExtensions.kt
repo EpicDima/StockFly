@@ -1,6 +1,6 @@
 package com.epicdima.stockfly.core.formatter.model
 
-import com.epicdima.stockfly.core.formatter.*
+import com.epicdima.stockfly.core.formatter.FORMAT_DATE_API
 import com.epicdima.stockfly.core.formatter.Formatter
 import com.epicdima.stockfly.core.model.Company
 import java.text.DateFormat

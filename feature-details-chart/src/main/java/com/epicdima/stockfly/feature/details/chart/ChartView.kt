@@ -64,9 +64,11 @@ class ChartView @JvmOverloads constructor(
     private val endGradientColor = context.color(com.epicdima.stockfly.core.ui.R.color.white)
     private val circleColor = context.color(com.epicdima.stockfly.core.ui.R.color.black)
     private val circleBorderColor = context.color(com.epicdima.stockfly.core.ui.R.color.light)
-    private val circleShadowColor = context.color(com.epicdima.stockfly.core.ui.R.color.darker_translucent)
+    private val circleShadowColor =
+        context.color(com.epicdima.stockfly.core.ui.R.color.darker_translucent)
     private val suggestionColor = context.color(com.epicdima.stockfly.core.ui.R.color.black)
-    private val suggestionShadowColor = context.color(com.epicdima.stockfly.core.ui.R.color.dark_translucent)
+    private val suggestionShadowColor =
+        context.color(com.epicdima.stockfly.core.ui.R.color.dark_translucent)
     private val suggestionPriceColor = context.color(com.epicdima.stockfly.core.ui.R.color.white)
     private val suggestionDateTimeColor = context.color(com.epicdima.stockfly.core.ui.R.color.dark)
 
@@ -76,7 +78,8 @@ class ChartView @JvmOverloads constructor(
         color = noDataColor
         textSize = noDataTextSize
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_bold)
+        typeface =
+            ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_bold)
     }
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -103,13 +106,19 @@ class ChartView @JvmOverloads constructor(
         color = suggestionPriceColor
         textSize = suggestionPriceTextSize
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_semibold)
+        typeface = ResourcesCompat.getFont(
+            context,
+            com.epicdima.stockfly.core.ui.R.font.montserrat_semibold
+        )
     }
     private val suggestionDateTimePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = suggestionDateTimeColor
         textSize = suggestionDateTimeTextSize
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_semibold)
+        typeface = ResourcesCompat.getFont(
+            context,
+            com.epicdima.stockfly.core.ui.R.font.montserrat_semibold
+        )
     }
 
     private val arrowDownIcon = context.drawable(R.drawable.ic_arrow_down)

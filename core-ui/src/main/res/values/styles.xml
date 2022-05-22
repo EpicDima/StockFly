@@ -43,20 +43,6 @@
         <item name="android:padding">@dimen/default_button_padding</item>
     </style>
 
-    <style name="DateTimeButton" parent="DefaultButton">
-        <item name="android:background">@drawable/button_datetime_background</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/datetime_button_textsize</item>
-        <item name="android:padding">@dimen/date_button_padding</item>
-    </style>
-
-    <style name="BuyButton" parent="DefaultButton">
-        <item name="android:background">@drawable/button_buy_background</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/buy_button_textsize</item>
-    </style>
-
     <style name="WarningTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -70,15 +56,6 @@
         <item name="android:text">@string/error_receiving_data</item>
     </style>
 
-    <style name="SearchTitle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/search_title_height</item>
-        <item name="android:layout_marginStart">@dimen/search_title_margin_start</item>
-        <item name="android:fontFamily">@font/montserrat_bold</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/search_title_textsize</item>
-    </style>
-
     <style name="WithoutOverScroll">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -88,14 +65,6 @@
 
     <style name="VerticalList" parent="WithoutOverScroll">
         <item name="android:orientation">vertical</item>
-    </style>
-
-    <style name="HorizontalList" parent="WithoutOverScroll">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:clipToPadding">false</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:paddingStart">@dimen/horizontal_list_side_padding</item>
-        <item name="android:paddingEnd">@dimen/horizontal_list_side_padding</item>
     </style>
 
     <style name="SingleLineTextView">
@@ -118,21 +87,4 @@
         <item name="android:textSize">@dimen/company_name_textsize</item>
     </style>
 
-    <style name="SummaryFieldTitle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/dark</item>
-        <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="SummaryFieldValue">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorLink">@color/black</item>
-        <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textAlignment">center</item>
-    </style>
 </resources>

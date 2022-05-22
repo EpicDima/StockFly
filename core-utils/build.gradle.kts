@@ -43,7 +43,9 @@ dependencies {
         kapt(hiltCompiler)
     }
 
-    implementation(Dependencies.other.timber)
-    implementation(Dependencies.other.asynclayoutinflater)
-    implementation(Dependencies.other.coil)
+    Dependencies.other.apply {
+        implementation(timber)
+        implementation(asynclayoutinflater)
+        implementation(coil)
+    }
 }

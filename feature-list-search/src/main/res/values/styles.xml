@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SearchTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/search_title_height</item>
+        <item name="android:layout_marginStart">@dimen/search_title_margin_start</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/search_title_textsize</item>
+    </style>
+
+    <style name="HorizontalList" parent="WithoutOverScroll">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingStart">@dimen/horizontal_list_side_padding</item>
+        <item name="android:paddingEnd">@dimen/horizontal_list_side_padding</item>
+    </style>
+</resources>

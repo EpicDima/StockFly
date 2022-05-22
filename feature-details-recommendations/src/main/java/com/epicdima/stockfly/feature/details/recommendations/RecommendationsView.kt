@@ -52,14 +52,16 @@ class RecommendationsView @JvmOverloads constructor(
     private val buyColor = context.color(com.epicdima.stockfly.core.ui.R.color.shamrock)
     private val holdColor = context.color(com.epicdima.stockfly.core.ui.R.color.ripe_lemon)
     private val sellColor = context.color(com.epicdima.stockfly.core.ui.R.color.ryb_orange)
-    private val strongSellColor = context.color(com.epicdima.stockfly.core.ui.R.color.deep_carmine_pink)
+    private val strongSellColor =
+        context.color(com.epicdima.stockfly.core.ui.R.color.deep_carmine_pink)
     private val unselectedStrongBuyColor = strongBuyColor.darken()
     private val unselectedBuyColor = buyColor.darken()
     private val unselectedHoldColor = holdColor.darken()
     private val unselectedSellColor = sellColor.darken()
     private val unselectedStrongSellColor = strongSellColor.darken()
     private val suggestionColor = context.color(com.epicdima.stockfly.core.ui.R.color.black)
-    private val suggestionShadowColor = context.color(com.epicdima.stockfly.core.ui.R.color.dark_translucent)
+    private val suggestionShadowColor =
+        context.color(com.epicdima.stockfly.core.ui.R.color.dark_translucent)
     private val suggestionTextColor = context.color(com.epicdima.stockfly.core.ui.R.color.white)
 
     private val noDataText = context.getString(R.string.no_recommendations)
@@ -68,7 +70,8 @@ class RecommendationsView @JvmOverloads constructor(
         color = noDataColor
         textSize = noDataTextSize
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_bold)
+        typeface =
+            ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_bold)
     }
     private val defaultBarPalette =
         com.epicdima.stockfly.feature.details.recommendations.PaintQuintuple(
@@ -94,7 +97,10 @@ class RecommendationsView @JvmOverloads constructor(
         color = suggestionTextColor
         textSize = suggestionDateTextSize
         textAlign = Paint.Align.CENTER
-        typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_semibold)
+        typeface = ResourcesCompat.getFont(
+            context,
+            com.epicdima.stockfly.core.ui.R.font.montserrat_semibold
+        )
     }
     private val suggestionValuePalette =
         com.epicdima.stockfly.feature.details.recommendations.PaintQuintuple(
@@ -429,7 +435,10 @@ class RecommendationsView @JvmOverloads constructor(
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             textSize = suggestionValueTextSize
             textAlign = Paint.Align.LEFT
-            typeface = ResourcesCompat.getFont(context, com.epicdima.stockfly.core.ui.R.font.montserrat_semibold)
+            typeface = ResourcesCompat.getFont(
+                context,
+                com.epicdima.stockfly.core.ui.R.font.montserrat_semibold
+            )
         }
     }
 

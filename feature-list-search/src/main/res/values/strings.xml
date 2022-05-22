@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_hint">Find company or ticker</string>
+    <string name="search_icon">Search icon</string>
+    <string name="back_icon">Back icon</string>
+    <string name="close_icon">Close icon</string>
+    <string name="not_empty_request">The search query must not be an empty string</string>
+    <string name="no_results">No results found</string>
+
+    <string name="popular_title">Popular requests</string>
+    <string name="searched_title">You’ve searched for this</string>
+    <string name="search_result_title">Stocks</string>
+
+    <string name="search_popup_menu_request_item_remove">Remove</string>
+</resources>

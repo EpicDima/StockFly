@@ -89,6 +89,8 @@ dependencies {
     implementation(project(":core-work"))
     implementation(project(":core-formatter"))
 
+    implementation(project(":feature-list"))
+    implementation(project(":feature-list-search"))
     implementation(project(":feature-details"))
 
     Dependencies.main.apply {

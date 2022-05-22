@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import com.epicdima.stockfly.feature.details.CompanyFragment
-import com.epicdima.stockfly.ui.main.MainFragment
-import com.epicdima.stockfly.ui.search.SearchFragment
+import com.epicdima.stockfly.feature.list.ListFragment
+import com.epicdima.stockfly.feature.list.search.SearchFragment
 import timber.log.Timber
 
 class NavigationRouter(
@@ -43,9 +43,9 @@ class NavigationRouter(
         if (fragmentManager.fragments.isEmpty()) {
             Timber.i("new MainFragment")
 
-            val mainFragment = MainFragment.newInstance()
+            val listFragment = ListFragment.newInstance()
             fragmentManager.commit {
-                openFragment(mainFragment, FragmentPage.MAIN, false)
+                openFragment(listFragment, FragmentPage.MAIN, false)
             }
         }
     }

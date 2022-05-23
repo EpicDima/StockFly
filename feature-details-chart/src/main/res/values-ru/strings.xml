@@ -11,5 +11,4 @@
     <string name="bought_stock">Вы купили %1$s за %2$s</string>
 
     <string name="no_data">Нет доступных данных</string>
-    <string name="d_day">D</string>
 </resources>

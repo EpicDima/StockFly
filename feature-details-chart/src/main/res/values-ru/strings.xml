@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="d_day">Д</string>
+    <string name="w_week">Н</string>
+    <string name="m_month">М</string>
+    <string name="six_m_six_months">6М</string>
+    <string name="one_y_one_year">1Г</string>
+    <string name="all_time">Всё</string>
+
+    <string name="buy_stock">Купить акцию за %1$s</string>
+    <string name="bought_stock">Вы купили %1$s за %2$s</string>
+
+    <string name="no_data">Нет доступных данных</string>
+    <string name="d_day">D</string>
+</resources>

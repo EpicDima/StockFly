@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="company_logo">Логотип компании</string>
+
+    <string name="companies_popup_menu_item_add_to_favourites">Добавить в избранное</string>
+    <string name="companies_popup_menu_item_remove">Удалить</string>
+    <string name="companies_popup_menu_item_delete_from_favourites">Удалить из избранного</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_recommendations">Нет рекомендаций</string>
+
+    <string name="strong_sell_value">Активная продажа: %1$s</string>
+    <string name="sell_value">Продажа: %1$s</string>
+    <string name="hold_value">Удержание: %1$s</string>
+    <string name="buy_value">Покупка: %1$s</string>
+    <string name="strong_buy_value">Активная покупка: %1$s</string>
+</resources>

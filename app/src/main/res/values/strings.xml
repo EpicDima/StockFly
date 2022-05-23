@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">StockFly</string>
+    <string name="app_name" translatable="false">StockFly</string>
 
     <string name="shortcut_search_long_label">Search</string>
     <string name="shortcut_search_short_label">Search</string>

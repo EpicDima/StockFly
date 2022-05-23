@@ -2,10 +2,9 @@
 <resources>
     <string name="no_recommendations">No recommendations</string>
 
-    <!-- Нужен хороший правильный перевод для этих строк -->
-    <string name="strong_sell_value" translatable="false">Strong sell: %1$s</string>
-    <string name="sell_value" translatable="false">Sell: %1$s</string>
-    <string name="hold_value" translatable="false">Hold: %1$s</string>
-    <string name="buy_value" translatable="false">Buy: %1$s</string>
-    <string name="strong_buy_value" translatable="false">Strong buy: %1$s</string>
+    <string name="strong_sell_value">Strong sell: %1$s</string>
+    <string name="sell_value">Sell: %1$s</string>
+    <string name="hold_value">Hold: %1$s</string>
+    <string name="buy_value">Buy: %1$s</string>
+    <string name="strong_buy_value">Strong buy: %1$s</string>
 </resources>

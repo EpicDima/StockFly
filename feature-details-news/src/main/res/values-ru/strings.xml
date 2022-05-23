@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news_item_image">Изображение из новости</string>
+    <string name="no_news">Нет новостей</string>
+</resources>

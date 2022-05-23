@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="company_logo">Логотип компании</string>
+
+    <string name="phone_number">Телефонный номер</string>
+    <string name="website">Вебсайт</string>
+    <string name="country">Страна</string>
+    <string name="currency">Валюта</string>
+    <string name="exchange">Биржа</string>
+    <string name="ipo_date">Дата IPO</string>
+    <string name="shares_outstanding">Акции в обращении</string>
+    <string name="market_capitalization">Рыночная капитализация</string>
+</resources>

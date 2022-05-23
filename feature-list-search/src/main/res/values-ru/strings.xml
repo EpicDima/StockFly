@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_hint">Найти компанию или тикер</string>
+    <string name="search_icon">Иконка поиска</string>
+    <string name="back_icon">Иконка возвращения назад</string>
+    <string name="close_icon">Иконка закрытия</string>
+    <string name="not_empty_request">Поисковой запрос не должен быть пустой строкой</string>
+    <string name="no_results">Результатов не найдено</string>
+
+    <string name="popular_title">Популярные запросы</string>
+    <string name="searched_title">Вы искали</string>
+    <string name="search_result_title">Акции</string>
+
+    <string name="search_popup_menu_request_item_remove">Удалить</string>
+</resources>

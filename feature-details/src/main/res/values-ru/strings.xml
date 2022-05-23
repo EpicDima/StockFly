@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chart">Курс акций</string>
+    <string name="summary">Подробности</string>
+    <string name="news">Новости</string>
+    <string name="recommendations">Рекомендации</string>
+</resources>

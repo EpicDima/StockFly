@@ -120,6 +120,7 @@ class CompanyAdapter(
                 setImageDrawable(null)
                 setBackgroundColor(companyItem.logoBackgroundColor)
                 if (companyItem.logoUrl.isNotBlank()) {
+                    Timber.d("start loading logo image for %s", companyItem.ticker)
                     logoDisposable = load(createUri(companyItem.logoUrl)) {
                         target {
                             Timber.d("bind logo image for %s", companyItem.ticker)
@@ -166,6 +167,9 @@ class CompanyAdapter(
                 }
                 if (payload.changeTextColor) {
                     change.setTextColor(companyItem.changeTextColor)
+                }
+                if (payload.logoUrl) {
+                    setLogo(logo, companyItem)
                 }
             }
         }
@@ -273,6 +277,7 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CompanyViewHolderItem
             oldItem.currentString != newItem.currentString,
             oldItem.changeString != newItem.changeString,
             oldItem.changeTextColorId != newItem.changeTextColorId,
+            oldItem.logoUrl != newItem.logoUrl
         )
 
         if (payload != DEFAULT_COMPANY_ITEM_PAYLOAD) {
@@ -290,6 +295,7 @@ data class CompanyItemPayload(
     var currentString: Boolean = false,
     var changeString: Boolean = false,
     var changeTextColor: Boolean = false,
+    var logoUrl: Boolean = false,
 )
 
 private val DEFAULT_COMPANY_ITEM_PAYLOAD = CompanyItemPayload()

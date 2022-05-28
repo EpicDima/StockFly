@@ -12,7 +12,7 @@ object Screens {
 
     fun list() = FragmentScreen { ListFragment.newInstance() }
 
-    fun search() = FragmentScreen { SearchFragment.newInstance() }
+    fun search(query: String) = FragmentScreen { SearchFragment.newInstance(query) }
 
     fun details(ticker: String) = FragmentScreen("Details_$ticker") {
         DetailsFragment.newInstance(ticker)

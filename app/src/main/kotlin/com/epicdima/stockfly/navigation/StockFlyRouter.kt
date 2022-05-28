@@ -10,8 +10,8 @@ class StockFlyRouter : Router(), OpenSearchProvider, OpenDetailsProvider, OpenBr
         executeCommands(ReplaceAllIfNotExist(Screens.list()))
     }
 
-    override fun openSearch() {
-        executeCommands(ForwardWithoutReplaceSameTop(Screens.search()))
+    override fun openSearch(query: String) {
+        executeCommands(ForwardWithoutReplaceSameTop(Screens.search(query)))
     }
 
     override fun openDetails(ticker: String) {

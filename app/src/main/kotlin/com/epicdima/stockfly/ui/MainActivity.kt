@@ -1,5 +1,6 @@
 package com.epicdima.stockfly.ui
 
+import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -58,7 +59,9 @@ class MainActivity : AppCompatActivity() {
         Timber.i(intent.toString())
 
         when (intent?.action) {
-            Intent.ACTION_SEARCH -> router.openSearch()
+            Intent.ACTION_SEARCH -> router.openSearch(
+                intent.getStringExtra(SearchManager.QUERY) ?: ""
+            )
             Intent.ACTION_VIEW -> intent.dataString?.let {
                 router.openDetails(it)
             }

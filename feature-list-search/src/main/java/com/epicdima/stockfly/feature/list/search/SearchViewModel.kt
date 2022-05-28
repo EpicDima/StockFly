@@ -1,5 +1,6 @@
 package com.epicdima.stockfly.feature.list.search
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.core.buildconfig.BuildConfigContainer
 import com.epicdima.stockfly.core.common.DownloadableViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
     private val openDetailsProvider: OpenDetailsProvider,
+    state: SavedStateHandle
 ) : DownloadableViewModel() {
 
     companion object {
@@ -65,6 +67,11 @@ class SearchViewModel @Inject constructor(
     init {
         Timber.v("init")
         reset()
+
+        val query = state.get<String>(SearchFragment.QUERY_KEY) ?: ""
+        if (query.isNotEmpty()) {
+            search(query)
+        }
     }
 
     fun reset() {

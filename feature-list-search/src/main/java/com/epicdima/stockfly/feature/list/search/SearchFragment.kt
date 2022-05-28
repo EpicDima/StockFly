@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.core.common.ViewModelFragment
+import com.epicdima.stockfly.core.common.setArgument
 import com.epicdima.stockfly.core.formatter.Formatter
 import com.epicdima.stockfly.feature.list.search.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.feature.list.shared.CompanyAdapter
@@ -45,10 +46,12 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     ViewTreeObserver.OnGlobalLayoutListener, AppBarLayout.OnOffsetChangedListener {
 
     companion object {
+        const val QUERY_KEY = "query"
+
         @JvmStatic
-        fun newInstance(): SearchFragment {
+        fun newInstance(query: String): SearchFragment {
             Timber.i("newInstance")
-            return SearchFragment()
+            return SearchFragment().setArgument(QUERY_KEY, query)
         }
     }
 
@@ -201,23 +204,26 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
     }
 
     private fun setupSearchField() {
-        binding.searchEditText.afterTextChanged {
-            binding.close.visibility = if (it.isNotEmpty()) View.VISIBLE else View.INVISIBLE
-        }
-        binding.searchEditText.setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (viewModel.search(v.text.toString())) {
-                    hideKeyboard()
+        binding.searchEditText.apply {
+            setText(requireArguments().getString(QUERY_KEY) ?: "")
+            afterTextChanged {
+                binding.close.visibility = if (it.isNotEmpty()) View.VISIBLE else View.INVISIBLE
+            }
+            setOnEditorActionListener { v, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (viewModel.search(v.text.toString())) {
+                        hideKeyboard()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            mustBeNotEmptyRequest,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    true
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        mustBeNotEmptyRequest,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    false
                 }
-                true
-            } else {
-                false
             }
         }
     }

@@ -2,14 +2,15 @@ package com.epicdima.stockfly.core.customtabs
 
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.browser.customtabs.*
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.epicdima.stockfly.core.customtabs.CustomTabsHelper.getPackageNameToUse
+import com.epicdima.stockfly.core.navigation.OpenBrowserProvider
 import timber.log.Timber
+import javax.inject.Inject
 
 class CustomTabsProvider(
     private var _context: Context?
@@ -21,6 +22,9 @@ class CustomTabsProvider(
     private var client: CustomTabsClient? = null
     private var session: CustomTabsSession? = null
     private val builder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+
+    @Inject
+    lateinit var openBrowserProvider: OpenBrowserProvider
 
     override fun onResume(owner: LifecycleOwner) {
         bindService()
@@ -66,13 +70,12 @@ class CustomTabsProvider(
 
     fun launchUrl(url: String) {
         Timber.i("launch url '$url'")
-        val uri = Uri.parse(url)
 
-        if (launchInCustomTabs(context, uri)) {
+        if (launchInCustomTabs(context, Uri.parse(url))) {
             return
         }
 
-        launchInBrowser(context, uri)
+        openBrowserProvider.openBrowser(url)
     }
 
     private fun launchInCustomTabs(context: Context, uri: Uri): Boolean {
@@ -81,10 +84,6 @@ class CustomTabsProvider(
             return true
         }
         return false
-    }
-
-    private fun launchInBrowser(context: Context, uri: Uri) {
-        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     override fun onCustomTabsServiceConnected(

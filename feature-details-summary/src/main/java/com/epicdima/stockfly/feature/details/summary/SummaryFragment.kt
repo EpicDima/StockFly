@@ -1,8 +1,6 @@
 package com.epicdima.stockfly.feature.details.summary
 
-import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -90,7 +88,7 @@ class SummaryFragment : ViewModelFragment<SummaryViewModel, FragmentSummaryBindi
                 val phoneNumber = phoneValue.text.toString()
                 if (phoneNumber.isNotEmpty()) {
                     Timber.i("open phone number '%s'", phoneNumber)
-                    startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}")))
+                    viewModel.openDialer(phoneNumber)
                 }
             }
 

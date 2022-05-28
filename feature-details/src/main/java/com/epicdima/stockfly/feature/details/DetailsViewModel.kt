@@ -15,12 +15,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class CompanyViewModel @Inject constructor(
+class DetailsViewModel @Inject constructor(
     private val repository: Repository,
     state: SavedStateHandle
 ) : DownloadableViewModel() {
 
-    private val ticker = state.get<String>(CompanyFragment.TICKER_KEY)!!
+    private val ticker = state.get<String>(DetailsFragment.TICKER_KEY)!!
 
     private val _company = MutableStateFlow<Company?>(null)
     val company: StateFlow<Company?> = _company.asStateFlow()

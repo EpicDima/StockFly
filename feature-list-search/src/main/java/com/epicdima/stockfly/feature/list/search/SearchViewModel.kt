@@ -5,6 +5,7 @@ import com.epicdima.stockfly.core.buildconfig.BuildConfigContainer
 import com.epicdima.stockfly.core.common.DownloadableViewModel
 import com.epicdima.stockfly.core.data.Repository
 import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.navigation.OpenDetailsProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,25 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
+    private val openDetailsProvider: OpenDetailsProvider,
 ) : DownloadableViewModel() {
+
+    companion object {
+        private val POPULAR = listOf(
+            "Yandex",
+            "Tesla",
+            "Google",
+            "Apple",
+            "Nvidia",
+            "AMD",
+            "Microsoft",
+            "GM",
+            "Alibaba",
+            "Facebook",
+            "Intel",
+            "Visa",
+        )
+    }
 
     @Inject
     lateinit var buildConfigContainer: BuildConfigContainer
@@ -140,20 +159,8 @@ class SearchViewModel @Inject constructor(
         stopLoading()
         setError()
     }
+
+    fun openCompanyDetails(ticker: String) {
+        openDetailsProvider.openDetails(ticker)
+    }
 }
-
-
-private val POPULAR = listOf(
-    "Yandex",
-    "Tesla",
-    "Google",
-    "Apple",
-    "Nvidia",
-    "AMD",
-    "Microsoft",
-    "GM",
-    "Alibaba",
-    "Facebook",
-    "Intel",
-    "Visa",
-)

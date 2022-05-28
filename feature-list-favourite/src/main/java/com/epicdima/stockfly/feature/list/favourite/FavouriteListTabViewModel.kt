@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.core.data.Repository
 import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.navigation.OpenDetailsProvider
 import com.epicdima.stockfly.core.shortcuts.ShortcutsConfigurator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class FavouriteListTabViewModel @Inject constructor(
     private val repository: Repository,
     private val shortcutConfigurator: ShortcutsConfigurator,
+    private val openDetailsProvider: OpenDetailsProvider,
 ) : ViewModel() {
 
     val companies: StateFlow<List<Company>> = repository.favourites
@@ -41,5 +43,9 @@ class FavouriteListTabViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteCompany(company)
         }
+    }
+
+    fun openCompanyDetails(ticker: String) {
+        openDetailsProvider.openDetails(ticker)
     }
 }

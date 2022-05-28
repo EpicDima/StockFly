@@ -4,19 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.epicdima.stockfly.core.customtabs.CustomTabsProvider
-import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
-import com.epicdima.stockfly.core.navigation.SearchFragmentOpener
+import com.epicdima.stockfly.navigation.StockFlyNavigator
+import com.epicdima.stockfly.navigation.StockFlyRouter
+import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentOpener {
+class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var navigationHolder: NavigatorHolder
+
+    @Inject
+    lateinit var router: StockFlyRouter
 
     @Inject
     lateinit var customTabsProvider: CustomTabsProvider
 
-    private var router: NavigationRouter? = null
+    private val navigator = StockFlyNavigator(this, android.R.id.content)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,17 +31,22 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
 
         lifecycle.addObserver(customTabsProvider)
 
-        router = NavigationRouter(supportFragmentManager, android.R.id.content)
-
         if (savedInstanceState == null) {
+            router.openList()
             openFragmentByIntent(intent)
         }
     }
 
-    override fun onDestroy() {
-        Timber.v("onDestroy")
-        router = null
-        super.onDestroy()
+    override fun onResumeFragments() {
+        Timber.v("onResumeFragments")
+        super.onResumeFragments()
+        navigationHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        Timber.v("onPause")
+        navigationHolder.removeNavigator()
+        super.onPause()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -46,22 +58,14 @@ class MainActivity : AppCompatActivity(), SearchFragmentOpener, CompanyFragmentO
         Timber.i(intent.toString())
 
         when (intent?.action) {
-            Intent.ACTION_SEARCH -> openSearchFragment()
-            Intent.ACTION_VIEW -> intent.dataString?.let { openCompanyFragment(it) }
+            Intent.ACTION_SEARCH -> router.openSearch()
+            Intent.ACTION_VIEW -> intent.dataString?.let {
+                router.openDetails(it)
+            }
         }
     }
 
     override fun onBackPressed() {
-        if (router?.back() == false) {
-            super.onBackPressed()
-        }
-    }
-
-    override fun openSearchFragment() {
-        router?.openSearchFragment()
-    }
-
-    override fun openCompanyFragment(ticker: String) {
-        router?.openCompanyFragment(ticker)
+        router.exit()
     }
 }

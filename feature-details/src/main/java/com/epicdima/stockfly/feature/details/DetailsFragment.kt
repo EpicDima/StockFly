@@ -30,20 +30,20 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
-class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBinding>() {
+class DetailsFragment : ViewModelFragment<DetailsViewModel, FragmentCompanyBinding>() {
 
     companion object {
         const val TICKER_KEY = "ticker"
         private const val PAGE_KEY = "page"
 
         @JvmStatic
-        fun newInstance(ticker: String): CompanyFragment {
+        fun newInstance(ticker: String): DetailsFragment {
             Timber.i("newInstance with ticker %s", ticker)
-            return CompanyFragment().setArgument(TICKER_KEY, ticker)
+            return DetailsFragment().setArgument(TICKER_KEY, ticker)
         }
     }
 
-    override val viewModel: CompanyViewModel by viewModels()
+    override val viewModel: DetailsViewModel by viewModels()
 
     private val titles: Array<String> by lazy(LazyThreadSafetyMode.NONE) {
         CompanyTab.values().map { resources.getString(it.titleId) }.toTypedArray()
@@ -65,7 +65,7 @@ class CompanyFragment : ViewModelFragment<CompanyViewModel, FragmentCompanyBindi
             offscreenPageLimit = 1
             adapter = CompanyFragmentAdapter(
                 requireArguments().getString(TICKER_KEY)!!,
-                this@CompanyFragment
+                this@DetailsFragment
             )
         }
         viewModel.error

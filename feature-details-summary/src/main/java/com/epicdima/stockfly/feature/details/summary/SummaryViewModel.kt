@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.epicdima.stockfly.core.data.Repository
 import com.epicdima.stockfly.core.model.Company
+import com.epicdima.stockfly.core.navigation.OpenDialerProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SummaryViewModel @Inject constructor(
     private val repository: Repository,
+    private val openDialerProvider: OpenDialerProvider,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -34,5 +36,9 @@ class SummaryViewModel @Inject constructor(
                 _company.value = it
             }
         }
+    }
+
+    fun openDialer(phoneNumber: String) {
+        openDialerProvider.openDialer(phoneNumber)
     }
 }

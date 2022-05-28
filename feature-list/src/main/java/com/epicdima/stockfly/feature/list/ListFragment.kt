@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.epicdima.stockfly.core.common.ViewBindingFragment
-import com.epicdima.stockfly.core.navigation.SearchFragmentOpener
+import com.epicdima.stockfly.core.common.ViewModelFragment
 import com.epicdima.stockfly.core.ui.customize
 import com.epicdima.stockfly.core.ui.getDimensionInSp
 import com.epicdima.stockfly.core.ui.set
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ListFragment : ViewBindingFragment<FragmentListBinding>() {
+class ListFragment : ViewModelFragment<ListViewModel, FragmentListBinding>() {
 
     companion object {
 
@@ -30,6 +30,8 @@ class ListFragment : ViewBindingFragment<FragmentListBinding>() {
             return ListFragment()
         }
     }
+
+    override val viewModel: ListViewModel by viewModels()
 
     private val titles: Array<String> by lazy(LazyThreadSafetyMode.NONE) {
         MainTab.values().map { resources.getString(it.titleId) }.toTypedArray()
@@ -53,7 +55,7 @@ class ListFragment : ViewBindingFragment<FragmentListBinding>() {
                 it.offscreenPageLimit = MainTab.values().size
             }
             searchLayout.setOnClickListener {
-                (requireActivity() as SearchFragmentOpener).openSearchFragment()
+                viewModel.openSearch()
             }
         }
         setupTabs()

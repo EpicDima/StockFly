@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.HORIZONTAL
 import com.epicdima.stockfly.core.common.ViewModelFragment
 import com.epicdima.stockfly.core.formatter.Formatter
-import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
 import com.epicdima.stockfly.feature.list.search.databinding.FragmentSearchBinding
 import com.epicdima.stockfly.feature.list.shared.CompanyAdapter
 import com.epicdima.stockfly.feature.list.shared.di.CompanyList
@@ -183,7 +182,7 @@ class SearchFragment : ViewModelFragment<SearchViewModel, FragmentSearchBinding>
 
     private fun setupResultList() {
         val resultAdapter = CompanyAdapter(formatter) { ticker ->
-            (requireActivity() as CompanyFragmentOpener).openCompanyFragment(ticker)
+            viewModel.openCompanyDetails(ticker)
         }.apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }

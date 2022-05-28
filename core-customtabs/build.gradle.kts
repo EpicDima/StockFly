@@ -37,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core-navigation"))
+
     implementation(Dependencies.lifecycle.runtimeKtx)
 
     Dependencies.di.apply {

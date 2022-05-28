@@ -57,5 +57,6 @@ dependencies {
 
     Dependencies.other.apply {
         implementation(timber)
+        implementation(fragmentKtx)
     }
 }

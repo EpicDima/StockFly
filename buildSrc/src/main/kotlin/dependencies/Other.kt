@@ -22,4 +22,6 @@ object Other {
         "androidx.asynclayoutinflater:asynclayoutinflater:${Versions.asynclayoutinflater}"
 
     const val workManager = "androidx.work:work-runtime-ktx:${Versions.workManager}"
+
+    const val cicerone = "com.github.terrakok:cicerone:${Versions.cicerone}"
 }

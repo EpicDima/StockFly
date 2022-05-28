@@ -9,7 +9,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.epicdima.stockfly.core.model.Company
-import com.epicdima.stockfly.core.navigation.CompanyFragmentOpener
 import com.epicdima.stockfly.feature.list.shared.CompanyAdapter
 import com.epicdima.stockfly.feature.list.shared.ListTabFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,11 +40,9 @@ class FavouriteListTabFragment : ListTabFragment<FavouriteListTabViewModel>() {
     override fun createAdapter(): CompanyAdapter {
         return CompanyAdapter(
             formatter,
-            this::showPopupMenu
-        ) { ticker ->
-            (requireParentFragment().requireActivity() as CompanyFragmentOpener)
-                .openCompanyFragment(ticker)
-        }
+            this::showPopupMenu,
+            viewModel::openCompanyDetails
+        )
     }
 
     override fun setupList() {

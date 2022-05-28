@@ -26,3 +26,7 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
+
+dependencies {
+    api(Dependencies.other.cicerone)
+}

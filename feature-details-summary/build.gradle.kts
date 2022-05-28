@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":core-utils"))
     implementation(project(":core-model"))
     implementation(project(":core-data"))
+    implementation(project(":core-navigation"))
     implementation(project(":core-ui"))
     implementation(project(":core-customtabs"))
     implementation(project(":core-formatter"))
